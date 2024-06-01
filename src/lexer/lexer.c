@@ -1,28 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/31 13:32:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/01 17:22:00 by wlin             ###   ########.fr       */
+/*   Created: 2024/06/01 18:07:03 by wlin              #+#    #+#             */
+/*   Updated: 2024/06/01 18:11:28 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef MINISHELL_H
-# define MINISHELL_H
+#include "minishell.h"
+#include "lexer.h"
+#include "macros.h"
 
-# include <stdio.h>
-# include <stdlib.h>
-# include "../src/readline/readline.h"
-# include "../src/readline/history.h"
-# include "../src/libft/libft.h"
-
-typedef struct s_toke
+int	handle_tocken(char *input)
 {
-	char	*value;
-	char	*type;
-}	t_toke;
+	int	i;
 
-# endif
+	i = 0;
+	while (input[i])
+	{
+		if (is_whitespace(input[i]))
+			i = skip_spaces(input, i);
+		else if (input[i] == QUOTE_S)
+		{}
+		else if (input[i] == QUOTE_D)
+		{}
+		else if (input [i] == )
+
+	}
+}

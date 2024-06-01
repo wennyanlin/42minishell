@@ -6,7 +6,7 @@
 #    By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 13:11:23 by wlin              #+#    #+#              #
-#    Updated: 2024/05/30 15:22:50 by wlin             ###   ########.fr        #
+#    Updated: 2024/06/01 17:09:44 by wlin             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,9 @@ NAME 		= minishell
 
 CC			:= gcc
 CFLAGS		:= -Wall -Wextra -Werror -g -fsanitize=address
+LIBFLAGS	= -L$(DIR_SRC)libft 
 HEADER		:= ./includes/minishell.h
+includes	:= -I./includes -I./readline
 
 DIR_OBJ		:=	obj/
 DIR_SRC		:=	src/
