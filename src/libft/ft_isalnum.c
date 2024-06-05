@@ -1,28 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_isalnum.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/31 13:32:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/01 17:22:00 by wlin             ###   ########.fr       */
+/*   Created: 2023/09/06 17:07:38 by wlin              #+#    #+#             */
+/*   Updated: 2023/09/06 17:07:38 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include "libft.h"
 
-# ifndef MINISHELL_H
-# define MINISHELL_H
-
-# include <stdio.h>
-# include <stdlib.h>
-# include "../src/readline/readline.h"
-# include "../src/readline/history.h"
-# include "../src/libft/libft.h"
-
-typedef struct s_toke
+int	ft_isalnum(int c)
 {
-	char	*value;
-	char	*type;
-}	t_toke;
+	int	isalnum;
 
-# endif
+	isalnum = 0;
+	if (('0' <= c && c <= '9') || ('A' <= c && c <= 'Z')
+		|| ('a' <= c && c <= 'z'))
+	{
+		isalnum = 1;
+	}
+	return (isalnum);
+}
+/*
+
+int main()
+{
+	char c;
+	c = ':';
+	printf("%i",ft_isalnum(c));
+} */

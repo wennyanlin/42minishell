@@ -3,8 +3,10 @@
 *.o
 *.d
 *.a
+a.out
 proba
 tester
 *.php
 /mpanic
 minishell
+src/readline

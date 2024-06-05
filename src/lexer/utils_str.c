@@ -1,28 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   utils_str.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/31 13:32:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/01 17:22:00 by wlin             ###   ########.fr       */
+/*   Created: 2024/06/01 17:34:51 by wlin              #+#    #+#             */
+/*   Updated: 2024/06/01 18:09:43 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef MINISHELL_H
-# define MINISHELL_H
+#include "minishell.h"
+#include "macros.h"
 
-# include <stdio.h>
-# include <stdlib.h>
-# include "../src/readline/readline.h"
-# include "../src/readline/history.h"
-# include "../src/libft/libft.h"
-
-typedef struct s_toke
+int	is_whitespace(char c)
 {
-	char	*value;
-	char	*type;
-}	t_toke;
+	if (c == ' ' || c > 8 && c < 14)
+		return (TRUE);
+	return (FALSE);
+}
 
-# endif
+int	skip_spaces(char *str, int i)
+{
+	int	j;
+
+	j = 0;
+	while (is_whitespace(str[i + j]))
+		j++;
+	return (0);
+}
+
+void	find_other_quote(char c)

@@ -1,28 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   macros.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/31 13:32:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/01 17:22:00 by wlin             ###   ########.fr       */
+/*   Created: 2024/06/01 17:38:17 by wlin              #+#    #+#             */
+/*   Updated: 2024/06/01 18:16:18 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef MINISHELL_H
-# define MINISHELL_H
+# ifndef MACROS_H
+# define MACROS_H
 
-# include <stdio.h>
-# include <stdlib.h>
-# include "../src/readline/readline.h"
-# include "../src/readline/history.h"
-# include "../src/libft/libft.h"
+# define SPACE 40
+# define TRUE 1
+# define FALSE 0
 
-typedef struct s_toke
-{
-	char	*value;
-	char	*type;
-}	t_toke;
+# define QUOTE_S 39
+# define QUOTE_D 34
+# define DOLLAR 36
+# define LESS '<'
+# define LESS '>'
+# define LESS_LESS '<<'
+# define GREAT_GREAT '>>'
+# define QUESTION '?'
 
 # endif

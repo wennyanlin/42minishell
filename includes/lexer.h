@@ -1,28 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/31 13:32:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/01 17:22:00 by wlin             ###   ########.fr       */
+/*   Created: 2024/06/01 17:58:40 by wlin              #+#    #+#             */
+/*   Updated: 2024/06/01 18:00:21 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef MINISHELL_H
-# define MINISHELL_H
+# ifndef LEXER_H
+# define LEXER_H
 
-# include <stdio.h>
-# include <stdlib.h>
-# include "../src/readline/readline.h"
-# include "../src/readline/history.h"
-# include "../src/libft/libft.h"
-
-typedef struct s_toke
-{
-	char	*value;
-	char	*type;
-}	t_toke;
+int	is_whitespace(char c);
+int	skip_spaces(char *str, int i);
 
 # endif

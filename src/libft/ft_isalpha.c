@@ -1,28 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_isalpha.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/31 13:32:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/01 17:22:00 by wlin             ###   ########.fr       */
+/*   Created: 2023/09/06 17:01:53 by wlin              #+#    #+#             */
+/*   Updated: 2023/09/16 18:49:46 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include "libft.h"
 
-# ifndef MINISHELL_H
-# define MINISHELL_H
-
-# include <stdio.h>
-# include <stdlib.h>
-# include "../src/readline/readline.h"
-# include "../src/readline/history.h"
-# include "../src/libft/libft.h"
-
-typedef struct s_toke
+int	ft_isalpha(int c)
 {
-	char	*value;
-	char	*type;
-}	t_toke;
+	int	isalpha;
 
-# endif
+	isalpha = 0;
+	if (('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z'))
+	{
+		isalpha = 1;
+	}
+	return (isalpha);
+}
+/* int main()
+{
+    int c;
+
+    c = '5';
+    printf("%i",ft_isalpha(c));
+} */
