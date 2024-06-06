@@ -6,7 +6,7 @@
 #    By: aglanuss <aglanuss@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 13:11:23 by wlin              #+#    #+#              #
-#    Updated: 2024/06/06 09:42:35 by aglanuss         ###   ########.fr        #
+#    Updated: 2024/06/06 12:03:08 by aglanuss         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,6 @@ NAME			= minishell
 
 CC				= gcc
 CFLAGS		= -Wall -Wextra -Werror -g -Iincludes -fsanitize=address
-LDFLAGS		= -Llib -llibft
 RM				= rm -fr
 
 # *******************************	FILES	********************************** #
@@ -47,18 +46,36 @@ CYAN_BOLD	=	\033[1;36m
 
 # ********************************	RULES	********************************** #
 
-all: $(NAME)
+all:
+	@$(MAKE) header
+	@$(MAKE) $(NAME)
+
+header:
+	@printf "%b" "$(GREEN)"
+	@echo "  __  __ _       _     _          _ _ "
+	@echo " |  \/  (_)     (_)   | |        | | |"
+	@echo " | \  / |_ _ __  _ ___| |__   ___| | |"
+	@echo " | |\/| | | '_ \| / __| '_ \ / _ \ | |"
+	@echo " | |  | | | | | | \__ \ | | |  __/ | |"
+	@echo " |_|  |_|_|_| |_|_|___/_| |_|\___|_|_|"
+	@echo
+	@printf "%b" "$(BLUE)Name:	$(RED)$(NAME)\n"
+	@printf "%b" "$(BLUE)Author:	$(RED)$(AUTHOR)\n"
+	@printf "%b" "$(BLUE)CC: 	$(RED)$(CC)\n\033[m"
+	@printf "%b" "$(BLUE)Flags: 	$(RED)$(CFLAGS)\n\033[m"
+	@echo
 
 libft:
 	@$(MAKE) -C $(LIBFT_DIR) --no-print-directory
 
 $(NAME): libft $(OBJS)
+	@echo "\n\n${BLUE_BOLD}[$(NAME)] $(GREEN)object files were created$(RESET)"
 	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LDFLAGS)
 	@echo "${BLUE_BOLD}[$(NAME)] $(GREEN)executable was created$(RESET)"
 
 %.o: %.c Makefile $(HEADERS)
 	@$(CC) $(CFLAGS) -DREADLINE_LIBRARY=1 $(RDFLAGS) -c $< -o $@
-	@echo "${YELLOW}Object compiling ${RESET}$@...${RESET}"
+	@echo "$(GREEN).$(RESET)\c"
 
 clean:
 	@$(MAKE) -C $(LIBFT_DIR) clean --no-print-directory
