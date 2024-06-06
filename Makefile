@@ -24,7 +24,7 @@ LIB         = lib/
 LIBRARIES   = libft
 LIBFT_DIR   = $(LIB)libft/
 LIBRARY_PATHS = -L$(LIBFT_DIR)
-LIBRARY_NAMES = -lft
+LIBRARY_NAMES = -lft -lreadline
 LDFLAGS     += $(LIBRARY_PATHS) $(LIBRARY_NAMES)
 
 HEADERS		= $(wildcard includes/*.h)

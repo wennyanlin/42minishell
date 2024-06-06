@@ -17,7 +17,7 @@
 # include <stdlib.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <libft.h>
+# include "../lib/libft/libft.h"
 
 typedef struct s_toke
 {
