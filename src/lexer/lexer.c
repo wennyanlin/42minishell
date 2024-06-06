@@ -10,24 +10,31 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "minishell.h"
-// #include "lexer.h"
-// #include "macros.h"
+#include "minishell.h"
+#include "lexer.h"
+#include "macros.h"
 
-// int	handle_tocken(char *input)
-// {
-// 	int	i;
+void    handle_token()
+{
 
-// 	i = 0;
-// 	while (input[i])
-// 	{
-// 		if (is_whitespace(input[i]))
-// 			i = skip_spaces(input, i);
-// 		else if (input[i] == QUOTE_S)
-// 		{}
-// 		else if (input[i] == QUOTE_D)
-// 		{}
-// 		else if (input [i] == )
+}
 
-// 	}
-// }
+int	classify_input(char *input)
+{
+	int	i;
+    
+
+	i = 0;
+	while (input[i])
+	{
+		if (is_whitespace(input[i]))
+			i = skip_spaces(input, i);
+		else if (input[i] == QUOTE_S)
+		{}
+		else if (input[i] == QUOTE_D)
+		{}
+		else
+            handle_token();
+
+	}
+}
