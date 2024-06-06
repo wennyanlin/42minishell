@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: wlin <wlin@student.42barcelona.>           +#+  +:+       +#+         #
+#    By: aglanuss <aglanuss@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/09 20:06:48 by wlin              #+#    #+#              #
-#    Updated: 2023/09/27 20:24:16 by wlin             ###   ########.fr        #
+#    Updated: 2024/06/06 13:26:07 by aglanuss         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,11 +34,25 @@ COMPILER = cc
 
 FLAGS = -Wall -Werror -Wextra
 
-%.o: %.c Makefile ${INCLUDES}
-	$(COMPILER) $(FLAGS) -I $(INCLUDES) -c $< -o $@
+RED				=	\033[0;31m
+GREEN			=	\033[0;32m
+YELLOW		=	\033[0;33m
+BLUE			=	\033[0;34m
+PURPLE		=	\033[0;35m
+CYAN			=	\033[0;36m
+RESET			=	\033[0m
+GREEN_BOLD	=	\033[1;32m
+BLUE_BOLD	=	\033[1;34m
+CYAN_BOLD	=	\033[1;36m
 
-$(NAME): $(OBJS) $(INCLUDES) Makefile 
-	ar -rcs $(NAME) $(OBJS)
+%.o: %.c Makefile ${INCLUDES}
+	@$(COMPILER) $(FLAGS) -I $(INCLUDES) -c $< -o $@
+	@echo "$(GREEN).$(RESET)\c"
+
+$(NAME): $(OBJS) $(INCLUDES) Makefile
+	@echo "\n\n${BLUE_BOLD}[libft] $(GREEN)object files were created$(RESET)"
+	@ar -rcs $(NAME) $(OBJS)
+	@echo "${BLUE_BOLD}[libft] $(GREEN)library was created$(RESET)\n"
 
 bonus: $(OBJS) $(OBJSBONUS)
 	ar -rcs $(NAME) $(OBJS) $(OBJSBONUS)
@@ -46,10 +60,10 @@ bonus: $(OBJS) $(OBJSBONUS)
 all: $(NAME)
 
 clean:
-	rm -f $(OBJS) $(OBJSBONUS)
+	@rm -f $(OBJS) $(OBJSBONUS)
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re:	fclean all
 

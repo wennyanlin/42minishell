@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aglanuss <aglanuss@student.42.fr>          +#+  +:+       +#+         #
+#    By: aglanuss <aglanuss@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 13:11:23 by wlin              #+#    #+#              #
-#    Updated: 2024/06/06 12:03:08 by aglanuss         ###   ########.fr        #
+#    Updated: 2024/06/06 13:27:10 by aglanuss         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -83,7 +83,7 @@ clean:
 	@echo "${BLUE_BOLD}[$(NAME)] $(RED)removed object files$(RESET)"
 
 fclean: clean
-	@$(MAKE) -C $(LIBFT_DIR) clean --no-print-directory
+	@$(MAKE) -C $(LIBFT_DIR) fclean --no-print-directory
 	@$(RM) $(NAME)
 	@echo "${BLUE_BOLD}[$(NAME)] $(RED)executable was deleted$(RESET)"
 
