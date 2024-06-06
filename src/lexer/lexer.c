@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aglanuss <aglanuss@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:07:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/06 11:52:14 by aglanuss         ###   ########.fr       */
+/*   Updated: 2024/06/07 01:06:12 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,58 @@
 #include "lexer.h"
 #include "macros.h"
 
-void    handle_token()
-{
+//1- loop through input, when find spaces, skip it util chars //YES
 
+
+//2- else if its quotes, find the other one,
+
+	//2.1- if yes, save the characters in between.
+	
+	//2.2- else, save the one with the rest of chars.
+
+
+//3- else, either spaces or quotes characters
+
+	//keep tracking if there is quotes until next spaces
+	
+		//if yes, repeat step 2.1- and result plus the character at the start
+			//int	find_matching_quote()
+		//if not, extract chars til find space
+
+int	find_matching_quote();
+
+char *extract_token(int start, int end);
+
+
+int	get_token(char **token_array, char *input, int i)
+{
+	int	j;
+	int	idx_matching_quote;
+	
+	j = i + 0;
+	while (!is_whitespace(input[j]) && (input[j] != QUOTE_S || input[j] != QUOTE_D))
+		++j;
+	if (input[j] == QUOTE_S || input[j] == QUOTE_D)
+	{
+		if ((idx_matching_quote = find_matching_quote()) != NOT_FOUND)
+		{
+			extract_token();
+			join_token();
+		}
+		else
+			extract_token();
+	}
+	else
+		return (extract_token());
 }
 
-int	classify_input(char *input)
+int	handle_input(char *input)
 {
-	int	i;
-    
+	char	**token_array;
+	int		i;
 
-	i = 0;
-	while (input[i])
+	i = -1;
+	while (input[++i])
 	{
 		if (is_whitespace(input[i]))
 			i = skip_spaces(input, i);
@@ -34,7 +74,7 @@ int	classify_input(char *input)
 		else if (input[i] == QUOTE_D)
 		{}
 		else
-            handle_token();
+            i = get_token(token_array, input, i);
 
 	}
 }
