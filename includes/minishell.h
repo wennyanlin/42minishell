@@ -19,10 +19,11 @@
 # include <readline/history.h>
 # include "../lib/libft/libft.h"
 
-typedef struct s_toke
+typedef struct s_token
 {
-	char	*value;
-	char	*type;
-}	t_toke;
+	char			*value;
+	int				type;
+	struct s_token	*next;
+}	t_token;
 
 # endif
