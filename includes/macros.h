@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 17:38:17 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/01 18:16:18 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/07 00:11:44 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # define SPACE 40
 # define TRUE 1
 # define FALSE 0
+# define NOT_FOUND -1
 
 # define QUOTE_S 39
 # define QUOTE_D 34

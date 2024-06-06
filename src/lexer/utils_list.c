@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 //1- get the 'word'
-//   when find the character that is not quotes and spaces, substracts it 
+    //when find the character that is not quotes and spaces, extracts it 
 //2- initialize a node with it's properties
 //3- add the node into a linked list 
 
