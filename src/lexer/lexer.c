@@ -29,12 +29,28 @@
 	//keep tracking if there is quotes until next spaces
 	
 		//if yes, repeat step 2.1- and result plus the character at the start
-			//int	find_matching_quote()
+			//int	find_matching_quote() -> 
+				//if found, output is the matching quote's index; 
+				//else, handle_errors(): if not find matching quotes, return error messages
+															
 		//if not, extract chars til find space
 
-int	find_matching_quote();
+int	find_matching_quote(char *input, int i, char quote);
+{
+	int	j;
 
-char *extract_token(int start, int end);
+	j = i - 1;
+	while (!is_whitespace(input[++j]))
+		if (input[j] == quote)
+			return (j);
+	if (!input[j] || is_whitespace(input[j]))
+		return (NOT_FOUND);
+}
+
+char *extract_token(int start, int end)
+{
+	
+}
 
 
 int	get_token(char **token_array, char *input, int i)
@@ -43,11 +59,12 @@ int	get_token(char **token_array, char *input, int i)
 	int	idx_matching_quote;
 	
 	j = i + 0;
-	while (!is_whitespace(input[j]) && (input[j] != QUOTE_S || input[j] != QUOTE_D))
-		++j;
+	// while (!is_whitespace(input[j]) && (input[j] != QUOTE_S || input[j] != QUOTE_D))
+	// 	++j;
 	if (input[j] == QUOTE_S || input[j] == QUOTE_D)
 	{
-		if ((idx_matching_quote = find_matching_quote()) != NOT_FOUND)
+		idx_matching_quote = find_matching_quote(char *input, int j, char input[j]);
+		if (idx_matching_quote != NOT_FOUND)
 		{
 			extract_token();
 			join_token();
