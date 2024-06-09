@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:07:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/07 01:06:12 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/09 23:45:58 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,71 +14,61 @@
 #include "lexer.h"
 #include "macros.h"
 
-//1- loop through input, when find spaces, skip it util chars //YES
-
-
-//2- else if its quotes, find the other one,
-
-	//2.1- if yes, save the characters in between.
-	
-	//2.2- else, save the one with the rest of chars.
-
-
-//3- else, either spaces or quotes characters
-
+//if we found matching quote, keep checking chars after matching quote until spaces
+	//if found more chars, 
+		//tokenize the whole string skipping the quotes
+	//else is an error case
 	//keep tracking if there is quotes until next spaces
+
+
+
+// char *extract_token(int start, int end)
+// {
 	
-		//if yes, repeat step 2.1- and result plus the character at the start
-			//int	find_matching_quote() -> 
-				//if found, output is the matching quote's index; 
-				//else, handle_errors(): if not find matching quotes, return error messages
-															
-		//if not, extract chars til find space
+// }
 
-int	find_matching_quote(char *input, int i, char quote);
+void	add_token_lst(t_lst **token_lst, char *new_token)
 {
-	int	j;
+	t_lst	*new_node;
 
-	j = i - 1;
+	new_node = create_lst_node();
+	lst_add_last(token_lst, new_node);
+	init_lst_node();
+	
+}
+
+int	tokenize_input(t_lst *token_lst, char *input, int start_token)
+{
+	int		j;
+	char	*new_token;
+	int		first_quote;
+	int		matching_quote;
+	int		end_token;
+	
+	
+	j = start_token - 1;
 	while (!is_whitespace(input[++j]))
-		if (input[j] == quote)
-			return (j);
-	if (!input[j] || is_whitespace(input[j]))
-		return (NOT_FOUND);
-}
-
-char *extract_token(int start, int end)
-{
-	
-}
-
-
-int	get_token(char **token_array, char *input, int i)
-{
-	int	j;
-	int	idx_matching_quote;
-	
-	j = i + 0;
-	// while (!is_whitespace(input[j]) && (input[j] != QUOTE_S || input[j] != QUOTE_D))
-	// 	++j;
-	if (input[j] == QUOTE_S || input[j] == QUOTE_D)
 	{
-		idx_matching_quote = find_matching_quote(char *input, int j, char input[j]);
-		if (idx_matching_quote != NOT_FOUND)
+		if (input[j] == QUOTE_S || input[j] == QUOTE_D)
 		{
-			extract_token();
-			join_token();
+			first_quote = input[j];
+			matching_quote = find_matching_quote(input, j, input[j]);
+			if (matching_quote != NOT_FOUND)
+			{
+				end_token = find_end_chars_index(input, j);
+				new_token = ft_substr(input, (unsigned int)start_token, end_token - start_token + 1);
+				add_token_lst(token_lst, new_token);
+				return (end_token);
+			}
+			//else
+				//extract_token();
 		}
-		else
-			extract_token();
 	}
-	else
-		return (extract_token());
 }
 
 int	handle_input(char *input)
 {
-	char	**token_array;
+	t_lst	*token_lst;
 	int		i;
 
 	i = -1;
@@ -86,12 +76,8 @@ int	handle_input(char *input)
 	{
 		if (is_whitespace(input[i]))
 			i = skip_spaces(input, i);
-		else if (input[i] == QUOTE_S)
-		{}
-		else if (input[i] == QUOTE_D)
-		{}
 		else
-            i = get_token(token_array, input, i);
+            i = tokenize_input(token_lst, input, i);
 
 	}
 }
