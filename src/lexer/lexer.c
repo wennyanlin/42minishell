@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:07:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/09 23:45:58 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/10 14:26:00 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,23 +21,18 @@
 	//keep tracking if there is quotes until next spaces
 
 
-
-// char *extract_token(int start, int end)
-// {
-	
-// }
+ft_error(char *error_token)
 
 void	add_token_lst(t_lst **token_lst, char *new_token)
 {
 	t_lst	*new_node;
 
-	new_node = create_lst_node();
-	lst_add_last(token_lst, new_node);
-	init_lst_node();
+	new_node = create_lst_node(new_token);
+	lst_add_back(token_lst, new_node);
 	
 }
 
-int	tokenize_input(t_lst *token_lst, char *input, int start_token)
+int	handle_token(t_lst *token_lst, char *input, int start_token)
 {
 	int		j;
 	char	*new_token;
@@ -60,8 +55,8 @@ int	tokenize_input(t_lst *token_lst, char *input, int start_token)
 				add_token_lst(token_lst, new_token);
 				return (end_token);
 			}
-			//else
-				//extract_token();
+			else
+				ft_error(new_token);
 		}
 	}
 }
@@ -77,7 +72,7 @@ int	handle_input(char *input)
 		if (is_whitespace(input[i]))
 			i = skip_spaces(input, i);
 		else
-            i = tokenize_input(token_lst, input, i);
+            i = handle_token(token_lst, input, i);
 
 	}
 }
