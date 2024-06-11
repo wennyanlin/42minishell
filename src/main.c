@@ -6,13 +6,50 @@
 /*   By: aglanuss <aglanuss@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/21 13:08:42 by aglanuss         ###   ########.fr       */
+/*   Updated: 2024/06/21 13:12:34 by aglanuss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
-#include "../includes/parser.h"
-#include "../lib/libft/libft.h"
+#include "minishell.h"
+#include "macros.h"
+#include "lexer.h"
+
+void	ft_free_lst(t_token *lst)
+{
+	t_token	*tmp;
+	while (lst)
+	{
+		tmp = lst;
+		lst = lst->next;
+		if (tmp->word)
+			free(tmp->word);
+		free(tmp);
+	}
+	lst = NULL;
+}
+
+int	main(int argc, char **argv, char **env)
+{
+	char	*line;
+	t_token	*token_lst;
+
+	(void)env;
+	if (argc == 2 && ft_strncmp(argv[1], "test", 5) == 0)
+		test_lexer();
+	else if (argc == 2 && ft_strncmp(argv[1], "-v", 3) == 0)
+		return (printf("%s, version %s\n", NAME, VERSION), 0);
+	else
+	{
+		while (1)
+		{
+			line = readline(PROMPT);
+			printf("'%s'\n", line);
+			token_lst = tokenize(line);
+			free(line);
+			ft_free_lst(token_lst);
+		}
+		return (0);
+	}
 
 // int	main(/*int argc, char **argv, char **env*/)
 // {
