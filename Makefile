@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aglanuss <aglanuss@student.42barcelona.    +#+  +:+       +#+         #
+#    By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 13:11:23 by wlin              #+#    #+#              #
-#    Updated: 2024/06/06 13:27:10 by aglanuss         ###   ########.fr        #
+#    Updated: 2024/06/11 16:17:43 by wlin             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ AUTHOR		= wlin, aglanuss
 NAME			= minishell
 
 CC				= gcc
-CFLAGS		= -Wall -Wextra -Werror -g -Iincludes -fsanitize=address
+CFLAGS		= -Wall -Wextra -Werror -g -Iincludes -I${LIBFT_DIR} -fsanitize=address
 RM				= rm -fr
 
 # *******************************	FILES	********************************** #

@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:07:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/10 14:26:00 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/11 17:42:20 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,48 +20,73 @@
 	//else is an error case
 	//keep tracking if there is quotes until next spaces
 
-
-ft_error(char *error_token)
-
-void	add_token_lst(t_lst **token_lst, char *new_token)
+void	printf_list(t_lst **lst)
 {
-	t_lst	*new_node;
+	t_lst	*tmp;
 
-	new_node = create_lst_node(new_token);
-	lst_add_back(token_lst, new_node);
-	
-}
-
-int	handle_token(t_lst *token_lst, char *input, int start_token)
-{
-	int		j;
-	char	*new_token;
-	int		first_quote;
-	int		matching_quote;
-	int		end_token;
-	
-	
-	j = start_token - 1;
-	while (!is_whitespace(input[++j]))
+	tmp = *lst;
+	while (tmp->next)
 	{
-		if (input[j] == QUOTE_S || input[j] == QUOTE_D)
-		{
-			first_quote = input[j];
-			matching_quote = find_matching_quote(input, j, input[j]);
-			if (matching_quote != NOT_FOUND)
-			{
-				end_token = find_end_chars_index(input, j);
-				new_token = ft_substr(input, (unsigned int)start_token, end_token - start_token + 1);
-				add_token_lst(token_lst, new_token);
-				return (end_token);
-			}
-			else
-				ft_error(new_token);
-		}
+		printf("value: %s; token: %i\n", tmp->value, tmp->token);
+		tmp = tmp->next;
 	}
 }
 
-int	handle_input(char *input)
+int ft_error(char *error_token);
+
+int	add_token_lst(t_lst **token_lst, char *word, int token)
+{
+	t_lst	*new_node;
+
+	new_node = create_lst_node(word, token);
+	lst_add_back(token_lst, new_node);
+	return (1);
+}
+
+int	handle_quotes(t_lst **token_lst, char *input, int start_token)
+{
+	int		matching_quote;
+	int		end_token;
+	char	*word;	
+	
+	matching_quote = find_matching_quote(input, start_token, input[start_token]);
+	if (matching_quote != NOT_FOUND)
+	{
+		end_token = find_end_chars_index(input, start_token);
+		word = ft_substr(input, (unsigned int)start_token, end_token - start_token + 1);
+		add_token_lst(token_lst, word, NONE);
+		return (end_token); 
+	}
+	// else
+	// 	ft_error(word);
+	return (1);
+}
+
+int	handle_token(t_lst **token_lst, char *input, int start_token)
+{
+	int		j;
+
+	j = start_token - 1;
+	// printf("input: %s\n", input);
+	while (!is_whitespace(input[++j]))
+	{
+		if (input[j] == QUOTE_S || input[j] == QUOTE_D)
+			j = handle_quotes(token_lst, input, start_token);
+		else if (input[j] == PIPE)
+			j += add_token_lst(token_lst, NULL, PIPE);
+		else if (input[j] == LESS && input[j + 1] != LESS)
+			j += add_token_lst(token_lst, NULL, LESS);
+		else if (input[j] == LESS && input[j + 1] == LESS)
+			j += add_token_lst(token_lst, NULL, LESS_LESS) + 1;
+		else if (input[j] == GREAT && input[j + 1] != GREAT)
+			j += add_token_lst(token_lst, NULL, GREAT);
+		else if (input[j] == GREAT && input[j + 1] == GREAT)
+			j += add_token_lst(token_lst, NULL, GREAT_GREAT) + 1;
+	}
+	return (j);
+}
+
+void	handle_input(char *input)
 {
 	t_lst	*token_lst;
 	int		i;
@@ -72,7 +97,7 @@ int	handle_input(char *input)
 		if (is_whitespace(input[i]))
 			i = skip_spaces(input, i);
 		else
-            i = handle_token(token_lst, input, i);
-
+            i = handle_token(&token_lst, input, i);
+		printf_list(&token_lst);
 	}
 }
