@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 17:34:51 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/11 16:15:31 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/12 23:24:39 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 int	is_whitespace(char c)
 {
+	if (!c)
+		return (TRUE);
 	if (c == ' ' || (c > 8 && c < 14))
 		return (TRUE);
 	return (FALSE);
@@ -25,7 +27,7 @@ int	skip_spaces(char *str, int i)
 	int	j;
 
 	j = 0;
-	while (is_whitespace(str[i + j]))
+	while (str[j] && is_whitespace(str[i + j]))
 		j++;
 	return (0);
 }
@@ -41,7 +43,7 @@ int	find_matching_quote(char *input, int i, char quote)
 {
 	int	j;
 
-	j = i - 1;
+	j = i;
 	while (!is_whitespace(input[++j]))
 	{
 		if (input[j] == quote)

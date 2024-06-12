@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:07:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/11 17:42:20 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/12 23:25:01 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@
 	//else is an error case
 	//keep tracking if there is quotes until next spaces
 
-void	printf_list(t_lst **lst)
+void	printf_list(t_lst *lst)
 {
 	t_lst	*tmp;
 
-	tmp = *lst;
-	while (tmp->next)
+	tmp = lst;
+	while (tmp)
 	{
 		printf("value: %s; token: %i\n", tmp->value, tmp->token);
 		tmp = tmp->next;
@@ -39,6 +39,7 @@ int	add_token_lst(t_lst **token_lst, char *word, int token)
 	t_lst	*new_node;
 
 	new_node = create_lst_node(word, token);
+	// printf("new_node: %p\n", new_node);
 	lst_add_back(token_lst, new_node);
 	return (1);
 }
@@ -67,7 +68,6 @@ int	handle_token(t_lst **token_lst, char *input, int start_token)
 	int		j;
 
 	j = start_token - 1;
-	// printf("input: %s\n", input);
 	while (!is_whitespace(input[++j]))
 	{
 		if (input[j] == QUOTE_S || input[j] == QUOTE_D)
@@ -82,6 +82,8 @@ int	handle_token(t_lst **token_lst, char *input, int start_token)
 			j += add_token_lst(token_lst, NULL, GREAT);
 		else if (input[j] == GREAT && input[j + 1] == GREAT)
 			j += add_token_lst(token_lst, NULL, GREAT_GREAT) + 1;
+		// else
+			
 	}
 	return (j);
 }
@@ -92,12 +94,13 @@ void	handle_input(char *input)
 	int		i;
 
 	i = -1;
+	token_lst = create_lst_node(NULL, -1);
 	while (input[++i])
 	{
 		if (is_whitespace(input[i]))
 			i = skip_spaces(input, i);
 		else
             i = handle_token(&token_lst, input, i);
-		printf_list(&token_lst);
+		printf_list(token_lst);
 	}
 }
