@@ -6,7 +6,7 @@
 /*   By: aglanuss <aglanuss@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 12:30:11 by aglanuss          #+#    #+#             */
-/*   Updated: 2024/06/11 12:52:52 by aglanuss         ###   ########.fr       */
+/*   Updated: 2024/06/13 14:23:28 by aglanuss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,16 @@ void  add_command_node(t_command **commands_lst, t_command *new_command)
       last_node = last_node->next;
     last_node->next = new_command;
   }
+}
+
+int count_words_until_pipe(t_lexer **lexer)
+{
+  t_lexer *curr;
+  int      count;
+
+  curr = *lexer;
+  count = 0;
+  while (curr->type != PIPE || curr)
+    count++;
+  return (count);
 }
