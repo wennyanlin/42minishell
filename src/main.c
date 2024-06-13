@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/11 17:27:11 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/13 16:58:03 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	main(int argc, char **argv, char **env)
 		line = readline(PROMPT);
 		printf("%s\n", line);
 		handle_input(line);
+		free(line);
 	}
 	return (0);
 }

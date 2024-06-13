@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 17:58:40 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/12 22:20:09 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/13 16:20:27 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,7 @@ void    lst_add_back(t_lst **token_lst, t_lst *new_node);
 int		find_matching_quote(char *input, int i, char quote);
 int		find_end_chars_index(char *input, int i);
 void	handle_input(char *input);
+int		handle_rest(t_lst **token_lst, int i, char *input, int token);
+int		is_delimiter(char c);
 
 # endif
