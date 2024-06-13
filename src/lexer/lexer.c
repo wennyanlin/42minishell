@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:07:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/13 17:19:20 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/14 00:03:40 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,16 @@ void	printf_list(t_lst *lst)
 	}
 }
 
-int ft_error(char *error_token);
+void	ft_error(char *input, int start_token)
+{
+	while (start_token > 0)
+	{
+		++input;
+		--start_token;
+	}
+	printf("Syntax error: %s\n", input);
+	return ;
+}
 
 int	add_token_lst(t_lst **token_lst, char *word, int token)
 {
@@ -49,6 +58,7 @@ int	handle_quotes(t_lst **token_lst, char *input, int start_token)
 	int		end_token;
 	char	*word;	
 	
+	printf("start_token = %d\n", start_token);
 	matching_quote = find_matching_quote(input, start_token, input[start_token]);
 	if (matching_quote != NOT_FOUND)
 	{
@@ -57,8 +67,11 @@ int	handle_quotes(t_lst **token_lst, char *input, int start_token)
 		add_token_lst(token_lst, word, NONE);
 		return (end_token);
 	}
-	// else
-	// 	ft_error(word);
+	else
+	{
+		ft_error(input, start_token);
+		exit(EXIT_FAILURE);
+	}
 	return (1);
 }
 
@@ -69,11 +82,8 @@ int	handle_rest(t_lst **token_lst, int i, char *input, int token)
 	char	*word;
 
 	j = i ;
-	while (!input[j] && !is_delimiter(input[j]))
-	{
-		
+	while (input[j] && !is_delimiter(input[j]))
 		j++;
-	}
 	word = ft_substr(input, (unsigned int)i, j - i + 1);
 	add_token_lst(token_lst, word, token);
 	return (j);
