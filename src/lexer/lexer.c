@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:07:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/12 23:25:01 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/13 17:19:20 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ int	add_token_lst(t_lst **token_lst, char *word, int token)
 	t_lst	*new_node;
 
 	new_node = create_lst_node(word, token);
-	// printf("new_node: %p\n", new_node);
 	lst_add_back(token_lst, new_node);
 	return (1);
 }
@@ -56,11 +55,28 @@ int	handle_quotes(t_lst **token_lst, char *input, int start_token)
 		end_token = find_end_chars_index(input, start_token);
 		word = ft_substr(input, (unsigned int)start_token, end_token - start_token + 1);
 		add_token_lst(token_lst, word, NONE);
-		return (end_token); 
+		return (end_token);
 	}
 	// else
 	// 	ft_error(word);
 	return (1);
+}
+
+
+int	handle_rest(t_lst **token_lst, int i, char *input, int token)
+{
+	int		j;
+	char	*word;
+
+	j = i ;
+	while (!input[j] && !is_delimiter(input[j]))
+	{
+		
+		j++;
+	}
+	word = ft_substr(input, (unsigned int)i, j - i + 1);
+	add_token_lst(token_lst, word, token);
+	return (j);
 }
 
 int	handle_token(t_lst **token_lst, char *input, int start_token)
@@ -82,8 +98,8 @@ int	handle_token(t_lst **token_lst, char *input, int start_token)
 			j += add_token_lst(token_lst, NULL, GREAT);
 		else if (input[j] == GREAT && input[j + 1] == GREAT)
 			j += add_token_lst(token_lst, NULL, GREAT_GREAT) + 1;
-		// else
-			
+		else
+			j = handle_rest(token_lst, j, input, 0);
 	}
 	return (j);
 }
@@ -101,6 +117,9 @@ void	handle_input(char *input)
 			i = skip_spaces(input, i);
 		else
             i = handle_token(&token_lst, input, i);
+		
 		printf_list(token_lst);
+		if (!input[i])
+			break ;
 	}
 }
