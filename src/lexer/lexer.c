@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:07:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/14 13:07:16 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/14 14:52:13 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,20 +94,20 @@ int	handle_token(t_lst **token_lst, char *input, int start_token)
 	int		j;
 
 	j = start_token - 1;
-	while (!is_whitespace(input[++j]))
+	while (input[++j] && !is_whitespace(input[j]))
 	{
 		if (input[j] == QUOTE_S || input[j] == QUOTE_D)
 			j = handle_quotes(token_lst, input, start_token);
-		else if (input[j] == PIPE)
-			j += add_token_lst(token_lst, NULL, PIPE);
-		else if (input[j] == LESS && input[j + 1] != LESS)
-			j += add_token_lst(token_lst, NULL, LESS);
-		else if (input[j] == LESS && input[j + 1] == LESS)
-			j += add_token_lst(token_lst, NULL, LESS_LESS) + 1;
-		else if (input[j] == GREAT && input[j + 1] != GREAT)
-			j += add_token_lst(token_lst, NULL, GREAT);
-		else if (input[j] == GREAT && input[j + 1] == GREAT)
-			j += add_token_lst(token_lst, NULL, GREAT_GREAT) + 1;
+		else if (input[j] == C_PIPE)
+			j = add_token_lst(token_lst, NULL, PIPE) - 1;
+		else if (input[j] == C_LESS && input[j + 1] != C_LESS)
+			j = add_token_lst(token_lst, NULL, LESS) - 1;
+		else if (input[j] == C_LESS && input[j + 1] == C_LESS)
+			j = add_token_lst(token_lst, NULL, LESS_LESS);
+		else if (input[j] == C_GREAT && input[j + 1] != C_GREAT)
+			j = add_token_lst(token_lst, NULL, GREAT) - 1;
+		else if (input[j] == C_GREAT && input[j + 1] == C_GREAT)
+			j = add_token_lst(token_lst, NULL, GREAT_GREAT);
 		else
 			j = handle_rest(token_lst, j, input, 0);
 	}
