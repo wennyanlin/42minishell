@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:07:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/14 00:03:40 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/14 13:07:16 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ int	handle_quotes(t_lst **token_lst, char *input, int start_token)
 	int		end_token;
 	char	*word;	
 	
-	printf("start_token = %d\n", start_token);
 	matching_quote = find_matching_quote(input, start_token, input[start_token]);
 	if (matching_quote != NOT_FOUND)
 	{
@@ -81,9 +80,10 @@ int	handle_rest(t_lst **token_lst, int i, char *input, int token)
 	int		j;
 	char	*word;
 
-	j = i ;
+	j = i;
 	while (input[j] && !is_delimiter(input[j]))
 		j++;
+	j -= 1;
 	word = ft_substr(input, (unsigned int)i, j - i + 1);
 	add_token_lst(token_lst, word, token);
 	return (j);
@@ -127,7 +127,6 @@ void	handle_input(char *input)
 			i = skip_spaces(input, i);
 		else
             i = handle_token(&token_lst, input, i);
-		
 		printf_list(token_lst);
 		if (!input[i])
 			break ;
