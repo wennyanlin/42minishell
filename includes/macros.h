@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 17:38:17 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/11 16:31:53 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/14 13:51:37 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,9 @@
 # define QUOTE_S 39
 # define QUOTE_D 34
 # define DOLLAR 36
+# define C_PIPE 124
+# define C_LESS 60
+# define C_GREAT 62
 
 
 
