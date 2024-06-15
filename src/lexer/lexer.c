@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:07:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/15 22:24:15 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/15 23:21:54 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,10 @@ int	handle_quotes(t_lst **token_lst, char *input, int start_token)
 	int		end_token;
 	char	*word;	
 	
-	matching_quote = find_matching_quote(input, start_token, input[start_token]);
+	matching_quote = find_matching_quote(input, start_token + 1, input[start_token]);
 	if (matching_quote != NOT_FOUND)
 	{
-		end_token = find_end_chars_index(input, start_token);
+		end_token = find_end_chars_index(input, matching_quote);
 		word = ft_substr(input, (unsigned int)start_token, end_token - start_token + 1);
 		add_token(token_lst, word, NONE);
 		return (end_token);
