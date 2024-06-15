@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 17:34:51 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/14 14:41:13 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/15 23:18:26 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,13 @@ int	find_matching_quote(char *input, int i, char quote)
 {
 	int	j;
 
-	j = i;
-	while (!is_whitespace(input[++j]))
+	j = i - 1;
+	while (input[++j])
 	{
 		if (input[j] == quote)
 			return (j);
 	}
-	if (!input[j] || is_whitespace(input[j]))
-		return (NOT_FOUND);
-	return (j);
+	return (NOT_FOUND);
 }
 
 int	is_delimiter(char c)
