@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:07:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/14 14:52:13 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/15 22:24:15 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,11 @@ void	ft_error(char *input, int start_token)
 		++input;
 		--start_token;
 	}
-	printf("Syntax error: %s\n", input);
+	printf("Syntax error at %s\n", input);
 	return ;
 }
 
-int	add_token_lst(t_lst **token_lst, char *word, int token)
+int	add_token(t_lst **token_lst, char *word, int token)
 {
 	t_lst	*new_node;
 
@@ -63,7 +63,7 @@ int	handle_quotes(t_lst **token_lst, char *input, int start_token)
 	{
 		end_token = find_end_chars_index(input, start_token);
 		word = ft_substr(input, (unsigned int)start_token, end_token - start_token + 1);
-		add_token_lst(token_lst, word, NONE);
+		add_token(token_lst, word, NONE);
 		return (end_token);
 	}
 	else
@@ -85,7 +85,7 @@ int	handle_rest(t_lst **token_lst, int i, char *input, int token)
 		j++;
 	j -= 1;
 	word = ft_substr(input, (unsigned int)i, j - i + 1);
-	add_token_lst(token_lst, word, token);
+	add_token(token_lst, word, token);
 	return (j);
 }
 
@@ -99,15 +99,15 @@ int	handle_token(t_lst **token_lst, char *input, int start_token)
 		if (input[j] == QUOTE_S || input[j] == QUOTE_D)
 			j = handle_quotes(token_lst, input, start_token);
 		else if (input[j] == C_PIPE)
-			j = add_token_lst(token_lst, NULL, PIPE) - 1;
+			j += add_token(token_lst, NULL, PIPE);
 		else if (input[j] == C_LESS && input[j + 1] != C_LESS)
-			j = add_token_lst(token_lst, NULL, LESS) - 1;
+			j += add_token(token_lst, NULL, LESS);
 		else if (input[j] == C_LESS && input[j + 1] == C_LESS)
-			j = add_token_lst(token_lst, NULL, LESS_LESS);
+			j += add_token(token_lst, NULL, LESS_LESS) + 1;
 		else if (input[j] == C_GREAT && input[j + 1] != C_GREAT)
-			j = add_token_lst(token_lst, NULL, GREAT) - 1;
+			j += add_token(token_lst, NULL, GREAT);
 		else if (input[j] == C_GREAT && input[j + 1] == C_GREAT)
-			j = add_token_lst(token_lst, NULL, GREAT_GREAT);
+			j += add_token(token_lst, NULL, GREAT_GREAT) + 1;
 		else
 			j = handle_rest(token_lst, j, input, 0);
 	}
