@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/13 16:58:03 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/16 18:51:44 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,19 @@ int	main(int argc, char **argv, char **env)
 	char	*line;
 
 	(void)env;
-	if (argc == 2 && strncmp(argv[1], "-v", 3) == 0)
+	if (argc == 2 && ft_strncmp(argv[1], "test", 5) == 0)
+		test_lexer();
+	else if (argc == 2 && ft_strncmp(argv[1], "-v", 3) == 0)
 		return (printf("%s, version %s\n", NAME, VERSION), 0);
-	while (1)
+	else
 	{
-		line = readline(PROMPT);
-		printf("%s\n", line);
-		handle_input(line);
-		free(line);
+		while (1)
+		{
+			line = readline(PROMPT);
+			printf("'%s'\n", line);
+			handle_input(line);
+			free(line);
+		}
+		return (0);
 	}
-	return (0);
 }
