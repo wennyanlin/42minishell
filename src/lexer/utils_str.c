@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 17:34:51 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/15 23:18:26 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/16 23:26:47 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,9 @@
 int	is_whitespace(char c)
 {
 	if (!c)
-	{
 		return (TRUE);
-	}
 	if (c == ' ' || (c > 8 && c < 14))
-	{
 		return (TRUE);
-		
-	}
 	return (FALSE);
 }
 
@@ -46,13 +41,11 @@ int	find_end_chars_index(char *input, int i)
 
 int	find_matching_quote(char *input, int i, char quote)
 {
-	int	j;
-
-	j = i - 1;
-	while (input[++j])
+	i -= 1;
+	while (input[++i])
 	{
-		if (input[j] == quote)
-			return (j);
+		if (input[i] == quote)
+			return (i);
 	}
 	return (NOT_FOUND);
 }

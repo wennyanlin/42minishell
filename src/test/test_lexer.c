@@ -1,41 +1,42 @@
 #include "lexer.h"
 #include "minishell.h"
+#include "macros.h"
 
 void compare_lst(t_lst *expected, t_lst *actual, char *description)
 {
     if (expected && actual)
     {
-        if (expected->value && actual->value)
+        if (expected->word && actual->word)
         {
-            int expected_len = ft_strlen(expected->value);
-            int actual_len = ft_strlen(actual->value);
-            if (expected_len != actual_len || ft_strncmp(expected->value, actual->value, expected_len) != 0)
-                printf("\n%s FAILED: Actual value `%s`, expected `%s`\n", description, actual->value, expected->value);
+            int expected_len = ft_strlen(expected->word);
+            int actual_len = ft_strlen(actual->word);
+            if (expected_len != actual_len || ft_strncmp(expected->word, actual->word, expected_len) != 0)
+                printf("\n%s %sFAILED%s: Actual value `%s`, expected `%s`\n", description, RED, RESET, actual->word, expected->word);
         }
-        else if (actual->value && !expected->value)
-            printf("\n%s FAILED: Actual value `%s`, Expected NULL\n", description, actual->value);
-        else if (expected->value && !actual->value)
-            printf("\n%s FAILED: Actual NULL, expected value `%s`\n", description, expected->value);
+        else if (actual->word && !expected->word)
+            printf("\n%s %sFAILED%s: Actual value `%s`, Expected NULL\n", description, RED, RESET, actual->word);
+        else if (expected->word && !actual->word)
+            printf("\n%s %sFAILED%s: Actual NULL, expected value `%s`\n", description, RED, RESET, expected->word);
         
 
-        if (expected->token != actual->token)
-            printf("\n%s FAILED: Actual token `%i`, expected `%i`\n", description, actual->token, expected->token);
+        if (expected->metachar != actual->metachar)
+            printf("\n%s %sFAILED%s: Actual token `%i`, expected `%i`\n", description, RED, RESET, actual->metachar, expected->metachar);
         
         if (!actual->next && expected->next)
-            printf("\n%s FAILED: actual is missing some tokens, expected next: [value: `%s`, token: `%i`]\n", description, expected->next->value, expected->next->token);
+            printf("\n%s %sFAILED%s: actual is missing some tokens, expected next: [value: `%s`, token: `%i`]\n", description, RED, RESET, expected->next->word, expected->next->metachar);
         else if (actual->next && !expected->next)
-            printf("\n%s FAILED: actual has additional tokens, extra token not expected: [value: `%s`, token: `%i`]\n", description, actual->next->value, actual->next->token);
+            printf("\n%s %sFAILED%s: actual has additional tokens, extra token not expected: [value: `%s`, token: `%i`]\n", description, RED, RESET, actual->next->word, actual->next->metachar);
         else if (!actual->next && !expected->next) 
-            printf("\n%s PASSED\n", description);
+            printf("\n%s %sPASSED%s\n", description, GREEN, RESET);
         else
             compare_lst(expected->next, actual->next, description);
     }
     else if (!actual)
     {
-        printf("\n%s FAILED: Actual was NULL, expected value: `%s` token: %d\n", description, expected->value, expected->token);
+        printf("\n%s %sFAILED%s: Actual was NULL, expected value: `%s` token: %d\n", description, RED, RESET, expected->word, expected->metachar);
     } if (!expected)
     {
-        printf("\n%s FAILED: Actual was not NULL but NULL was expected, Actual value: `%s` token: %d\n", description, actual->value, actual->token);
+        printf("\n%s %sFAILED%s: Actual was not NULL but NULL was expected, Actual value: `%s` token: %d\n", description, RED, RESET, actual->word, actual->metachar);
     }
 
 }
@@ -46,10 +47,10 @@ void test_lexer_should_return_empty_when_input_is_empty(void)
     t_lst *result;
     t_lst expected;
 
-    result = handle_input(input);
+    result = tokenize(input);
 
-    expected.value = NULL;
-    expected.token = -1;
+    expected.word = NULL;
+    expected.metachar = -1;
     expected.next = NULL;
     expected.prev = NULL;
 
@@ -63,10 +64,10 @@ void test_lexer_should_return_single_word(void)
     t_lst expected;
 
     input =  "echo";
-    result = handle_input(input);
+    result = tokenize(input);
 
-    expected.value = "echo";
-    expected.token = 0;
+    expected.word = "echo";
+    expected.metachar = 0;
     expected.next = NULL;
     expected.prev = NULL;
 
@@ -80,10 +81,10 @@ void test_lexer_should_return_chars_with_double_quotes(void)
     t_lst expected;
 
     input =  "\"echo\"";
-    result = handle_input(input);
+    result = tokenize(input);
 
-    expected.value = "\"echo\"";
-    expected.token = 0;
+    expected.word = "\"echo\"";
+    expected.metachar = 0;
     expected.next = NULL;
     expected.prev = NULL;
 
@@ -97,10 +98,10 @@ void test_lexer_should_return_chars_with_single_quotes(void)
     t_lst expected;
 
     input =  "\'echo\'";
-    result = handle_input(input);
+    result = tokenize(input);
 
-    expected.value = "\'echo\'";
-    expected.token = 0;
+    expected.word = "\'echo\'";
+    expected.metachar = 0;
     expected.next = NULL;
     expected.prev = NULL;
 
@@ -114,10 +115,10 @@ void test_lexer_should_return_word_with_single_quotes_in_mid_word(void)
     t_lst expected;
 
     input =  "echo\'hello\'";
-    result = handle_input(input);
+    result = tokenize(input);
 
-    expected.value = "echo\'hello\'";
-    expected.token = 0;
+    expected.word = "echo\'hello\'";
+    expected.metachar = 0;
     expected.next = NULL;
     expected.prev = NULL;
 
@@ -131,10 +132,10 @@ void test_lexer_should_return_chars_with_double_quotes_in_mid_word(void)
     t_lst expected;
 
     input =  "echo\"hello\"";
-    result = handle_input(input);
+    result = tokenize(input);
 
-    expected.value = "echo\"hello\"";
-    expected.token = 0;
+    expected.word = "echo\"hello\"";
+    expected.metachar = 0;
     expected.next = NULL;
     expected.prev = NULL;
 
@@ -149,12 +150,12 @@ void test_lexer_should_return_chars_and_multi_closed_quotes(void)
     t_lst expected_second;
 
     input =  "\"\"\"echo\" hi";
-    result = handle_input(input);
+    result = tokenize(input);
 
-    expected.value = "\"\"\"echo\"";
-    expected.token = 0;
-    expected_second.value = "hi";
-    expected_second.token = 0;
+    expected.word = "\"\"\"echo\"";
+    expected.metachar = 0;
+    expected_second.word = "hi";
+    expected_second.metachar = 0;
     expected.next = &expected_second;
     expected.prev = NULL;
     expected_second.next = NULL;
@@ -171,12 +172,12 @@ void test_lexer_should_return_multiple_types_of_chars(void)
     t_lst expected_second;
 
     input =  "echo \" |$USER|\"";
-    result = handle_input(input);
+    result = tokenize(input);
 
-    expected.value = "echo";
-    expected.token = 0;
-    expected_second.value = "\" |$USER|\"";
-    expected_second.token = 0;
+    expected.word = "echo";
+    expected.metachar = 0;
+    expected_second.word = "\" |$USER|\"";
+    expected_second.metachar = 0;
     expected.next = &expected_second;
     expected.prev = NULL;
     expected_second.next = NULL;
@@ -191,10 +192,10 @@ void test_lexer_should_return_metachars(void)
     t_lst *result;
     t_lst expected;
 
-    result = handle_input(input);
+    result = tokenize(input);
 
-    expected.value = NULL;
-    expected.token = 1;
+    expected.word = NULL;
+    expected.metachar = 1;
     expected.next = NULL;
     expected.prev = NULL;
 
@@ -209,14 +210,14 @@ void test_lexer_should_return_word_and_metachars(void)
     t_lst two;
     t_lst three;
 
-    result = handle_input(input);
+    result = tokenize(input);
 
-    expected.value = "ls";
-    expected.token = 0;
-    two.value = NULL;
-    two.token = 1;
-    three.value = "grep";
-    three.token = 0;
+    expected.word = "ls";
+    expected.metachar = 0;
+    two.word = NULL;
+    two.metachar = 1;
+    three.word = "grep";
+    three.metachar = 0;
     expected.next = &two;
     expected.prev = NULL;
     two.next = &three;

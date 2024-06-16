@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:07:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/16 20:42:07 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/16 23:29:57 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,53 +20,23 @@
 	//else is an error case
 	//keep tracking if there is quotes until next spaces
 
-void	printf_list(t_lst *lst)
-{
-	t_lst	*tmp;
-	int		i;
 
-	i = 0;
-	tmp = lst;
-	while (tmp)
-	{
-		if (tmp->value && tmp->token == 0)
-			printf("`%s`  =>  ", tmp->value);	
-		else if (!tmp->value && tmp->token != 0)
-			printf("%i  =>  ", tmp->token);
-		else 
-			printf("ERROR! `%s` %i, ",  tmp->value, tmp->token);
-		tmp = tmp->next;
-		++i;
-	}
-	printf("null\n");
-}
 
-void	ft_error(char *input, int start)
-{
-	while (start > 0)
-	{
-		++input;
-		--start;
-	}
-	printf("Syntax error at `%s`\n", input);
-	return ;
-}
-
-int	add_token(t_lst **token_lst, char *word, int token)
+int	add_token(t_lst **token_lst, char *word, t_metachar metachar)
 {
 	t_lst *new_node;
 	t_lst *head;
 
 	head = *token_lst;
 
-	if (head->token == UNINITIALIZED)
+	if ((int)head->metachar == UNINITIALIZED)
 	{
-		head->value = word;
-		head->token = token;	
+		head->word = word;
+		head->metachar = metachar;	
 	} 
 	else
 	{
-		new_node = create_lst_node(word, token);
+		new_node = create_lst_node(word, metachar);
 		lst_add_back(token_lst, new_node);
 	}
 	return (1);
@@ -103,29 +73,30 @@ int	handle_word(t_lst **token_lst, char *input, int start)
 	return (i);
 }
 
-int	handle_token(t_lst **token_lst, char *input, int start)
+int	get_next_token(t_lst **token_lst, char *input, int start)
 {
-	int		j;
-	j = start - 1;
-	while (input[++j] && !is_whitespace(input[j]))
+	int	i;
+	
+	i = start - 1;
+	while (input[++i] && !is_whitespace(input[i]))
 	{
-		if (input[j] == C_PIPE)
+		if (input[i] == C_PIPE)
 			add_token(token_lst, NULL, PIPE);
-		else if (input[j] == C_LESS && input[j + 1] != C_LESS)
+		else if (input[i] == C_LESS && input[i + 1] != C_LESS)
 			add_token(token_lst, NULL, LESS);
-		else if (input[j] == C_LESS && input[j + 1] == C_LESS)
-			j += add_token(token_lst, NULL, LESS_LESS);
-		else if (input[j] == C_GREAT && input[j + 1] != C_GREAT)
+		else if (input[i] == C_LESS && input[i + 1] == C_LESS)
+			i += add_token(token_lst, NULL, LESS_LESS);
+		else if (input[i] == C_GREAT && input[i + 1] != C_GREAT)
 			add_token(token_lst, NULL, GREAT);
-		else if (input[j] == C_GREAT && input[j + 1] == C_GREAT)
-			j += add_token(token_lst, NULL, GREAT_GREAT);
+		else if (input[i] == C_GREAT && input[i + 1] == C_GREAT)
+			i += add_token(token_lst, NULL, GREAT_GREAT);
 		else
-			j = handle_word(token_lst, input, j) - 1;
+			i = handle_word(token_lst, input, i) - 1;
 	}
-	return (j);
+	return (i);
 }
 
-t_lst	*handle_input(char *input)
+t_lst	*tokenize(char *input)
 {
 	t_lst	*token_lst;
 	int		i;
@@ -137,7 +108,7 @@ t_lst	*handle_input(char *input)
 		if (is_whitespace(input[i]))
 			i = skip_spaces(input, i);
 		else
-            i = handle_token(&token_lst, input, i);
+            i = get_next_token(&token_lst, input, i);
 		if (!input[i])
 			break ;
 	}

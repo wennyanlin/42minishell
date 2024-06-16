@@ -6,10 +6,8 @@
 /*   By: aglanuss <aglanuss@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/21 13:16:11 by aglanuss         ###   ########.fr       */
+/*   Updated: 2024/06/21 13:18:03 by aglanuss         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
-
 /* ************************************************************************** */
 
 #include "minishell.h"
@@ -142,6 +140,7 @@ int main()
   printf("\n");
   return 0;
 			handle_input(line);
+			tokenize(line);
 			free(line);
 		}
 		return (0);
