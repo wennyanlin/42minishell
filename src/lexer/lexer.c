@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:07:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/16 13:12:36 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/16 20:42:07 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,21 @@ void	ft_error(char *input, int start)
 
 int	add_token(t_lst **token_lst, char *word, int token)
 {
-	t_lst	*new_node;
+	t_lst *new_node;
+	t_lst *head;
 
-	new_node = create_lst_node(word, token);
-	lst_add_back(token_lst, new_node);
+	head = *token_lst;
+
+	if (head->token == UNINITIALIZED)
+	{
+		head->value = word;
+		head->token = token;	
+	} 
+	else
+	{
+		new_node = create_lst_node(word, token);
+		lst_add_back(token_lst, new_node);
+	}
 	return (1);
 }
 
@@ -95,7 +106,6 @@ int	handle_word(t_lst **token_lst, char *input, int start)
 int	handle_token(t_lst **token_lst, char *input, int start)
 {
 	int		j;
-
 	j = start - 1;
 	while (input[++j] && !is_whitespace(input[j]))
 	{
@@ -110,12 +120,12 @@ int	handle_token(t_lst **token_lst, char *input, int start)
 		else if (input[j] == C_GREAT && input[j + 1] == C_GREAT)
 			j += add_token(token_lst, NULL, GREAT_GREAT);
 		else
-			j = handle_word(token_lst, input, j);
+			j = handle_word(token_lst, input, j) - 1;
 	}
 	return (j);
 }
 
-void	handle_input(char *input)
+t_lst	*handle_input(char *input)
 {
 	t_lst	*token_lst;
 	int		i;
@@ -132,4 +142,7 @@ void	handle_input(char *input)
 			break ;
 	}
 	printf_list(token_lst);
+	return (token_lst);
 }
+
+

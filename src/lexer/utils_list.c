@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:59:45 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/12 23:06:52 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/16 19:24:36 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 #include "lexer.h"
 #include "macros.h"
 
-t_lst	*create_lst_node(char *new_token, int token)
+t_lst	*create_lst_node(char *value, int token)
 {
 	t_lst   *node;
     
     node = malloc(sizeof(t_lst));
     if (!node)
         exit(EXIT_FAILURE);
-    node->value = new_token;
+    node->value = value;
     node->token = token;
     node->next = NULL;
     node->prev = NULL;

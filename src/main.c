@@ -6,12 +6,10 @@
 /*   By: aglanuss <aglanuss@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/06/21 13:12:34 by aglanuss         ###   ########.fr       */
-=======
-/*   Updated: 2024/06/13 16:58:03 by wlin             ###   ########.fr       */
->>>>>>> c22e216 (added handle_rest)
+/*   Updated: 2024/06/21 13:16:11 by aglanuss         ###   ########.fr       */
 /*                                                                            */
+/* ************************************************************************** */
+
 /* ************************************************************************** */
 
 #include "minishell.h"
@@ -44,7 +42,6 @@ int	main(int argc, char **argv, char **env)
 		return (printf("%s, version %s\n", NAME, VERSION), 0);
 	else
 	{
-<<<<<<< HEAD
 		while (1)
 		{
 			line = readline(PROMPT);
@@ -54,12 +51,10 @@ int	main(int argc, char **argv, char **env)
 			ft_free_lst(token_lst);
 		}
 		return (0);
-=======
 		line = readline(PROMPT);
 		printf("%s\n", line);
 		handle_input(line);
 		free(line);
->>>>>>> c22e216 (added handle_rest)
 	}
 
 // int	main(/*int argc, char **argv, char **env*/)
@@ -146,4 +141,9 @@ int main()
 	}
   printf("\n");
   return 0;
+			handle_input(line);
+			free(line);
+		}
+		return (0);
+	}
 }
