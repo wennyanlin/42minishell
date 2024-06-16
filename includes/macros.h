@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 17:38:17 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/14 13:51:37 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/16 23:41:14 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,15 @@
 
 # define VERSION "0.1"
 # define BLUE "\033[1;34m"
+# define RED "\033[0;31m"
+# define GREEN "\033[0;32m"
 # define RESET "\033[0m"
 # define NAME "minishell"
 # define PROMPT BLUE NAME "% " RESET
 
 # define TRUE 1
 # define FALSE 0
+# define UNINITIALIZED -1
 # define NOT_FOUND -1
 # define NONE 0
 
