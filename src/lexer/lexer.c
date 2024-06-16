@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:07:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/16 12:32:55 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/16 13:12:36 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,16 @@ void	printf_list(t_lst *lst)
 	tmp = lst;
 	while (tmp)
 	{
-		printf("value: %s; token: %i --> ", tmp->value, tmp->token);
+		if (tmp->value && tmp->token == 0)
+			printf("`%s`  =>  ", tmp->value);	
+		else if (!tmp->value && tmp->token != 0)
+			printf("%i  =>  ", tmp->token);
+		else 
+			printf("ERROR! `%s` %i, ",  tmp->value, tmp->token);
 		tmp = tmp->next;
 		++i;
 	}
-	printf("\n");
+	printf("null\n");
 }
 
 void	ft_error(char *input, int start)
@@ -43,7 +48,7 @@ void	ft_error(char *input, int start)
 		++input;
 		--start;
 	}
-	printf("Syntax error at %s\n", input);
+	printf("Syntax error at `%s`\n", input);
 	return ;
 }
 
@@ -82,7 +87,7 @@ int	handle_word(t_lst **token_lst, char *input, int start)
 		else if (is_delimiter(input[i]) == TRUE)
 			break ;
 	}
-	word = ft_substr(input, (unsigned int)start, i - start + 1);
+	word = ft_substr(input, (unsigned int)start, i - start);
 	add_token(token_lst, word, NONE);
 	return (i);
 }
@@ -123,8 +128,8 @@ void	handle_input(char *input)
 			i = skip_spaces(input, i);
 		else
             i = handle_token(&token_lst, input, i);
-		printf_list(token_lst);
 		if (!input[i])
 			break ;
 	}
+	printf_list(token_lst);
 }
