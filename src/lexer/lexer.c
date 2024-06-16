@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:07:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/15 23:21:54 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/16 12:32:55 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,21 +23,25 @@
 void	printf_list(t_lst *lst)
 {
 	t_lst	*tmp;
+	int		i;
 
+	i = 0;
 	tmp = lst;
 	while (tmp)
 	{
-		printf("value: %s; token: %i\n", tmp->value, tmp->token);
+		printf("value: %s; token: %i --> ", tmp->value, tmp->token);
 		tmp = tmp->next;
+		++i;
 	}
+	printf("\n");
 }
 
-void	ft_error(char *input, int start_token)
+void	ft_error(char *input, int start)
 {
-	while (start_token > 0)
+	while (start > 0)
 	{
 		++input;
-		--start_token;
+		--start;
 	}
 	printf("Syntax error at %s\n", input);
 	return ;
@@ -52,64 +56,56 @@ int	add_token(t_lst **token_lst, char *word, int token)
 	return (1);
 }
 
-int	handle_quotes(t_lst **token_lst, char *input, int start_token)
+int	handle_quotes(char *input, int start)
 {
 	int		matching_quote;
-	int		end_token;
-	char	*word;	
 	
-	matching_quote = find_matching_quote(input, start_token + 1, input[start_token]);
-	if (matching_quote != NOT_FOUND)
+	matching_quote = find_matching_quote(input, start + 1, input[start]);
+	if (matching_quote == NOT_FOUND)
 	{
-		end_token = find_end_chars_index(input, matching_quote);
-		word = ft_substr(input, (unsigned int)start_token, end_token - start_token + 1);
-		add_token(token_lst, word, NONE);
-		return (end_token);
-	}
-	else
-	{
-		ft_error(input, start_token);
+		ft_error(input, start);
 		exit(EXIT_FAILURE);
 	}
-	return (1);
+	return (matching_quote);
 }
 
-
-int	handle_rest(t_lst **token_lst, int i, char *input, int token)
+int	handle_word(t_lst **token_lst, char *input, int start)
 {
-	int		j;
+	int		i;
 	char	*word;
 
-	j = i;
-	while (input[j] && !is_delimiter(input[j]))
-		j++;
-	j -= 1;
-	word = ft_substr(input, (unsigned int)i, j - i + 1);
-	add_token(token_lst, word, token);
-	return (j);
+	i = start - 1;
+	while (input[++i])
+	{
+		if (input[i] == QUOTE_D || input[i] == QUOTE_S)
+			i = handle_quotes(input, i);
+		else if (is_delimiter(input[i]) == TRUE)
+			break ;
+	}
+	word = ft_substr(input, (unsigned int)start, i - start + 1);
+	add_token(token_lst, word, NONE);
+	return (i);
 }
 
-int	handle_token(t_lst **token_lst, char *input, int start_token)
+int	handle_token(t_lst **token_lst, char *input, int start)
 {
 	int		j;
 
-	j = start_token - 1;
+	j = start - 1;
 	while (input[++j] && !is_whitespace(input[j]))
 	{
-		if (input[j] == QUOTE_S || input[j] == QUOTE_D)
-			j = handle_quotes(token_lst, input, start_token);
-		else if (input[j] == C_PIPE)
-			j += add_token(token_lst, NULL, PIPE);
+		if (input[j] == C_PIPE)
+			add_token(token_lst, NULL, PIPE);
 		else if (input[j] == C_LESS && input[j + 1] != C_LESS)
-			j += add_token(token_lst, NULL, LESS);
+			add_token(token_lst, NULL, LESS);
 		else if (input[j] == C_LESS && input[j + 1] == C_LESS)
-			j += add_token(token_lst, NULL, LESS_LESS) + 1;
+			j += add_token(token_lst, NULL, LESS_LESS);
 		else if (input[j] == C_GREAT && input[j + 1] != C_GREAT)
-			j += add_token(token_lst, NULL, GREAT);
+			add_token(token_lst, NULL, GREAT);
 		else if (input[j] == C_GREAT && input[j + 1] == C_GREAT)
-			j += add_token(token_lst, NULL, GREAT_GREAT) + 1;
+			j += add_token(token_lst, NULL, GREAT_GREAT);
 		else
-			j = handle_rest(token_lst, j, input, 0);
+			j = handle_word(token_lst, input, j);
 	}
 	return (j);
 }
