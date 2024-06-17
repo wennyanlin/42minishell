@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:07:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/16 23:29:57 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/17 13:58:20 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,13 +106,14 @@ t_lst	*tokenize(char *input)
 	while (input[++i])
 	{
 		if (is_whitespace(input[i]))
-			i = skip_spaces(input, i);
+			i = skip_spaces(input, i) - 1;
 		else
             i = get_next_token(&token_lst, input, i);
 		if (!input[i])
 			break ;
 	}
 	printf_list(token_lst);
+	
 	return (token_lst);
 }
 

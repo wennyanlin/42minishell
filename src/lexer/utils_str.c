@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 17:34:51 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/16 23:26:47 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/17 12:28:41 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,9 @@ int	is_whitespace(char c)
 
 int	skip_spaces(char *str, int i)
 {
-	int	j;
-
-	j = 0;
-	while (str[i + j] && is_whitespace(str[i + j]))
-		j++;
-	return (0);
+	while (str[i] && is_whitespace(str[i]))
+		++i;
+	return (i);
 }
 
 int	find_end_chars_index(char *input, int i)
