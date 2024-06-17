@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 17:58:40 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/16 23:31:23 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/17 14:34:07 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,6 @@ int		find_matching_quote(char *input, int i, char quote);
 int		find_end_chars_index(char *input, int i);
 t_lst	*tokenize(char *input);
 void	test_lexer(void);
+void	ft_free_lst(t_lst *lst);
 
 # endif
