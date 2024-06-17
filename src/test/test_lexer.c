@@ -55,6 +55,7 @@ void test_lexer_should_return_empty_when_input_is_empty(void)
     expected.prev = NULL;
 
     compare_lst(&expected, result, "Should return empty when input is empty");
+    ft_free_lst(result);
 }
 
 void test_lexer_should_return_single_word(void)
@@ -72,6 +73,7 @@ void test_lexer_should_return_single_word(void)
     expected.prev = NULL;
 
     compare_lst(&expected, result, "Should return single word");
+    ft_free_lst(result);
 }
 
 void test_lexer_should_return_chars_with_double_quotes(void)
@@ -89,6 +91,7 @@ void test_lexer_should_return_chars_with_double_quotes(void)
     expected.prev = NULL;
 
     compare_lst(&expected, result, "Should return chars_with_double_quotes");
+    ft_free_lst(result);
 }
 
 void test_lexer_should_return_chars_with_single_quotes(void)
@@ -106,6 +109,7 @@ void test_lexer_should_return_chars_with_single_quotes(void)
     expected.prev = NULL;
 
     compare_lst(&expected, result, "Should return chars_with_single_quotes");
+    ft_free_lst(result);
 }
 
 void test_lexer_should_return_word_with_single_quotes_in_mid_word(void)
@@ -123,6 +127,7 @@ void test_lexer_should_return_word_with_single_quotes_in_mid_word(void)
     expected.prev = NULL;
 
     compare_lst(&expected, result, "Should return chars_and_single_quotes");
+    ft_free_lst(result);
 }
 
 void test_lexer_should_return_chars_with_double_quotes_in_mid_word(void)
@@ -140,6 +145,7 @@ void test_lexer_should_return_chars_with_double_quotes_in_mid_word(void)
     expected.prev = NULL;
 
     compare_lst(&expected, result, "Should return chars and double quotes");
+    ft_free_lst(result);
 }
 
 void test_lexer_should_return_chars_and_multi_closed_quotes(void)
@@ -162,6 +168,7 @@ void test_lexer_should_return_chars_and_multi_closed_quotes(void)
     expected_second.prev = &expected;
 
     compare_lst(&expected, result, "Should return chars and multi closed quotes");
+    ft_free_lst(result);
 }
 
 void test_lexer_should_return_multiple_types_of_chars(void)
@@ -184,6 +191,7 @@ void test_lexer_should_return_multiple_types_of_chars(void)
     expected_second.prev = &expected;
 
     compare_lst(&expected, result, "Should return multiple types of chars");
+    ft_free_lst(result);
 }
 
 void test_lexer_should_return_metachars(void)
@@ -200,6 +208,7 @@ void test_lexer_should_return_metachars(void)
     expected.prev = NULL;
 
     compare_lst(&expected, result, "Should return only metachars");
+    ft_free_lst(result);
 }
 
 void test_lexer_should_return_word_and_metachars(void)
@@ -225,6 +234,7 @@ void test_lexer_should_return_word_and_metachars(void)
     three.next = NULL;
     three.prev = &two;
     compare_lst(&expected, result, "Should return only metachars");
+    ft_free_lst(result);
 }
 
 void test_lexer(void)

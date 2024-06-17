@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:07:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/17 13:58:20 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/17 14:42:13 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,6 @@ t_lst	*tokenize(char *input)
 			break ;
 	}
 	printf_list(token_lst);
-	
 	return (token_lst);
 }
 
