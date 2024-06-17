@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:59:45 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/16 23:36:37 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/17 16:29:38 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 #include "lexer.h"
 #include "macros.h"
 
-t_lst	*create_lst_node(char *word, int metachar)
+t_token	*create_lst_node(char *word, int metachar)
 {
-	t_lst   *node;
+	t_token   *node;
     
-    node = malloc(sizeof(t_lst));
+    node = malloc(sizeof(t_token));
     if (!node)
         exit(EXIT_FAILURE);
     node->word = word;
@@ -28,9 +28,9 @@ t_lst	*create_lst_node(char *word, int metachar)
     return (node);
 }
 
-void    lst_add_back(t_lst **token_lst, t_lst *new_node)
+void    lst_add_back(t_token **token_lst, t_token *new_node)
 {
-    t_lst   *tmp;
+    t_token   *tmp;
 
     if (*token_lst)
     {
@@ -44,9 +44,9 @@ void    lst_add_back(t_lst **token_lst, t_lst *new_node)
         *token_lst = new_node;
 }
 
-void	printf_list(t_lst *lst)
+void	printf_list(t_token *lst)
 {
-	t_lst	*tmp;
+	t_token	*tmp;
 
 	tmp = lst;
 	while (tmp)

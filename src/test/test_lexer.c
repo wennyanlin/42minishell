@@ -2,7 +2,7 @@
 #include "minishell.h"
 #include "macros.h"
 
-void compare_lst(t_lst *expected, t_lst *actual, char *description)
+void compare_lst(t_token *expected, t_token *actual, char *description)
 {
     if (expected && actual)
     {
@@ -44,8 +44,8 @@ void compare_lst(t_lst *expected, t_lst *actual, char *description)
 void test_lexer_should_return_empty_when_input_is_empty(void)
 {
     char *input = "";
-    t_lst *result;
-    t_lst expected;
+    t_token *result;
+    t_token expected;
 
     result = tokenize(input);
 
@@ -61,8 +61,8 @@ void test_lexer_should_return_empty_when_input_is_empty(void)
 void test_lexer_should_return_single_word(void)
 {
     char *input;
-    t_lst *result;
-    t_lst expected;
+    t_token *result;
+    t_token expected;
 
     input =  "echo";
     result = tokenize(input);
@@ -79,8 +79,8 @@ void test_lexer_should_return_single_word(void)
 void test_lexer_should_return_chars_with_double_quotes(void)
 {
     char *input;
-    t_lst *result;
-    t_lst expected;
+    t_token *result;
+    t_token expected;
 
     input =  "\"echo\"";
     result = tokenize(input);
@@ -97,8 +97,8 @@ void test_lexer_should_return_chars_with_double_quotes(void)
 void test_lexer_should_return_chars_with_single_quotes(void)
 {
     char *input;
-    t_lst *result;
-    t_lst expected;
+    t_token *result;
+    t_token expected;
 
     input =  "\'echo\'";
     result = tokenize(input);
@@ -115,8 +115,8 @@ void test_lexer_should_return_chars_with_single_quotes(void)
 void test_lexer_should_return_word_with_single_quotes_in_mid_word(void)
 {
     char *input;
-    t_lst *result;
-    t_lst expected;
+    t_token *result;
+    t_token expected;
 
     input =  "echo\'hello\'";
     result = tokenize(input);
@@ -133,8 +133,8 @@ void test_lexer_should_return_word_with_single_quotes_in_mid_word(void)
 void test_lexer_should_return_chars_with_double_quotes_in_mid_word(void)
 {
     char *input;
-    t_lst *result;
-    t_lst expected;
+    t_token *result;
+    t_token expected;
 
     input =  "echo\"hello\"";
     result = tokenize(input);
@@ -151,9 +151,9 @@ void test_lexer_should_return_chars_with_double_quotes_in_mid_word(void)
 void test_lexer_should_return_chars_and_multi_closed_quotes(void)
 {
     char *input;
-    t_lst *result;
-    t_lst expected;
-    t_lst expected_second;
+    t_token *result;
+    t_token expected;
+    t_token expected_second;
 
     input =  "\"\"\"echo\" hi";
     result = tokenize(input);
@@ -174,9 +174,9 @@ void test_lexer_should_return_chars_and_multi_closed_quotes(void)
 void test_lexer_should_return_multiple_types_of_chars(void)
 {
     char *input;
-    t_lst *result;
-    t_lst expected;
-    t_lst expected_second;
+    t_token *result;
+    t_token expected;
+    t_token expected_second;
 
     input =  "echo \" |$USER|\"";
     result = tokenize(input);
@@ -197,8 +197,8 @@ void test_lexer_should_return_multiple_types_of_chars(void)
 void test_lexer_should_return_metachars(void)
 {
     char *input = "|";
-    t_lst *result;
-    t_lst expected;
+    t_token *result;
+    t_token expected;
 
     result = tokenize(input);
 
@@ -214,10 +214,10 @@ void test_lexer_should_return_metachars(void)
 void test_lexer_should_return_word_and_metachars(void)
 {
     char *input = "ls|grep";
-    t_lst *result;
-    t_lst expected;
-    t_lst two;
-    t_lst three;
+    t_token *result;
+    t_token expected;
+    t_token two;
+    t_token three;
 
     result = tokenize(input);
 

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstmap_bonus.c                                  :+:      :+:    :+:   */
+/*   ft_tokenmap_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wlin <wlin@student.42barcelona.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,28 +12,28 @@
 
 #include "libft.h"
 
-t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
+t_list	*ft_tokenmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	t_list	*result_lst;
+	t_list	*result_token;
 	t_list	*new_node;
 	void	*content;
 
 	if (!lst || !f || !del)
 		return (NULL);
-	result_lst = NULL;
+	result_token = NULL;
 	while (lst)
 	{
 		content = f(lst->content);
 		if (content)
-			new_node = ft_lstnew(content);
+			new_node = ft_tokennew(content);
 		if (!content || !new_node)
 		{
 			free(content);
-			ft_lstclear(&result_lst, del);
+			ft_tokenclear(&result_token, del);
 			return (NULL);
 		}
-		ft_lstadd_back(&result_lst, new_node);
+		ft_tokenadd_back(&result_token, new_node);
 		lst = lst->next;
 	}
-	return (result_lst);
+	return (result_token);
 }

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aglanuss <aglanuss@student.42barcelona.    +#+  +:+       +#+         #
+#    By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/09 20:06:48 by wlin              #+#    #+#              #
-#    Updated: 2024/06/06 13:26:07 by aglanuss         ###   ########.fr        #
+#    Updated: 2024/06/17 16:29:38 by wlin             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,9 +22,9 @@ SRCS =  ft_isalnum.c ft_isalpha.c ft_isascii.c ft_isdigit.c ft_isprint.c \
 		ft_itoa.c ft_putchar_fd.c ft_putstr_fd.c ft_putendl_fd.c ft_putnbr_fd.c\
 		ft_striteri.c ft_strmapi.c ft_split.c
 
-SRCSBONUS = ft_lstnew_bonus.c ft_lstadd_front_bonus.c ft_lstsize_bonus.c\
-			ft_lstlast_bonus.c ft_lstadd_back_bonus.c ft_lstdelone_bonus.c\
-			ft_lstclear_bonus.c ft_lstiter_bonus.c ft_lstmap_bonus.c
+SRCSBONUS = ft_tokennew_bonus.c ft_tokenadd_front_bonus.c ft_tokensize_bonus.c\
+			ft_tokenlast_bonus.c ft_tokenadd_back_bonus.c ft_tokendelone_bonus.c\
+			ft_tokenclear_bonus.c ft_tokeniter_bonus.c ft_tokenmap_bonus.c
 
 OBJS = $(SRCS:.c=.o)
 

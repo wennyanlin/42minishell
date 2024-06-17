@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/17 14:56:55 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/17 16:29:38 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 #include "libft.h"
 #include "lexer.h"
 
-void	ft_free_lst(t_lst *lst)
+void	ft_free_lst(t_token *lst)
 {
-	t_lst	*tmp;
+	t_token	*tmp;
 	while (lst)
 	{
 		tmp = lst;
@@ -32,7 +32,7 @@ void	ft_free_lst(t_lst *lst)
 int	main(int argc, char **argv, char **env)
 {
 	char	*line;
-	t_lst	*token_lst;
+	t_token	*token_lst;
 
 	(void)env;
 	if (argc == 2 && ft_strncmp(argv[1], "test", 5) == 0)

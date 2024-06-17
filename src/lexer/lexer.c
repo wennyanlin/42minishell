@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:07:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/17 14:42:13 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/17 16:29:38 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@
 
 
 
-int	add_token(t_lst **token_lst, char *word, t_metachar metachar)
+int	add_token(t_token **token_lst, char *word, t_metachar metachar)
 {
-	t_lst *new_node;
-	t_lst *head;
+	t_token *new_node;
+	t_token *head;
 
 	head = *token_lst;
 
@@ -55,7 +55,7 @@ int	handle_quotes(char *input, int start)
 	return (matching_quote);
 }
 
-int	handle_word(t_lst **token_lst, char *input, int start)
+int	handle_word(t_token **token_lst, char *input, int start)
 {
 	int		i;
 	char	*word;
@@ -73,7 +73,7 @@ int	handle_word(t_lst **token_lst, char *input, int start)
 	return (i);
 }
 
-int	get_next_token(t_lst **token_lst, char *input, int start)
+int	get_next_token(t_token **token_lst, char *input, int start)
 {
 	int	i;
 	
@@ -96,9 +96,9 @@ int	get_next_token(t_lst **token_lst, char *input, int start)
 	return (i);
 }
 
-t_lst	*tokenize(char *input)
+t_token	*tokenize(char *input)
 {
-	t_lst	*token_lst;
+	t_token	*token_lst;
 	int		i;
 
 	i = -1;
