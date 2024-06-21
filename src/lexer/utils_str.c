@@ -3,31 +3,54 @@
 /*                                                        :::      ::::::::   */
 /*   utils_str.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aglanuss <aglanuss@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 17:34:51 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/06 11:52:21 by aglanuss         ###   ########.fr       */
+/*   Updated: 2024/06/17 12:28:41 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "minishell.h"
-// #include "macros.h"
+#include "minishell.h"
+#include "macros.h"
 
-// int	is_whitespace(char c)
-// {
-// 	if (c == ' ' || c > 8 && c < 14)
-// 		return (TRUE);
-// 	return (FALSE);
-// }
+int	is_whitespace(char c)
+{
+	if (!c)
+		return (TRUE);
+	if (c == ' ' || (c > 8 && c < 14))
+		return (TRUE);
+	return (FALSE);
+}
 
-// int	skip_spaces(char *str, int i)
-// {
-// 	int	j;
+int	skip_spaces(char *str, int i)
+{
+	while (str[i] && is_whitespace(str[i]))
+		++i;
+	return (i);
+}
 
-// 	j = 0;
-// 	while (is_whitespace(str[i + j]))
-// 		j++;
-// 	return (0);
-// }
+int	find_end_chars_index(char *input, int i)
+{
+	while (!is_whitespace(input[i]))
+		i++;
+	return (i - 1);
+}
 
-// void	find_other_quote(char c)
+int	find_matching_quote(char *input, int i, char quote)
+{
+	i -= 1;
+	while (input[++i])
+	{
+		if (input[i] == quote)
+			return (i);
+	}
+	return (NOT_FOUND);
+}
+
+int	is_delimiter(char c)
+{
+	if (is_whitespace(c) || c == '|' || c == '<' || c == '>')
+		return (TRUE);
+	return (FALSE);
+}
+
