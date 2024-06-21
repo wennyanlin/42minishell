@@ -6,11 +6,23 @@
 /*   By: aglanuss <aglanuss@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 12:30:11 by aglanuss          #+#    #+#             */
-/*   Updated: 2024/06/13 14:23:28 by aglanuss         ###   ########.fr       */
+/*   Updated: 2024/06/21 11:54:00 by aglanuss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
+
+void  remove_first_node_lexer(t_lexer **lexer_lst)
+{
+  t_lexer *tmp;
+
+  if (!lexer_lst || !*lexer_lst)
+    return ;
+  tmp = *lexer_lst;
+  *lexer_lst = tmp->next;
+  (*lexer_lst)->prev = NULL;
+  free(tmp);
+}
 
 t_command *new_command_node(char **str)
 {
@@ -49,7 +61,10 @@ int count_words_until_pipe(t_lexer **lexer)
 
   curr = *lexer;
   count = 0;
-  while (curr->type != PIPE || curr)
+  while (curr && curr->type != PIPE)
+  {
+    curr = curr->next;
     count++;
+  }
   return (count);
 }

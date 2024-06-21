@@ -6,7 +6,7 @@
 #    By: aglanuss <aglanuss@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 13:11:23 by wlin              #+#    #+#              #
-#    Updated: 2024/06/06 13:27:10 by aglanuss         ###   ########.fr        #
+#    Updated: 2024/06/21 12:53:45 by aglanuss         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ AUTHOR		= wlin, aglanuss
 NAME			= minishell
 
 CC				= gcc
-CFLAGS		= -Wall -Wextra -Werror -g -Iincludes -fsanitize=address
+CFLAGS		= -Wall -Wextra -Werror -g -Iincludes
 RM				= rm -fr
 
 # *******************************	FILES	********************************** #

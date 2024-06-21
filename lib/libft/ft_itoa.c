@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aglanuss <aglanuss@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 14:30:30 by wlin              #+#    #+#             */
-/*   Updated: 2024/02/28 18:28:53 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/21 12:45:39 by aglanuss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,23 +25,23 @@ size_t	ft_strlen(const char *s)
 	return (count);
 }
 
-char	*ft_strdup(const char *s1)
-{
-	char	*s2;
-	int		i;	
+// char	*ft_strdup(const char *s1)
+// {
+// 	char	*s2;
+// 	int		i;	
 
-	i = 0;
-	s2 = malloc(ft_strlen(s1) + 1);
-	if (s2 == NULL)
-		return (NULL);
-	while (s1[i] != '\0')
-	{
-		s2[i] = s1[i];
-		i++;
-	}
-	s2[i] = '\0';
-	return (s2);
-}
+// 	i = 0;
+// 	s2 = malloc(ft_strlen(s1) + 1);
+// 	if (s2 == NULL)
+// 		return (NULL);
+// 	while (s1[i] != '\0')
+// 	{
+// 		s2[i] = s1[i];
+// 		i++;
+// 	}
+// 	s2[i] = '\0';
+// 	return (s2);
+// }
 
 int	calculate_digits(int n)
 {

@@ -6,7 +6,7 @@
 /*   By: aglanuss <aglanuss@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 17:44:59 by aglanuss          #+#    #+#             */
-/*   Updated: 2024/06/13 14:12:12 by aglanuss         ###   ########.fr       */
+/*   Updated: 2024/06/21 12:04:56 by aglanuss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,11 @@ typedef struct s_lexer
 }	t_lexer;
 /* DELETE THIS */
 
+t_command **parse_input(t_lexer **lexer_lst);
 t_command	*new_command_node(char **str);
 void			add_command_node(t_command **commands_lst, t_command *new_command);
-int count_words_until_pipe(t_lexer **lexer);
+void			remove_first_node_lexer(t_lexer **lexer_lst);
+int				count_words_until_pipe(t_lexer **lexer);
+char  **extract_words_from_lexer(t_lexer **lexer_lst);
 
 #endif

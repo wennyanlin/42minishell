@@ -6,48 +6,60 @@
 /*   By: aglanuss <aglanuss@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 17:49:09 by aglanuss          #+#    #+#             */
-/*   Updated: 2024/06/13 13:59:38 by aglanuss         ###   ########.fr       */
+/*   Updated: 2024/06/21 11:57:22 by aglanuss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
 
-/* DELETE THIS */
-typedef enum e_token
+char  **extract_words_from_lexer(t_lexer **lexer_lst)
 {
-	PIPE = 1,
-	GREAT,
-	GREAT_GREAT,
-	LESS,
-	LESS_LESS
-}	t_token;
-
-typedef struct s_lexer
-{
-	char					*value;
-	t_token				type;
-	struct s_lexer	*prev;
-	struct s_lexer	*next;
-}	t_lexer;
-/* DELETE THIS */
-
-void create_command(t_command **command_nodes, t_list **lexer_node)
-{
-  t_command *new_command;
-
-  if ((*lexer_node))
-  new_command = new_command_node();
-}
-
-t_command **parse_input(t_lexer **lexer_lst)
-{
-  t_list    *curr_lexer_node;
-  t_command **commands_list;
+  char  **words;
+  int   words_num;
+  int   i;
 
   if (!lexer_lst || !*lexer_lst)
     return (NULL);
-  curr_lexer_node = *lexer_lst;
-  commands_list = NULL;
-  while (curr_lexer_node)
-    create_command(commands_list, &curr_lexer_node);
+  words_num = count_words_until_pipe(lexer_lst);
+  words = (char **)malloc(sizeof(char *) * (words_num + 1));
+  if (!words)
+    return (NULL);
+  words[words_num] = NULL;
+  i = 0;
+  while (i < words_num)
+  {
+    words[i] = ft_strdup((*lexer_lst)->value);
+    // todo: free words array in case of error.
+    if (!words[i])
+      return (NULL);
+    remove_first_node_lexer(lexer_lst);
+    i++;
+  }
+  remove_first_node_lexer(lexer_lst);
+  return (words);
 }
+
+// t_command **create_commands(t_lexer **lexer_lst)
+// {
+//   t_command **commands_list;
+//   t_command *new_command;
+
+//   commands_list = NULL;
+//   while (*lexer_lst)
+//   {
+
+//     new_command = new_command_node();
+//   }
+// }
+
+// t_command **parse_input(t_lexer **lexer_lst)
+// {
+//   t_command **commands_list;
+
+//   if (!lexer_lst || !*lexer_lst)
+//     return (NULL);
+//   commands_list = create_commands(lexer_lst);
+//   if (!commands_list)
+//     return (NULL);
+//   return (commands_list);
+// }
