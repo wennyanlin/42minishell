@@ -6,19 +6,13 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:07:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/17 16:29:38 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/22 11:41:52 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "lexer.h"
 #include "macros.h"
-
-//if we found matching quote, keep checking chars after matching quote until spaces
-	//if found more chars, 
-		//tokenize the whole string skipping the quotes
-	//else is an error case
-	//keep tracking if there is quotes until next spaces
 
 
 

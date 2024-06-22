@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/17 16:29:38 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/22 13:58:19 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,13 @@ void	ft_free_lst(t_token *lst)
 	lst = NULL;
 }
 
-int	main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **envp)
 {
 	char	*line;
 	t_token	*token_lst;
+	char	*cmd_args[2] = {"ls", NULL};
 
-	(void)env;
+	// (void)envp;
 	if (argc == 2 && ft_strncmp(argv[1], "test", 5) == 0)
 		test_lexer();
 	else if (argc == 2 && ft_strncmp(argv[1], "-v", 3) == 0)
@@ -46,6 +47,7 @@ int	main(int argc, char **argv, char **env)
 			line = readline(PROMPT);
 			printf("'%s'\n", line);
 			token_lst = tokenize(line);
+			executor(cmd_args, envp);
 			free(line);
 			ft_free_lst(token_lst);
 		}
