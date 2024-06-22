@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_tokeniter_bonus.c                                 :+:      :+:    :+:   */
+/*   ft_lstiter_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wlin <wlin@student.42barcelona.>           +#+  +:+       +#+        */
+/*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:12:56 by wlin              #+#    #+#             */
-/*   Updated: 2023/09/27 20:23:11 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/22 15:56:02 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "libft.h"
 
-void	ft_tokeniter(t_list *lst, void (*f)(void *))
+
+void	ft_lstiter(t_list *lst, void (*f)(void *))
 {
 	if (!lst)
 		return ;

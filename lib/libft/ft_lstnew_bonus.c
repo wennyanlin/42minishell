@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_tokennew.c                                        :+:      :+:    :+:   */
+/*   ft_lstnew_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wlin <wlin@student.42barcelona.>           +#+  +:+       +#+        */
+/*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 16:38:47 by wlin              #+#    #+#             */
-/*   Updated: 2023/10/03 12:00:00 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/22 15:56:02 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_list	*ft_tokennew(void *content)
+t_list	*ft_lstnew(void *content)
 {
 	t_list	*node;
 
@@ -29,9 +29,9 @@ int main()
 {
 	int content = 14566;
 
-	t_list	*node_1 = ft_tokennew(&content);
-	t_list	*node_2 = ft_tokennew(&content);
-	t_list	*node_3 = ft_tokennew(&content);
+	t_list	*node_1 = ft_lstnew(&content);
+	t_list	*node_2 = ft_lstnew(&content);
+	t_list	*node_3 = ft_lstnew(&content);
 	t_list 	*lst;
 
 	lst = node_1;
@@ -47,8 +47,8 @@ int main()
 *//*
 int main()
 {
-	t_list	*node_1 = ft_tokennew("Hello");
-	t_list	*node_2 = ft_tokennew("wat's up");
+	t_list	*node_1 = ft_lstnew("Hello");
+	t_list	*node_2 = ft_lstnew("wat's up");
 	t_list *lst;
 
 	lst = node_1;

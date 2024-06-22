@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_tokenadd_back_bonus.c                             :+:      :+:    :+:   */
+/*   ft_lstadd_back_bonus.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wlin <wlin@student.42barcelona.>           +#+  +:+       +#+        */
+/*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:27:34 by wlin              #+#    #+#             */
-/*   Updated: 2023/09/29 17:32:31 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/22 15:56:02 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_tokenadd_back(t_list **lst, t_list *new)
+void	ft_lstadd_back(t_list **lst, t_list *new)
 {
 	t_list	*last;
 
@@ -22,7 +22,7 @@ void	ft_tokenadd_back(t_list **lst, t_list *new)
 		*lst = new;
 	else
 	{
-		last = ft_tokenlast(*lst);
+		last = ft_lstlast(*lst);
 		last->next = new;
 	}
 }
