@@ -6,19 +6,13 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/22 16:23:57 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/23 19:13:50 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "executor.h"
 #include "macros.h"
-
-void	perror_and_exit(char *file, int code)
-{
-	perror(file);
-	exit(code);
-}
 
 void	free_array(char **array)
 {
@@ -30,15 +24,13 @@ void	free_array(char **array)
 	free(array);
 }
 
-char    *parse_command(char **cmd_args)
+void	parse_command(t_exec_state *state)
 {
     char    *env_value;
-    char    *cmd_path;
 
     env_value = getenv("PATH");
-    cmd_path = find_path(env_value, cmd_args[0]);
+    state->cmd_path = find_path(env_value, state->cmd_args[0]);
     // free(env_value);
-    return (cmd_path);
 }
 
 void	execute_command(char *command_path, char **cmd_args, char **envp)
@@ -68,16 +60,32 @@ void	execute_command(char *command_path, char **cmd_args, char **envp)
 		perror_and_exit(cmd_args[0], EXIT_FAILURE);
 }
 
-void    executor(char **cmd_args, char **envp)
-{
-    char    *cmd_path;
+// void    executor(char **cmd_args, char **envp)
+// {
+//     char    *cmd_path;
     
-    cmd_path = parse_command(cmd_args);
-    if (access(cmd_path, X_OK) == -1 && access(cmd_path, F_OK) == 0)
-    {
-        write(STDERR_FILENO, cmd_args[0], str_size(cmd_args[0]));
-        write(STDERR_FILENO, ": permission denied\n", 20);
-        exit (126);
-    }
-    execute_command(cmd_path, cmd_args, envp);
+//     execute_command(cmd_path, cmd_args, envp);
+// }
+
+// void init_state(t_exec_state *state)
+// {
+// 	state->cmd_args = 
+// }
+
+void	execute_all(char **cmd_arr, char **envp)
+{
+	t_exec_state	state;
+	int				i;
+
+	state.fd_in = STDIN_FILENO;
+	state.envp = envp;
+	state.cmd_args = cmd_arr;
+	i = -1;
+	while (state.cmd_args[++i])
+	{
+    	parse_command(&state);
+		create_process(&state);
+        // free(state->cmd_path);
+        // free_array(state->cmd_args);
+	}
 }
