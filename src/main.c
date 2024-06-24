@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/23 19:22:28 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/25 00:28:17 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,16 +82,12 @@ int	main(int argc, char **argv, char **envp)
 	{
 		while (1)
 		{
-			printf("READING\n");
 			line = readline(PROMPT);
-			printf("READ\n");
-			printf("'%s'\n", line);
 			token_lst = tokenize(line);
-			// executor(convert_lst_to_array(token_lst), envp);
 			execute_all(convert_lst_to_array(token_lst), envp);
 			free(line);
-			ft_free_lst(token_lst);
 		}
+		ft_free_lst(token_lst);
 		return (0);
 	}
 }

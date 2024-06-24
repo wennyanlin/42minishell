@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/23 18:55:00 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/24 23:29:15 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct s_commands
 
 typedef struct s_exec_state
 {
+	int		*cmd_idx;
 	int		num_cmds;
 	char	*cmd_path;
 	char	**cmd_args;

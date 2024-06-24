@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/23 19:13:50 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/25 00:24:35 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,15 @@ void	execute_all(char **cmd_arr, char **envp)
 	t_exec_state	state;
 	int				i;
 
-	state.fd_in = STDIN_FILENO;
+	i = 0;
+	while (cmd_arr[i])
+		i++;
+	state.fd_in = dup(STDIN_FILENO);
 	state.envp = envp;
 	state.cmd_args = cmd_arr;
+	state.num_cmds = i;
 	i = -1;
+	state.cmd_idx = &i;
 	while (state.cmd_args[++i])
 	{
     	parse_command(&state);
