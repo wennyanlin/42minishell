@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 18:16:01 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/25 00:35:05 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/25 18:12:54 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,13 @@ void	child_process(int pipe_fd[2], t_exec_state *state)
     fd_dup2(state->fd_in, STDIN_FILENO);
 	close(pipe_fd[RD]);
     if (state->num_cmds > 1 && *state->cmd_idx < state->num_cmds)
+    {
+        printf("if more than 1 commands\n");
         fd_dup2(pipe_fd[WR], STDOUT_FILENO);
-	execute_command(state->cmd_path, state->cmd_args, state->envp);
+    }
+    close(pipe_fd[WR]);//NOT SURE
+    printf("before executing\n");
+	execute_command(state->cmd_path, state->cmd_args, state->envp, pipe_fd);
 	exit(127);
 }
 
@@ -66,5 +71,6 @@ void create_process(t_exec_state *state)
     // state->pid_arr[state->cmd_idx] = pid;
     close(state->fd_in);
     state->fd_in = pipe_fd[RD];
-    close(pipe_fd[WR]);
+    close(pipe_fd[WR]);//NOT SURE
+    
 }

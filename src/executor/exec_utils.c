@@ -6,12 +6,13 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:12:56 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/22 13:51:43 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/25 17:21:29 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 #include "macros.h"
+#include "minishell.h"
 
 char	**array_concat(char *shell_path, char **args)
 {

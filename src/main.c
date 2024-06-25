@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/25 00:28:17 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/25 17:21:46 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	ft_free_lst(t_token *lst)
 		lst = lst->next;
 		if (tmp->word)
 			free(tmp->word);
+		tmp->word = NULL;
 		free(tmp);
 	}
 	lst = NULL;
@@ -71,6 +72,7 @@ char	**convert_lst_to_array(t_token *token_lst)
 int	main(int argc, char **argv, char **envp)
 {
 	char	*line;
+	char	**cmd_arr;
 	t_token	*token_lst;
 
 	// (void)envp;
@@ -84,10 +86,13 @@ int	main(int argc, char **argv, char **envp)
 		{
 			line = readline(PROMPT);
 			token_lst = tokenize(line);
-			execute_all(convert_lst_to_array(token_lst), envp);
 			free(line);
+			cmd_arr = convert_lst_to_array(token_lst);
+			ft_free_lst(token_lst);
+			execute_all(cmd_arr, envp);
 		}
-		ft_free_lst(token_lst);
+		free_array(cmd_arr);
+		printf("finish free cmd_arr\n");
 		return (0);
 	}
 }

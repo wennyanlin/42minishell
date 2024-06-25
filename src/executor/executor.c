@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/25 00:24:35 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/25 17:20:25 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	free_array(char **array)
 	while (array[i])
 		free(array[i++]);
 	free(array);
+	array = NULL;
 }
 
 void	parse_command(t_exec_state *state)
@@ -33,7 +34,7 @@ void	parse_command(t_exec_state *state)
     // free(env_value);
 }
 
-void	execute_command(char *command_path, char **cmd_args, char **envp)
+void	execute_command(char *command_path, char **cmd_args, char **envp, int pipe_fd[2])
 {
 	char	**result_array_concat = NULL;
 
@@ -42,35 +43,31 @@ void	execute_command(char *command_path, char **cmd_args, char **envp)
 	{
 		result_array_concat = array_concat("/bin/sh", cmd_args);
 		execve("/bin/sh", result_array_concat, envp);
+        close(pipe_fd[WR]);
 		// free_array(re sult_array_concat);
 		result_array_concat = NULL;
 	}
 	else if (errno == ENOENT)
 	{
 		if (char_index(cmd_args[0], '/') != INVALID)
+        {
 			perror(cmd_args[0]);
+            close(pipe_fd[WR]);
+        }
 		else
 		{
 			write(STDERR_FILENO, cmd_args[0], str_size(cmd_args[0]));
 			write(STDERR_FILENO, ": command not found\n", 20);
+            close(pipe_fd[WR]);
 			exit(127);
 		}
 	}
 	else
+    {
 		perror_and_exit(cmd_args[0], EXIT_FAILURE);
+        close(pipe_fd[WR]);
+    }
 }
-
-// void    executor(char **cmd_args, char **envp)
-// {
-//     char    *cmd_path;
-    
-//     execute_command(cmd_path, cmd_args, envp);
-// }
-
-// void init_state(t_exec_state *state)
-// {
-// 	state->cmd_args = 
-// }
 
 void	execute_all(char **cmd_arr, char **envp)
 {
@@ -90,7 +87,7 @@ void	execute_all(char **cmd_arr, char **envp)
 	{
     	parse_command(&state);
 		create_process(&state);
-        // free(state->cmd_path);
-        // free_array(state->cmd_args);
+        free(state.cmd_path);
+        // free_array(state.cmd_args);
 	}
 }
