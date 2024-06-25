@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/25 17:21:46 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/25 22:57:11 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,20 @@
 #include "libft.h"
 #include "lexer.h"
 #include "executor.h"
+
+int get_wait_status(int status)
+{
+    int stat_code;
+
+    stat_code = 0;
+    if (WIFEXITED(status))
+        stat_code = WEXITSTATUS(status);
+    else if (WIFSIGNALED(status))
+        stat_code = WTERMSIG(status);
+    else if (WIFSTOPPED(status))
+        stat_code = WSTOPSIG(status);
+    return (stat_code);
+}
 
 void	perror_and_exit(char *file, int code)
 {
@@ -71,9 +85,12 @@ char	**convert_lst_to_array(t_token *token_lst)
 
 int	main(int argc, char **argv, char **envp)
 {
+	int		i;
+	pid_t	status;
 	char	*line;
 	char	**cmd_arr;
 	t_token	*token_lst;
+	t_exec_state	state;
 
 	// (void)envp;
 	if (argc == 2 && ft_strncmp(argv[1], "test", 5) == 0)
@@ -89,10 +106,15 @@ int	main(int argc, char **argv, char **envp)
 			free(line);
 			cmd_arr = convert_lst_to_array(token_lst);
 			ft_free_lst(token_lst);
-			execute_all(cmd_arr, envp);
+			state = execute_all(cmd_arr, envp);
+			i = -1;
+			while (++i < state.num_cmds)
+			{
+				waitpid(state.pid_arr[i], &status, 0);
+				get_wait_status(status);
+			}
 		}
 		free_array(cmd_arr);
-		printf("finish free cmd_arr\n");
 		return (0);
 	}
 }

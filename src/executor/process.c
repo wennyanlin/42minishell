@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 18:16:01 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/25 18:12:54 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/25 22:36:57 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void	fd_dup2(int oldfd, int newfd)
 
 void	child_process(int pipe_fd[2], t_exec_state *state)
 {
-    printf("child\n");
     if (access(state->cmd_path, X_OK) == -1
         && access(state->cmd_path, F_OK) == 0)
     {
@@ -48,7 +47,6 @@ void	child_process(int pipe_fd[2], t_exec_state *state)
         fd_dup2(pipe_fd[WR], STDOUT_FILENO);
     }
     close(pipe_fd[WR]);//NOT SURE
-    printf("before executing\n");
 	execute_command(state->cmd_path, state->cmd_args, state->envp, pipe_fd);
 	exit(127);
 }
@@ -60,7 +58,6 @@ void create_process(t_exec_state *state)
     int     pipe_fd[2];
     pid_t   pid;
 
-    printf("start\n");
     if (pipe(pipe_fd) == INVALID)
         perror_and_exit("pipe", EXIT_FAILURE);
     pid = fork();
@@ -72,5 +69,5 @@ void create_process(t_exec_state *state)
     close(state->fd_in);
     state->fd_in = pipe_fd[RD];
     close(pipe_fd[WR]);//NOT SURE
-    
+    // close(state->fd_in);
 }

@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/25 17:20:25 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/25 22:55:17 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	execute_command(char *command_path, char **cmd_args, char **envp, int pipe_
     }
 }
 
-void	execute_all(char **cmd_arr, char **envp)
+t_exec_state	execute_all(char **cmd_arr, char **envp)
 {
 	t_exec_state	state;
 	int				i;
@@ -81,6 +81,7 @@ void	execute_all(char **cmd_arr, char **envp)
 	state.envp = envp;
 	state.cmd_args = cmd_arr;
 	state.num_cmds = i;
+	state.pid_arr = calloc(state.num_cmds, sizeof(pid_t));
 	i = -1;
 	state.cmd_idx = &i;
 	while (state.cmd_args[++i])
@@ -90,4 +91,5 @@ void	execute_all(char **cmd_arr, char **envp)
         free(state.cmd_path);
         // free_array(state.cmd_args);
 	}
+	return (state);
 }
