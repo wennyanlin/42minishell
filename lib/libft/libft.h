@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 20:57:20 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/17 16:29:38 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/22 15:54:42 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +58,14 @@ char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char	**ft_split(const char *s, char c);
 
 /* BONUS */
-t_list	*ft_tokennew(void *content);
-void	ft_tokenadd_front(t_list **lst, t_list *new);
-int		ft_tokensize(t_list *lst);
-t_list	*ft_tokenlast(t_list *lst);
-void	ft_tokenadd_back(t_list **lst, t_list *new);
-void	ft_tokendelone(t_list *lst, void (*del)(void *));
-void	ft_tokenclear(t_list **lst, void (*del)(void *));
-void	ft_tokeniter(t_list *lst, void (*f)(void *));
-t_list	*ft_tokenmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
+t_list	*ft_lstnew(void *content);
+void	ft_lstadd_front(t_list **lst, t_list *new);
+int		ft_lstsize(t_list *lst);
+t_list	*ft_lstlast(t_list *lst);
+void	ft_lstadd_back(t_list **lst, t_list *new);
+void	ft_lstdelone(t_list *lst, void (*del)(void *));
+void	ft_lstclear(t_list **lst, void (*del)(void *));
+void	ft_lstiter(t_list *lst, void (*f)(void *));
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 
 #endif

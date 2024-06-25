@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 17:38:17 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/16 23:41:14 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/22 13:37:38 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # define FALSE 0
 # define UNINITIALIZED -1
 # define NOT_FOUND -1
+# define INVALID -1
 # define NONE 0
 
 # define QUOTE_S 39
