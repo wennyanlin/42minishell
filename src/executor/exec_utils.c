@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:12:56 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/25 17:21:29 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/28 20:47:57 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ char *make_path(char *dir, char *cmd)
 	return (full_path);
 }
 
-char	*find_path(char *env, char *cmd)
+char	*find_cmd_path(char *env, char *cmd)
 {
 	int		i;
 	char 	*full_path;

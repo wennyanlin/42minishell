@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/25 22:55:17 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/28 23:37:32 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,6 @@ void	free_array(char **array)
 		free(array[i++]);
 	free(array);
 	array = NULL;
-}
-
-void	parse_command(t_exec_state *state)
-{
-    char    *env_value;
-
-    env_value = getenv("PATH");
-    state->cmd_path = find_path(env_value, state->cmd_args[0]);
-    // free(env_value);
 }
 
 void	execute_command(char *command_path, char **cmd_args, char **envp, int pipe_fd[2])
@@ -69,27 +60,74 @@ void	execute_command(char *command_path, char **cmd_args, char **envp, int pipe_
     }
 }
 
-t_exec_state	execute_all(char **cmd_arr, char **envp)
+t_process	init_process(t_commands *cmds, char **envp, int pipe_read_end_prev)
 {
-	t_exec_state	state;
-	int				i;
+	t_process	process;
 
-	i = 0;
-	while (cmd_arr[i])
-		i++;
-	state.fd_in = dup(STDIN_FILENO);
-	state.envp = envp;
-	state.cmd_args = cmd_arr;
-	state.num_cmds = i;
-	state.pid_arr = calloc(state.num_cmds, sizeof(pid_t));
-	i = -1;
-	state.cmd_idx = &i;
-	while (state.cmd_args[++i])
+	process.envp = envp;
+	process.command = cmds->str;
+	process.cmd_path = find_cmd_path(getenv("PATH"), process.command[0]);
+	process.fd_in = pipe_read_end_prev;
+	if (cmds->next)
 	{
-    	parse_command(&state);
-		create_process(&state);
-        free(state.cmd_path);
-        // free_array(state.cmd_args);
+		if (pipe(process.pipe_fd) == INVALID)
+        	perror_and_exit("pipe", EXIT_FAILURE);
+		process.fd_out = process.pipe_fd[WR];
 	}
-	return (state);
+	else
+		process.fd_out = dup(STDOUT_FILENO);
+	return (process);
+}
+
+int get_wait_status(int status)
+{
+    int stat_code;
+
+    stat_code = 0;
+    if (WIFEXITED(status))
+        stat_code = WEXITSTATUS(status);
+    else if (WIFSIGNALED(status))
+        stat_code = WTERMSIG(status);
+    else if (WIFSTOPPED(status))
+        stat_code = WSTOPSIG(status);
+    return (stat_code);
+}
+
+void	wait_process(pid_t *pid_array, int num_cmd)
+{
+	int	i;
+	int	status;
+
+	i = -1;
+	while (++i < num_cmd)
+	{
+		waitpid(pid_array[i], &status, 0);
+		get_wait_status(status);
+	}
+}
+
+void	execute_all(t_commands *cmds, char **envp)
+{
+	t_commands	*tmp;
+	t_process	process;
+	pid_t		*pid;
+	int			i;
+	int			num_cmd;
+	int			pipe_read_end_prev;
+	
+	i = -1;
+	tmp = cmds;
+	num_cmd = lst_size(tmp);
+	pid = calloc(num_cmd, sizeof(pid_t));
+	pipe_read_end_prev = dup(STDIN_FILENO);
+	while (tmp)
+	{
+		process = init_process(tmp, envp, pipe_read_end_prev);
+		pid[++i] = create_process(&process);
+        free(process.cmd_path);
+		tmp = tmp->next;
+		pipe_read_end_prev = process.pipe_fd[RD];
+        // free_array(process.command);
+	}
+	wait_process(pid, num_cmd);
 }
