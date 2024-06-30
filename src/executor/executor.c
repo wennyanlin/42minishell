@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/28 23:37:32 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/30 16:42:24 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,14 @@ t_process	init_process(t_commands *cmds, char **envp, int pipe_read_end_prev)
 	process.command = cmds->str;
 	process.cmd_path = find_cmd_path(getenv("PATH"), process.command[0]);
 	process.fd_in = pipe_read_end_prev;
-	if (cmds->next)
+	if (cmds->redirect)
+	{
+		if (pipe(process.pipe_fd) == INVALID)
+        	perror_and_exit("pipe", EXIT_FAILURE);
+		process.fd_out = open(cmds->redirect->filename, O_CREAT | O_TRUNC | O_RDWR, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+		// printf("opened: %d\n", process.fd_out);
+	}
+	else if (cmds->next)
 	{
 		if (pipe(process.pipe_fd) == INVALID)
         	perror_and_exit("pipe", EXIT_FAILURE);
