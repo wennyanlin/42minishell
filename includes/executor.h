@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/30 13:39:43 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/30 19:35:20 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,7 @@ void	execute_command(char *command_path, char **cmd_args, char **envp, int pipe_
 void	perror_and_exit(char *file, int code);
 void	execute_all(t_commands *cmds, char **envp);
 int 	lst_size(t_commands *cmds);
+
+int 	read_here_doc(char *limiter);
 
 #endif

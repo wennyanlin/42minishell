@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/30 18:04:14 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/30 19:37:27 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,8 @@ t_commands	create_cmd_arr(t_commands *cmd2, t_commands *cmd3, t_redirect *redire
 	arr1[0] = "ls";
 	arr1[1] = "-la";
 	arr1[2] = NULL;
-	redirect1->filename = "a.txt";
-	redirect1->type = LESS;
+	redirect1->filename = "EOF";
+	redirect1->type = LESS_LESS;
 	arr2 = calloc(3, sizeof(char*));
 	arr2[0] = "grep";
 	arr2[1] = "src";
@@ -119,7 +119,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		// while (1)
 		// {
-		// 	line = readline(PROMPT);
+			// line = readline(PROMPT);
 		// 	token_lst = tokenize(line);
 		// 	free(line);
 		// 	cmd_arr = convert_lst_to_array(token_lst);
