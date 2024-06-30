@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/30 19:56:20 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/01 00:05:41 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ t_process	init_process(t_commands *cmds, char **envp, int pipe_read_end_prev)
 			process.fd_in = open(cmds->redirect->filename, O_RDONLY);
 		else if (cmds->redirect->type == LESS_LESS)
 			process.fd_in = read_here_doc(cmds->redirect->filename);
+		if (errno == ENOENT && process.fd_in == INVALID)
+			printf("%s: %s\n", cmds->redirect->filename, strerror(errno));
 	}
 	else if (cmds->next)
 	{
