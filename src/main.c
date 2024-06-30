@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/30 13:48:13 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/30 17:40:27 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ t_commands	create_cmd_arr(t_commands *cmd2, t_commands *cmd3, t_redirect *redire
 	arr1[1] = "-la";
 	arr1[2] = NULL;
 	redirect1->filename = "a.txt";
-	redirect1->type = GREAT;
+	redirect1->type = GREAT_GREAT;
 	arr2 = calloc(3, sizeof(char*));
 	arr2[0] = "grep";
 	arr2[1] = "src";
