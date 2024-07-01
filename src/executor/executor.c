@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/01 00:05:41 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/01 22:20:16 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,30 @@ void	execute_command(char *command_path, char **cmd_args, char **envp, int pipe_
     }
 }
 
+void	redirection_error_handling(char *filename, int fd_in)
+{
+	if ((errno == ENOENT || errno == EACCES)&& fd_in == INVALID)
+		printf("%s: %s\n", filename, strerror(errno));
+}
+
+void	handle_redirection(t_process *process, t_commands *cmds)
+{
+	if (pipe(process->pipe_fd) == INVALID)
+        	perror_and_exit("pipe", EXIT_FAILURE);
+	if (cmds->redirect->type == GREAT)
+		process->fd_out = open(cmds->redirect->filename, O_CREAT | O_TRUNC
+			| O_RDWR, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+	else if (cmds->redirect->type == GREAT_GREAT)
+		process->fd_out = open(cmds->redirect->filename, O_CREAT | O_APPEND
+			| O_RDWR, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+	else if (cmds->redirect->type == LESS)
+		process->fd_in = open(cmds->redirect->filename, O_RDONLY);
+	else if (cmds->redirect->type == LESS_LESS)
+		process->fd_in = read_here_doc(cmds->redirect->filename);
+	// printf("fd_in = %d, errno: %d, %s\n", process->fd_in, errno, strerror(errno));
+	redirection_error_handling(cmds->redirect->filename, process->fd_in);
+}
+
 t_process	init_process(t_commands *cmds, char **envp, int pipe_read_end_prev)
 {
 	t_process	process;
@@ -69,22 +93,7 @@ t_process	init_process(t_commands *cmds, char **envp, int pipe_read_end_prev)
 	process.cmd_path = find_cmd_path(getenv("PATH"), process.command[0]);
 	process.fd_in = pipe_read_end_prev;
 	if (cmds->redirect)
-	{
-		if (pipe(process.pipe_fd) == INVALID)
-        	perror_and_exit("pipe", EXIT_FAILURE);
-		if (cmds->redirect->type == GREAT)
-			process.fd_out = open(cmds->redirect->filename, O_CREAT | O_TRUNC
-				| O_RDWR, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-		else if (cmds->redirect->type == GREAT_GREAT)
-			process.fd_out = open(cmds->redirect->filename, O_CREAT | O_APPEND
-				| O_RDWR, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-		else if (cmds->redirect->type == LESS)
-			process.fd_in = open(cmds->redirect->filename, O_RDONLY);
-		else if (cmds->redirect->type == LESS_LESS)
-			process.fd_in = read_here_doc(cmds->redirect->filename);
-		if (errno == ENOENT && process.fd_in == INVALID)
-			printf("%s: %s\n", cmds->redirect->filename, strerror(errno));
-	}
+		handle_redirection(&process, cmds);
 	else if (cmds->next)
 	{
 		if (pipe(process.pipe_fd) == INVALID)
