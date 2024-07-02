@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/01 22:20:16 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/02 12:58:37 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ void	execute_all(t_commands *cmds, char **envp)
 	i = -1;
 	tmp = cmds;
 	num_cmd = lst_size(tmp);
-	pid = calloc(num_cmd, sizeof(pid_t));
+	pid = malloc(sizeof(pid_t) * num_cmd);
 	pipe_read_end_prev = dup(STDIN_FILENO);
 	while (tmp)
 	{
@@ -156,4 +156,5 @@ void	execute_all(t_commands *cmds, char **envp)
         // free_array(process.command);
 	}
 	wait_process(pid, num_cmd);
+	free(pid);
 }

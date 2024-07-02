@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/30 19:35:20 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/02 12:14:24 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct s_str
 	int		continue_from_index;
 }			t_str;
 
+pid_t	waitpid(pid_t pid, int *status, int options); 
 int		str_size(const char *str);
 char	*str_cpy(char *src);
 int	    char_index(char *str, char ref);
