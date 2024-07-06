@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/02 12:58:37 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/06 21:48:00 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,10 @@ void	handle_redirection(t_process *process, t_commands *cmds)
 	else if (cmds->redirect->type == LESS)
 		process->fd_in = open(cmds->redirect->filename, O_RDONLY);
 	else if (cmds->redirect->type == LESS_LESS)
+	{
 		process->fd_in = read_here_doc(cmds->redirect->filename);
-	// printf("fd_in = %d, errno: %d, %s\n", process->fd_in, errno, strerror(errno));
+		process->fd_out = process->pipe_fd[WR];
+	}
 	redirection_error_handling(cmds->redirect->filename, process->fd_in);
 }
 

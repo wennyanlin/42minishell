@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 18:16:01 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/30 16:42:57 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/06 21:48:16 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	child_process(t_process *process)
         close(process->pipe_fd[WR]);
         close(process->pipe_fd[RD]);
         exit (127);
-    }
+    } 
     fd_dup2(process->fd_in, STDIN_FILENO);
 	close(process->pipe_fd[RD]); 
     close(process->fd_in); 

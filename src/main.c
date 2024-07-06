@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/30 23:33:14 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/02 23:27:47 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ char	**convert_lst_to_array(t_token *token_lst)
 	return (cmd_args);
 }
 
-t_commands	create_cmd_arr(t_commands *cmd2, t_commands *cmd3, t_redirect *redirect1)
+t_commands	create_cmd_arr(t_commands *cmd2, t_commands *cmd3, t_redirect *redirect1, t_redirect *redirect3)
 {
 	char		**arr1;
 	char		**arr2;
@@ -78,10 +78,10 @@ t_commands	create_cmd_arr(t_commands *cmd2, t_commands *cmd3, t_redirect *redire
 	
 	arr1 = calloc(3, sizeof(char*));
 	arr1[0] = "ls";
-	arr1[1] = "-la";
+	arr1[1] = "-l";
 	arr1[2] = NULL;
 	redirect1->filename = "EOF";
-	redirect1->type = LESS;
+	redirect1->type = LESS_LESS;
 	arr2 = calloc(3, sizeof(char*));
 	arr2[0] = "grep";
 	arr2[1] = "src";
@@ -90,12 +90,14 @@ t_commands	create_cmd_arr(t_commands *cmd2, t_commands *cmd3, t_redirect *redire
 	arr3[0] = "wc";
 	arr3[1] = "-w";
 	arr3[2] = NULL;
+	redirect3->filename = "outfile";
+	redirect3->type = GREAT;
 	cmd1.str = arr1;
 	cmd2->str = arr2;
-	cmd2->redirect = redirect1;
+	cmd2->redirect = NULL;
 	cmd3->str = arr3;
-	cmd3->redirect = NULL;
-	cmd1.redirect = NULL;
+	cmd1.redirect = redirect1;
+	cmd3->redirect = redirect3;
 	cmd1.next = cmd2;
 	cmd2->next = cmd3;
 	cmd3->next = NULL;
@@ -109,6 +111,7 @@ int	main(int argc, char **argv, char **envp)
 	t_commands	*cmd2;
 	t_commands	*cmd3;
 	t_redirect	*redirect1;
+	t_redirect	*redirect3;
 	// t_token	*token_lst;
 
 	if (argc == 2 && ft_strncmp(argv[1], "test", 5) == 0)
@@ -127,7 +130,8 @@ int	main(int argc, char **argv, char **envp)
 			cmd2 = malloc(sizeof(t_commands));
 			cmd3 = malloc(sizeof(t_commands));
 			redirect1 = malloc(sizeof(t_redirect));
-			cmds = create_cmd_arr(cmd2, cmd3, redirect1);
+			redirect3 = malloc(sizeof(t_redirect));
+			cmds = create_cmd_arr(cmd2, cmd3, redirect1, redirect3);
 			execute_all(&cmds, envp);
 		// }
 		// free_array(cmd_arr);
