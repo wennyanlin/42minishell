@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/06 21:48:00 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/09 22:05:23 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,37 +66,35 @@ void	redirection_error_handling(char *filename, int fd_in)
 		printf("%s: %s\n", filename, strerror(errno));
 }
 
-void	handle_redirection(t_process *process, t_commands *cmds)
+void	handle_redirection(t_process *process, t_redirect *redirect)
 {
-	if (pipe(process->pipe_fd) == INVALID)
-        	perror_and_exit("pipe", EXIT_FAILURE);
-	if (cmds->redirect->type == GREAT)
-		process->fd_out = open(cmds->redirect->filename, O_CREAT | O_TRUNC
+	if (redirect->type == GREAT)
+		process->fd_out = open(redirect->filename, O_CREAT | O_TRUNC
 			| O_RDWR, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-	else if (cmds->redirect->type == GREAT_GREAT)
-		process->fd_out = open(cmds->redirect->filename, O_CREAT | O_APPEND
+	else if (redirect->type == GREAT_GREAT)
+		process->fd_out = open(redirect->filename, O_CREAT | O_APPEND
 			| O_RDWR, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-	else if (cmds->redirect->type == LESS)
-		process->fd_in = open(cmds->redirect->filename, O_RDONLY);
-	else if (cmds->redirect->type == LESS_LESS)
+	else if (redirect->type == LESS)
 	{
-		process->fd_in = read_here_doc(cmds->redirect->filename);
-		process->fd_out = process->pipe_fd[WR];
+		close(process->fd_in);
+		process->fd_in = open(redirect->filename, O_RDONLY);
 	}
-	redirection_error_handling(cmds->redirect->filename, process->fd_in);
+	else if (redirect->type == LESS_LESS)
+		process->fd_in = read_here_doc(redirect->filename);
+	redirection_error_handling(redirect->filename, process->fd_in);
 }
 
 t_process	init_process(t_commands *cmds, char **envp, int pipe_read_end_prev)
 {
 	t_process	process;
+	t_redirect	*tmp_redirect;
 
+	tmp_redirect = cmds->redirect;
 	process.envp = envp;
 	process.command = cmds->str;
 	process.cmd_path = find_cmd_path(getenv("PATH"), process.command[0]);
 	process.fd_in = pipe_read_end_prev;
-	if (cmds->redirect)
-		handle_redirection(&process, cmds);
-	else if (cmds->next)
+	if (cmds->next)
 	{
 		if (pipe(process.pipe_fd) == INVALID)
         	perror_and_exit("pipe", EXIT_FAILURE);
@@ -104,6 +102,11 @@ t_process	init_process(t_commands *cmds, char **envp, int pipe_read_end_prev)
 	}
 	else
 		process.fd_out = dup(STDOUT_FILENO);
+	while (tmp_redirect)
+	{
+		handle_redirection(&process, tmp_redirect);
+		tmp_redirect = tmp_redirect->next;
+	}
 	return (process);
 }
 

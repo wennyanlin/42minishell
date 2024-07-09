@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/02 12:14:24 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/09 17:32:19 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,9 @@
 
 typedef struct s_redirect
 {
-	t_metachar	type;
-	char		*filename;
+	t_metachar			type;
+	char				*filename;
+	struct s_redirect	*next;
 }	t_redirect;
 
 typedef struct s_commands

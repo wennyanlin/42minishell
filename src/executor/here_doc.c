@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 19:15:28 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/30 19:55:57 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/09 21:40:27 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ int read_here_doc(char *limiter)
     next_line = readline(HEREDOC_PROMPT);
     while (check_limiter(next_line, limiter) == 0)
     {
-        write(pipe_fd[WR], next_line, str_size(next_line)); 
+        write(pipe_fd[WR], next_line, str_size(next_line));
+        write(pipe_fd[WR], "\n", 1);
         free(next_line);
         next_line = readline(HEREDOC_PROMPT);
     }
