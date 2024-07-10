@@ -12,3 +12,5 @@ minishell
 src/readline
 infile
 outfile
+infile1
+infile2

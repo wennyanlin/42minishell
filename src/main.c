@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/09 21:59:16 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/10 12:39:09 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,9 @@ t_commands	create_cmd_arr(t_commands *cmd2, t_commands *cmd3, t_redirect *redire
 	arr1[0] = "ls";
 	arr1[1] = "-l";
 	arr1[2] = NULL;
-	redirect1->filename = "outfile1";
+	redirect1->filename = "infile1";
 	redirect1->type = LESS;
-	redirect1_2->filename = "outfile2";
+	redirect1_2->filename = "infile2";
 	redirect1_2->type = LESS;
 	redirect1->next = redirect1_2;
 	redirect1_2->next = NULL;
