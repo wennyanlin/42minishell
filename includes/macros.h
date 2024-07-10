@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 17:38:17 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/22 13:37:38 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/23 18:19:06 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,11 @@
 # define C_LESS 60
 # define C_GREAT 62
 
+#define EXIT_FAILURE 1
 
+# define NEGATIVE 0
+# define CHILD 0
+# define WR 1
+# define RD 0
 
 # endif

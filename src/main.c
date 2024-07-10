@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/22 16:23:34 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/28 23:38:41 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,13 @@
 #include "macros.h"
 #include "libft.h"
 #include "lexer.h"
+#include "executor.h"
+
+void	perror_and_exit(char *file, int code)
+{
+	perror(file);
+	exit(code);
+}
 
 void	ft_free_lst(t_token *lst)
 {
@@ -24,6 +31,7 @@ void	ft_free_lst(t_token *lst)
 		lst = lst->next;
 		if (tmp->word)
 			free(tmp->word);
+		tmp->word = NULL;
 		free(tmp);
 	}
 	lst = NULL;
@@ -61,27 +69,52 @@ char	**convert_lst_to_array(t_token *token_lst)
 	return (cmd_args);
 }
 
+t_commands	create_cmd_arr(t_commands *cmd2)
+{
+	char		**arr1;
+	char		**arr2;
+	t_commands	cmd1;
+	
+	arr1 = calloc(3, sizeof(char*));
+	arr1[0] = "ls";
+	arr1[1] = "-la";
+	arr1[2] = NULL;
+	arr2 = calloc(3, sizeof(char*));
+	arr2[0] = "grep";
+	arr2[1] = "src";
+	arr2[2] = NULL;
+	cmd1.str = arr1;
+	cmd2->str = arr2;
+	cmd1.next = cmd2;
+	cmd2->next = NULL;
+	return (cmd1);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
-	char	*line;
-	t_token	*token_lst;
+	// char	*line;
+	t_commands	cmds;
+	t_commands	*cmd2;
+	// t_token	*token_lst;
 
-	// (void)envp;
 	if (argc == 2 && ft_strncmp(argv[1], "test", 5) == 0)
 		test_lexer();
 	else if (argc == 2 && ft_strncmp(argv[1], "-v", 3) == 0)
 		return (printf("%s, version %s\n", NAME, VERSION), 0);
 	else
 	{
-		while (1)
-		{
-			line = readline(PROMPT);
-			printf("'%s'\n", line);
-			token_lst = tokenize(line);
-			executor(convert_lst_to_array(token_lst), envp);
-			free(line);
-			ft_free_lst(token_lst);
-		}
+		// while (1)
+		// {
+		// 	line = readline(PROMPT);
+		// 	token_lst = tokenize(line);
+		// 	free(line);
+		// 	cmd_arr = convert_lst_to_array(token_lst);
+		// 	ft_free_lst(token_lst);
+			cmd2 = malloc(sizeof(t_commands));
+			cmds = create_cmd_arr(cmd2);
+			execute_all(&cmds, envp);
+		// }
+		// free_array(cmd_arr);
 		return (0);
 	}
 }

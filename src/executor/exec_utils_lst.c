@@ -1,23 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   exec_utils_lst.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/31 13:32:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/25 15:06:40 by wlin             ###   ########.fr       */
+/*   Created: 2024/06/26 18:27:19 by wlin              #+#    #+#             */
+/*   Updated: 2024/06/28 23:12:16 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef MINISHELL_H
-# define MINISHELL_H
+#include "minishell.h"
+#include "macros.h"
+#include "executor.h"
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include "../lib/libft/libft.h"
-
-
-# endif
+int lst_size(t_commands *cmds)
+{
+    int             i;
+    t_commands		*tmp;
+    
+    i = 0;
+    tmp = cmds;
+	while (tmp)
+	{
+		++i;
+		tmp = tmp->next;
+	}
+    return (i);
+}
