@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/28 23:37:32 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/09 22:05:23 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,36 @@ void	execute_command(char *command_path, char **cmd_args, char **envp, int pipe_
     }
 }
 
+void	redirection_error_handling(char *filename, int fd_in)
+{
+	if ((errno == ENOENT || errno == EACCES)&& fd_in == INVALID)
+		printf("%s: %s\n", filename, strerror(errno));
+}
+
+void	handle_redirection(t_process *process, t_redirect *redirect)
+{
+	if (redirect->type == GREAT)
+		process->fd_out = open(redirect->filename, O_CREAT | O_TRUNC
+			| O_RDWR, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+	else if (redirect->type == GREAT_GREAT)
+		process->fd_out = open(redirect->filename, O_CREAT | O_APPEND
+			| O_RDWR, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+	else if (redirect->type == LESS)
+	{
+		close(process->fd_in);
+		process->fd_in = open(redirect->filename, O_RDONLY);
+	}
+	else if (redirect->type == LESS_LESS)
+		process->fd_in = read_here_doc(redirect->filename);
+	redirection_error_handling(redirect->filename, process->fd_in);
+}
+
 t_process	init_process(t_commands *cmds, char **envp, int pipe_read_end_prev)
 {
 	t_process	process;
+	t_redirect	*tmp_redirect;
 
+	tmp_redirect = cmds->redirect;
 	process.envp = envp;
 	process.command = cmds->str;
 	process.cmd_path = find_cmd_path(getenv("PATH"), process.command[0]);
@@ -76,6 +102,11 @@ t_process	init_process(t_commands *cmds, char **envp, int pipe_read_end_prev)
 	}
 	else
 		process.fd_out = dup(STDOUT_FILENO);
+	while (tmp_redirect)
+	{
+		handle_redirection(&process, tmp_redirect);
+		tmp_redirect = tmp_redirect->next;
+	}
 	return (process);
 }
 
@@ -118,7 +149,7 @@ void	execute_all(t_commands *cmds, char **envp)
 	i = -1;
 	tmp = cmds;
 	num_cmd = lst_size(tmp);
-	pid = calloc(num_cmd, sizeof(pid_t));
+	pid = malloc(sizeof(pid_t) * num_cmd);
 	pipe_read_end_prev = dup(STDIN_FILENO);
 	while (tmp)
 	{
@@ -130,4 +161,5 @@ void	execute_all(t_commands *cmds, char **envp)
         // free_array(process.command);
 	}
 	wait_process(pid, num_cmd);
+	free(pid);
 }

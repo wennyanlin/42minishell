@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 17:38:17 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/23 18:19:06 by wlin             ###   ########.fr       */
+/*   Updated: 2024/06/30 19:39:44 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # define RESET "\033[0m"
 # define NAME "minishell"
 # define PROMPT BLUE NAME "% " RESET
+# define HEREDOC_PROMPT "> "
 
 # define TRUE 1
 # define FALSE 0

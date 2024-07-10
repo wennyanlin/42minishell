@@ -10,3 +10,5 @@ tester
 /mpanic
 minishell
 src/readline
+infile
+outfile

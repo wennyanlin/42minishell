@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 18:16:01 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/28 23:38:21 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/06 21:48:16 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,13 @@ void	child_process(t_process *process)
         close(process->pipe_fd[WR]);
         close(process->pipe_fd[RD]);
         exit (127);
-    }
+    } 
     fd_dup2(process->fd_in, STDIN_FILENO);
-	close(process->pipe_fd[RD]);
+	close(process->pipe_fd[RD]); 
+    close(process->fd_in); 
     fd_dup2(process->fd_out, STDOUT_FILENO);
     close(process->pipe_fd[WR]);
+    close(process->fd_out);
 	execute_command(process->cmd_path, process->command, process->envp, process->pipe_fd);
 	exit(127);
 }
@@ -53,12 +55,14 @@ pid_t create_process(t_process *process)
 {
     pid_t   pid;
     
+
     pid = fork();
     if (pid == INVALID)
         perror_and_exit("fork", EXIT_FAILURE);
     else if (pid == CHILD)
         child_process(process);
     close(process->fd_in);
+    close(process->fd_out);
     close(process->pipe_fd[WR]);//NOT SURE
     return (pid);
 }
