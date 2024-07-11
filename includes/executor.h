@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/09 17:32:19 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/11 16:00:00 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,7 @@ void	execute_all(t_commands *cmds, char **envp);
 int 	lst_size(t_commands *cmds);
 
 int 	read_here_doc(char *limiter);
+
+t_commands  *parse_tokens(t_token *tokens);
 
 #endif

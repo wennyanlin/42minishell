@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/09 22:05:23 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/11 16:32:42 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,8 @@ void	execute_all(t_commands *cmds, char **envp)
 	
 	i = -1;
 	tmp = cmds;
+	printf("[0] = %s\n", tmp->str[0]);
+	printf("[1] = %p\n", tmp->next);
 	num_cmd = lst_size(tmp);
 	pid = malloc(sizeof(pid_t) * num_cmd);
 	pipe_read_end_prev = dup(STDIN_FILENO);

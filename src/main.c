@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/10 12:39:09 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/11 16:00:52 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,13 +112,13 @@ t_commands	create_cmd_arr(t_commands *cmd2, t_commands *cmd3, t_redirect *redire
 
 int	main(int argc, char **argv, char **envp)
 {
-	// char	*line;
-	t_commands	cmds;
-	t_commands	*cmd2;
-	t_commands	*cmd3;
-	t_redirect	*redirect1;
-	t_redirect	*redirect3;
-	// t_token	*token_lst;
+	char	*line;
+	t_commands	*cmds;
+	// t_commands	*cmd2;
+	// t_commands	*cmd3;
+	// t_redirect	*redirect1;
+	// t_redirect	*redirect3;
+	t_token	*token_lst;
 
 	if (argc == 2 && ft_strncmp(argv[1], "test", 5) == 0)
 		test_lexer();
@@ -126,20 +126,21 @@ int	main(int argc, char **argv, char **envp)
 		return (printf("%s, version %s\n", NAME, VERSION), 0);
 	else
 	{
-		// while (1)
-		// {
-			// line = readline(PROMPT);
-		// 	token_lst = tokenize(line);
-		// 	free(line);
+		while (1)
+		{
+			line = readline(PROMPT);
+			token_lst = tokenize(line);
+			free(line);
+			cmds = parse_tokens(token_lst);
 		// 	cmd_arr = convert_lst_to_array(token_lst);
 		// 	ft_free_lst(token_lst);
-			cmd2 = malloc(sizeof(t_commands));
-			cmd3 = malloc(sizeof(t_commands));
-			redirect1 = malloc(sizeof(t_redirect));
-			redirect3 = malloc(sizeof(t_redirect));
-			cmds = create_cmd_arr(cmd2, cmd3, redirect1, redirect3);
-			execute_all(&cmds, envp);
-		// }
+			// cmd2 = malloc(sizeof(t_commands));
+			// cmd3 = malloc(sizeof(t_commands));
+			// redirect1 = malloc(sizeof(t_redirect));
+			// redirect3 = malloc(sizeof(t_redirect));
+			// cmds = create_cmd_arr(cmd2, cmd3, redirect1, redirect3);
+			execute_all(cmds, envp);
+		}
 		// free_array(cmd_arr);
 		return (0);
 	}
