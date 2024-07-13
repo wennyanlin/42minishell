@@ -23,28 +23,9 @@
 //     return (len);
 // }
 
-// int count_str_size(t_token *tokens)
-// {
-//     t_token *tmp;
-//     int     len;
-
-//     tmp = tokens;
-//     len = 0;
-//     while (tmp && tmp->metachar != PIPE)
-//     {
-//         if (tmp->metachar == LESS)
-//         {
-//             add_cmd_redirect(LESS, tmp->next, tmp);
-//             tmp = tmp->next;
-//         }
-//         else if (tmp->)
-//         tmp = tmp->next;
-//     }
-//     return (len);
-// }
-
 void    add_cmd_str(char *str, int i, t_commands *cmds)
 {
+    
     cmds->str[i] = ft_strdup(str);
 }
 
@@ -68,14 +49,14 @@ void    add_cmd_redirect(t_metachar type, char *filename, t_commands *cmds)
     }
 }
 
-void    init_cmd_str(t_token *tokens, t_commands *cmds)
+int    count_cmd_str(t_token *tokens)
 {
     t_token *tmp;
     int     len;
 
     tmp = tokens;
     len = 0;
-    while (tmp && tmp->metachar != PIPE)
+    while (tmp && tmp->metachar >= PIPE)
     {
         if (tmp->metachar > PIPE)
             tmp = tmp->next;
@@ -83,46 +64,80 @@ void    init_cmd_str(t_token *tokens, t_commands *cmds)
             ++len;
         tmp = tmp->next;
     }
-    cmds->str = malloc(sizeof(char *) * len + 1);
-    if (!cmds->str)
-        free_array(cmds->str);
+    return (len);
 }
 
+t_commands  *create_cmd_lstnew()
+{
+    t_commands  *new;
+
+    new = malloc(sizeof(t_commands));
+    if (!new)
+        return (NULL);
+    new->str = NULL;
+    new->redirect = NULL;
+    new->prev = NULL;
+    new->next = NULL;
+    return (new);
+}
+
+void    cmd_lst_addback(t_commands *cmd, t_commands *new)
+{
+    t_commands  *tmp;
+
+    if (cmd)
+    {
+        tmp = cmd;
+        while (tmp->next)
+            tmp = tmp->next;
+        tmp->next = new;
+        new->prev = tmp;
+    }
+    else
+        cmd = new;
+}
+
+void build_cmd(t_token *token_lst, t_commands *cmds)
+{
+    int     i;
+    int     len;
+    char    **str_arr;
+
+    len = count_cmd_str(token_lst);
+    str_arr = malloc(sizeof(char *) * (len + 1));
+    if (!cmds->str)
+        free_array(cmds->str);
+    cmds->str = str_arr;
+    i = -1;
+    while (token_lst && token_lst->metachar != PIPE)
+    {
+        if (token_lst && token_lst->metachar > PIPE)
+            add_cmd_redirect(token_lst->metachar, token_lst->next->word, cmds);
+        else if (token_lst && token_lst->word)
+        {
+            ++i;
+            add_cmd_str(token_lst->word, i, cmds);
+        }
+        token_lst = token_lst->next;
+    }
+    cmds->str[len] = NULL;
+    
+}
 
 t_commands  *parse_tokens(t_token *tokens)
 {
-    t_token     *tmp_lst;
     t_commands  *cmds;
-    int         i;
+    t_commands  *new;
 
-    cmds = malloc(sizeof(t_commands));
-    if (!cmds)
-        return (NULL);
-    cmds->redirect = NULL;
-    cmds->prev = NULL;
-    cmds->next = NULL;
-    tmp_lst = tokens;
-    while (tmp_lst)
+    cmds = NULL;
+    while (tokens)
     {
-        // if (tmp_lst->metachar == PIPE)
-        // {
-        //     i = 0;
-        //     while (tokens && tokens != tmp_lst)
-        //     {
-        //         init_cmd_str(tokens, cmds);
-        //         if (tokens && tokens->metachar == NONE)
-        //         {
-        //             add_cmd_str(tokens->word, i, cmds);
-        //             ++i;
-        //         }
-        //         else if (tokens && tokens->metachar > PIPE && tokens->next->word)
-        //             add_cmd_redirect(tokens->metachar, tokens->next->word, cmds); //DO I need to init redirect to NULL first?
-        //         tokens = tokens->next;
-        //     }
-        // }
-        tmp_lst = tmp_lst->next;
+        new = create_cmd_lstnew();
+        if (!new)
+            return (NULL);
+        cmd_lst_addback(cmds, new);
+        build_cmd(tokens, cmds);
+        tokens = tokens->next;
     }
     return (cmds);
 }
-
-//when found redirection, init one redirection property, copy them to it
