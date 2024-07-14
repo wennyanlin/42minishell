@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/14 11:37:13 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/14 20:47:16 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ int	main(int argc, char **argv, char **envp)
 			token_lst = tokenize(line);
 			free(line);
 			cmds = parse_tokens(token_lst);
-			print_parser_cmds(cmds);
+			// print_parser_cmds(cmds);
 			execute_all(cmds, envp);
 		}
 		// free_array(cmd_arr);

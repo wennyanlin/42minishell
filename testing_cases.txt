@@ -1,0 +1,45 @@
+
+<<< Makefile grep src
+1, no error message
+
+
+test | >
+test | >>  
+test | <
+echo >
+echo <<<
+258, bash: syntax error near unexpected token `newline'
+
+
+echo >>>
+bash: syntax error near unexpected token `>'
+
+
+=====if after outfile redirection there are more redirection=========
+echo hi >< file
+258, bash: syntax error near unexpected token `<'
+
+=====more then 2 of char '<', is always showing error of '<<<'=======
+echo hi ><<<< file
+258, bash: syntax error near unexpected token `<<<'
+
+=====more than 3 of char '>', is always showing error of '<<'========
+echo hi >>>> file
+258, bash: syntax error near unexpected token `>>'
+
+=====if starting with a pipe, pipe is the error======================
+|test
+< | test
+<< | test
+> | test
+>> | test
+| < test
+| << test
+| > test
+| >> test
+| test
+echo hi | | echo hi
+258, bash: syntax error near unexpected token `|'
+
+
+echo hi >| file
