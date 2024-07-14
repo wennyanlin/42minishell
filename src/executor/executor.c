@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/11 16:32:42 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/14 09:21:51 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ t_process	init_process(t_commands *cmds, char **envp, int pipe_read_end_prev)
 
 	tmp_redirect = cmds->redirect;
 	process.envp = envp;
-	process.command = cmds->str;
+	process.command = cmds->args;
 	process.cmd_path = find_cmd_path(getenv("PATH"), process.command[0]);
 	process.fd_in = pipe_read_end_prev;
 	if (cmds->next)
@@ -148,8 +148,8 @@ void	execute_all(t_commands *cmds, char **envp)
 	
 	i = -1;
 	tmp = cmds;
-	printf("[0] = %s\n", tmp->str[0]);
-	printf("[1] = %p\n", tmp->next);
+	// printf("[0] = %s\n", tmp->args[0]);
+	// printf("[1] = %p\n", tmp->next);
 	num_cmd = lst_size(tmp);
 	pid = malloc(sizeof(pid_t) * num_cmd);
 	pipe_read_end_prev = dup(STDIN_FILENO);

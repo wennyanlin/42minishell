@@ -23,13 +23,13 @@
 //     return (len);
 // }
 
-void    add_cmd_str(char *str, int i, t_commands *cmds)
+void    add_cmd_str(char *str, int i, t_commands *cmd)
 {
-    
-    cmds->str[i] = ft_strdup(str);
+    cmd->args[i] = ft_strdup(str);
+    // printf("In add_cmd_str() => cmd.args[%d] = %s\n", i, cmd->args[i]);
 }
 
-void    add_cmd_redirect(t_metachar type, char *filename, t_commands *cmds)
+void    add_cmd_redirect(t_metachar type, char *filename, t_commands *cmd)
 {
    t_redirect   *new_redirect;
    t_commands   *tmp;
@@ -38,11 +38,11 @@ void    add_cmd_redirect(t_metachar type, char *filename, t_commands *cmds)
    new_redirect->type = type;
    new_redirect->filename = ft_strdup(filename);
    new_redirect->next = NULL;
-   if (!cmds->redirect)
-        cmds->redirect = new_redirect;
+   if (!cmd->redirect)
+        cmd->redirect = new_redirect;
     else
     {
-        tmp = cmds;
+        tmp = cmd;
         while (tmp->redirect->next)
             tmp->redirect = tmp->redirect->next;
         tmp->redirect->next = new_redirect;
@@ -56,7 +56,7 @@ int    count_cmd_str(t_token *tokens)
 
     tmp = tokens;
     len = 0;
-    while (tmp && tmp->metachar >= PIPE)
+    while (tmp && tmp->metachar != PIPE)
     {
         if (tmp->metachar > PIPE)
             tmp = tmp->next;
@@ -74,54 +74,59 @@ t_commands  *create_cmd_lstnew()
     new = malloc(sizeof(t_commands));
     if (!new)
         return (NULL);
-    new->str = NULL;
+    new->args = NULL;
     new->redirect = NULL;
     new->prev = NULL;
     new->next = NULL;
     return (new);
 }
 
-void    cmd_lst_addback(t_commands *cmd, t_commands *new)
+void    cmd_lst_addback(t_commands **cmds, t_commands *new)
 {
     t_commands  *tmp;
 
-    if (cmd)
+    if (*cmds != NULL)
     {
-        tmp = cmd;
+        tmp = *cmds;
         while (tmp->next)
             tmp = tmp->next;
         tmp->next = new;
         new->prev = tmp;
     }
     else
-        cmd = new;
+    {
+        (*cmds) = new;
+    }
 }
 
-void build_cmd(t_token *token_lst, t_commands *cmds)
+t_commands *build_cmd(t_token **token_lst)
 {
     int     i;
     int     len;
-    char    **str_arr;
+    t_commands  *cmd;
 
-    len = count_cmd_str(token_lst);
-    str_arr = malloc(sizeof(char *) * (len + 1));
-    if (!cmds->str)
-        free_array(cmds->str);
-    cmds->str = str_arr;
+    cmd = create_cmd_lstnew();
+    len = count_cmd_str(*token_lst);
+    cmd->args = malloc(sizeof(char *) * (len + 1));
+    if (!cmd->args)
+        free_array(cmd->args);
     i = -1;
-    while (token_lst && token_lst->metachar != PIPE)
+    while (*token_lst && (*token_lst)->metachar != PIPE)
     {
-        if (token_lst && token_lst->metachar > PIPE)
-            add_cmd_redirect(token_lst->metachar, token_lst->next->word, cmds);
-        else if (token_lst && token_lst->word)
+        if (token_lst && (*token_lst)->metachar > PIPE)
+        {
+            add_cmd_redirect((*token_lst)->metachar, (*token_lst)->next->word, cmd);
+            *token_lst = (*token_lst)->next;
+        }
+        else if (token_lst && (*token_lst)->word)
         {
             ++i;
-            add_cmd_str(token_lst->word, i, cmds);
+            add_cmd_str((*token_lst)->word, i, cmd);
         }
-        token_lst = token_lst->next;
+        *token_lst = (*token_lst)->next;
     }
-    cmds->str[len] = NULL;
-    
+    cmd->args[len] = NULL;
+    return (cmd);
 }
 
 t_commands  *parse_tokens(t_token *tokens)
@@ -132,12 +137,10 @@ t_commands  *parse_tokens(t_token *tokens)
     cmds = NULL;
     while (tokens)
     {
-        new = create_cmd_lstnew();
-        if (!new)
-            return (NULL);
-        cmd_lst_addback(cmds, new);
-        build_cmd(tokens, cmds);
-        tokens = tokens->next;
+        new = build_cmd(&tokens);
+        cmd_lst_addback(&cmds, new);
+        if (tokens && tokens->metachar == PIPE)
+            tokens = tokens->next;
     }
     return (cmds);
 }
