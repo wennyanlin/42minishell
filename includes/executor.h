@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/09 17:32:19 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/13 18:41:21 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef struct s_redirect
 
 typedef struct s_commands
 {
-	char				**str;
+	char				**args;
 	struct	s_redirect	*redirect;
 	struct	s_commands	*prev;
 	struct	s_commands	*next;
@@ -54,9 +54,9 @@ typedef struct s_str
 }			t_str;
 
 pid_t	waitpid(pid_t pid, int *status, int options); 
-int		str_size(const char *str);
+int		str_size(const char *args);
 char	*str_cpy(char *src);
-int	    char_index(char *str, char ref);
+int	    char_index(char *args, char ref);
 char	*string_concat(char *path, char *cmd);
 char    *make_path(char *dir, char *cmd);
 char	**split_path(char *string, char separator);
@@ -73,5 +73,8 @@ void	execute_all(t_commands *cmds, char **envp);
 int 	lst_size(t_commands *cmds);
 
 int 	read_here_doc(char *limiter);
+
+t_commands  *parse_tokens(t_token *tokens);
+void	print_parser_cmds(t_commands *cmds);
 
 #endif
