@@ -32,6 +32,7 @@ void    add_cmd_str(char *str, int i, t_commands *cmd)
 void    add_cmd_redirect(t_metachar type, char *filename, t_commands *cmd)
 {
    t_redirect   *new_redirect;
+   t_redirect   *tmp_redirect;
    t_commands   *tmp;
 
    new_redirect = malloc(sizeof(t_redirect));
@@ -43,9 +44,10 @@ void    add_cmd_redirect(t_metachar type, char *filename, t_commands *cmd)
     else
     {
         tmp = cmd;
-        while (tmp->redirect->next)
-            tmp->redirect = tmp->redirect->next;
-        tmp->redirect->next = new_redirect;
+        tmp_redirect = tmp->redirect;
+        while (tmp_redirect->next)
+            tmp_redirect = tmp_redirect->next;
+        tmp_redirect->next = new_redirect;
     }
 }
 
