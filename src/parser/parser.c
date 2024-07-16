@@ -58,6 +58,7 @@ int    count_cmd_str(t_token *tokens)
 
     tmp = tokens;
     len = 0;
+
     while (tmp && tmp->metachar != PIPE)
     {
         if (tmp->metachar > PIPE)
@@ -131,13 +132,14 @@ t_commands *build_cmd(t_token **token_lst)
     return (cmd);
 }
 
-int validate_cmd_syntax()
-{
-    //loop through token_lst, 
-        //if there's no command before or after '|', pipe error
-        //else if there's no filename after redirection, redirection error??
-        //else if 'newline' (kinda tricky, very similar to redirection error)??
-}
+// int validate_cmd_syntax()
+// {
+
+//     //loop through token_lst, 
+//         //if there's no command before or after '|', pipe error
+//         //else if there's no filename after redirection, redirection error??
+//         //else if 'newline' (kinda tricky, very similar to redirection error)??
+// }
 
 t_commands  *parse_tokens(t_token *tokens)
 {

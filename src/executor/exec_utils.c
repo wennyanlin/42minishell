@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:12:56 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/28 20:47:57 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/16 12:32:34 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	char_index(char *str, char ref)
 	int	i;
 
 	i = -1;
-	if (!*str || !str)
+	if (!str)
 		return (-1);
 	while (str[++i])
 		if (str[i] == ref)

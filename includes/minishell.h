@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:32:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/25 15:06:40 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/15 14:45:52 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,5 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../lib/libft/libft.h"
-
 
 # endif

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
+/*                                      														                  :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/14 20:47:16 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/15 14:27:56 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,26 @@ void	print_parser_cmds(t_commands *cmds)
 	printf("\n");
 }
 
+void	trim_whitespaces(char *line)
+{
+	int	i;
+	int	line_len;
+	int	to_be_replaced;
+	int	extra_to_replace;
+
+	to_be_replaced = 0;
+	line_len = ft_strlen(line);
+	i = line_len;
+	while (is_whitespace(line[--i]))
+		line[i] = '\0';
+	while (is_whitespace(line[to_be_replaced]))
+		to_be_replaced++;
+	ft_memmove(&line, &line + to_be_replaced, to_be_replaced);
+	extra_to_replace = i - to_be_replaced;
+	while (extra_to_replace <= i)
+		line[i--] = '\0';
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char	*line;
@@ -156,8 +176,13 @@ int	main(int argc, char **argv, char **envp)
 		while (1)
 		{
 			line = readline(PROMPT);
+			trim_whitespaces(line);
 			token_lst = tokenize(line);
+			// if (token_lst->metachar == -1)
+			// 	return (130);
 			free(line);
+			// (void)token_lst;
+			// (void)envp;
 			cmds = parse_tokens(token_lst);
 			// print_parser_cmds(cmds);
 			execute_all(cmds, envp);

@@ -6,12 +6,12 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/13 18:41:21 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/15 14:28:29 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef executor_h
-#define executor_h
+#ifndef EXECUTOR_H
+#define EXECUTOR_H
 
 # include <fcntl.h>
 # include <stdlib.h>
