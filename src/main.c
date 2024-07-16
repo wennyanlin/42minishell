@@ -141,7 +141,7 @@ void	print_parser_cmds(t_commands *cmds)
 	printf("\n");
 }
 
-void	trim_whitespaces(char *line)
+int	trim_whitespaces(char *line)
 {
 	int	i;
 	int	line_len;
@@ -150,15 +150,18 @@ void	trim_whitespaces(char *line)
 
 	to_be_replaced = 0;
 	line_len = ft_strlen(line);
-	i = line_len;
-	while (is_whitespace(line[--i]))
+	i = line_len - 1;
+	while (--i >= 0 && line[i] && is_whitespace(line[i]))
 		line[i] = '\0';
+	if (i < 0)
+		return (1);
 	while (is_whitespace(line[to_be_replaced]))
 		to_be_replaced++;
 	ft_memmove(&line, &line + to_be_replaced, to_be_replaced);
 	extra_to_replace = i - to_be_replaced;
 	while (extra_to_replace <= i)
 		line[i--] = '\0';
+	return (0);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -176,7 +179,8 @@ int	main(int argc, char **argv, char **envp)
 		while (1)
 		{
 			line = readline(PROMPT);
-			trim_whitespaces(line);
+			if (trim_whitespaces(line))
+				return (1);
 			token_lst = tokenize(line);
 			// if (token_lst->metachar == -1)
 			// 	return (130);
