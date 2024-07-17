@@ -25,6 +25,7 @@ void	perror_and_exit(char *file, int code)
 void	ft_free_lst(t_token *lst)
 {
 	t_token	*tmp;
+
 	while (lst)
 	{
 		tmp = lst;
@@ -35,6 +36,29 @@ void	ft_free_lst(t_token *lst)
 		free(tmp);
 	}
 	lst = NULL;
+}
+
+void	ft_free_cmds(t_commands *cmds)
+{
+	t_commands	*tmp;
+	t_redirect	*tmp_redirect;
+
+	while (cmds)
+	{
+		free_array(cmds->args);
+		while (cmds->redirect)
+		{
+			free(cmds->redirect->filename);
+			cmds->redirect->filename = NULL;
+			tmp_redirect = cmds->redirect;
+			cmds->redirect = cmds->redirect->next;
+			free(tmp_redirect);
+		}
+		cmds->redirect = NULL;
+		tmp = cmds;
+		cmds = cmds->next;
+		free(tmp);
+	}
 }
 
 char	**convert_lst_to_array(t_token *token_lst)
@@ -141,27 +165,25 @@ void	print_parser_cmds(t_commands *cmds)
 	printf("\n");
 }
 
-int	trim_whitespaces(char *line)
+void	trim_whitespaces(char *line)
 {
-	int	i;
-	int	line_len;
-	int	to_be_replaced;
-	int	extra_to_replace;
+	int	start_back;
+	int	front;
 
-	to_be_replaced = 0;
-	line_len = ft_strlen(line);
-	i = line_len - 1;
-	while (--i >= 0 && line[i] && is_whitespace(line[i]))
-		line[i] = '\0';
-	if (i < 0)
-		return (1);
-	while (is_whitespace(line[to_be_replaced]))
-		to_be_replaced++;
-	ft_memmove(&line, &line + to_be_replaced, to_be_replaced);
-	extra_to_replace = i - to_be_replaced;
-	while (extra_to_replace <= i)
-		line[i--] = '\0';
-	return (0);
+	if (!line)
+		return ;
+	start_back = ft_strlen(line) - 1;
+	while (start_back >= 0 && is_whitespace(line[start_back]))
+	{
+		line[start_back] = '\0';
+		start_back--;
+	}
+	start_back++;
+	front = 0;
+	while (line[front] && is_whitespace(line[front]))
+		front++;
+	if (front > 0)
+		ft_memmove(line, line + front, start_back - front + 1);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -179,19 +201,18 @@ int	main(int argc, char **argv, char **envp)
 		while (1)
 		{
 			line = readline(PROMPT);
-			if (trim_whitespaces(line))
-				return (1);
+			trim_whitespaces(line);
+			if (line == NULL || *line == '\0')
+				continue ;
 			token_lst = tokenize(line);
-			// if (token_lst->metachar == -1)
-			// 	return (130);
 			free(line);
-			// (void)token_lst;
-			// (void)envp;
 			cmds = parse_tokens(token_lst);
+			ft_free_lst(token_lst);
 			// print_parser_cmds(cmds);
-			execute_all(cmds, envp);
+			//execute_all(cmds, envp);
+			(void)envp;
+			ft_free_cmds(cmds);
 		}
-		// free_array(cmd_arr);
 		return (0);
 	}
 }

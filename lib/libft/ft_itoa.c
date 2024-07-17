@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 14:30:30 by wlin              #+#    #+#             */
-/*   Updated: 2024/02/28 18:28:53 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/17 17:12:01 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ size_t	ft_strlen(const char *s)
 	int	count;
 
 	count = 0;
+	if (!*s)
+		return (0);
 	while (*s)
 	{
 		count++;
