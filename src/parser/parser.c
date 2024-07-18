@@ -132,22 +132,6 @@ t_commands *build_cmd(t_token **token_lst)
     return (cmd);
 }
 
-void    prompt_error_message(t_metachar type)
-{
-    if (type == PIPE)
-        printf("minishell: syntax error near unexpected token '%c'\n", C_PIPE);
-    else if (type == LESS)
-        printf("minishell: syntax error near unexpected token '%c'\n", C_LESS);
-    else if (type == LESS_LESS)
-        printf("minishell: syntax error near unexpected token '%c%c'\n", C_LESS
-            , C_LESS);
-    else if (type == GREAT)
-        printf("minishell: syntax error near unexpected token '%c'\n", C_GREAT);
-    else if (type == GREAT_GREAT)
-        printf("minishell: syntax error near unexpected token '%c'\n", C_GREAT
-            , C_GREAT);
-}
-
 int is_redirection(t_metachar type)
 {
     if (type == LESS || type == LESS_LESS 
@@ -157,6 +141,22 @@ int is_redirection(t_metachar type)
         return (0);           
 }
 
+void    prompt_error_message(t_metachar type)
+{
+    if (type == PIPE)
+        printf("minishell: syntax error near unexpected token `%c'\n", C_PIPE);
+    else if (type == LESS)
+        printf("minishell: syntax error near unexpected token `%c'\n", C_LESS);
+    else if (type == LESS_LESS)
+        printf("minishell: syntax error near unexpected token `%c%c'\n", C_LESS
+            , C_LESS);
+    else if (type == GREAT)
+        printf("minishell: syntax error near unexpected token `%c'\n", C_GREAT);
+    else if (type == GREAT_GREAT)
+        printf("minishell: syntax error near unexpected token`%c%c'\n", C_GREAT
+            , C_GREAT);
+}
+
 int validate_cmd_syntax(t_token *token_lst)
 {
     t_token *tmp;
@@ -164,20 +164,24 @@ int validate_cmd_syntax(t_token *token_lst)
     tmp = token_lst;
     while (tmp)
     {
-        if (tmp->metachar == PIPE && tmp->next == NULL || tmp->metachar == PIPE
-            && tmp->next->metachar == PIPE)
+        if (tmp->metachar == PIPE && (tmp->prev == NULL || is_redirection(tmp->prev->metachar)))
+        {
             prompt_error_message(PIPE);
-        else if (is_redirection(tmp->metachar) && !tmp->next->word)
-            prompt_error_message(tmp->metachar);
+            return (EXIT_FAILURE);
+        }
         else if (is_redirection(tmp->metachar) && !tmp->next)
-            //newline error
-        
-
+        {
+            prompt_error_message(tmp->metachar);
+            return (EXIT_FAILURE);
+        }
+        else if (is_redirection(tmp->metachar) && !tmp->next->word)
+        {
+            printf("minishell: syntax error near unexpected token`newline'\n");
+            return (EXIT_FAILURE);
+        }
+        tmp = tmp->next;
     }
-    //loop through token_lst, 
-        //if there's no command before or after '|', pipe error
-        //else if there's no filename after redirection, redirection error??
-        //else if 'newline' (kinda tricky, very similar to redirection error)??
+    return (EXIT_SUCCESS);
 }
 
 t_commands  *parse_tokens(t_token *tokens)
@@ -185,7 +189,8 @@ t_commands  *parse_tokens(t_token *tokens)
     t_commands  *cmds;
     t_commands  *new;
 
-    // validate_cmd_syntax();
+    if (validate_cmd_syntax(tokens) == EXIT_FAILURE)
+        return (NULL);
     cmds = NULL;
     while (tokens)
     {
