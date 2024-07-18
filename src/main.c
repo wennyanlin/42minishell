@@ -209,8 +209,8 @@ int	main(int argc, char **argv, char **envp)
 			cmds = parse_tokens(token_lst);
 			ft_free_lst(token_lst);
 			// print_parser_cmds(cmds);
-			//execute_all(cmds, envp);
-			(void)envp;
+			execute_all(cmds, envp);
+			// (void)envp;
 			ft_free_cmds(cmds);
 		}
 		return (0);

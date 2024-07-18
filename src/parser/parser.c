@@ -132,14 +132,53 @@ t_commands *build_cmd(t_token **token_lst)
     return (cmd);
 }
 
-// int validate_cmd_syntax()
-// {
+void    prompt_error_message(t_metachar type)
+{
+    if (type == PIPE)
+        printf("minishell: syntax error near unexpected token '%c'\n", C_PIPE);
+    else if (type == LESS)
+        printf("minishell: syntax error near unexpected token '%c'\n", C_LESS);
+    else if (type == LESS_LESS)
+        printf("minishell: syntax error near unexpected token '%c%c'\n", C_LESS
+            , C_LESS);
+    else if (type == GREAT)
+        printf("minishell: syntax error near unexpected token '%c'\n", C_GREAT);
+    else if (type == GREAT_GREAT)
+        printf("minishell: syntax error near unexpected token '%c'\n", C_GREAT
+            , C_GREAT);
+}
 
-//     //loop through token_lst, 
-//         //if there's no command before or after '|', pipe error
-//         //else if there's no filename after redirection, redirection error??
-//         //else if 'newline' (kinda tricky, very similar to redirection error)??
-// }
+int is_redirection(t_metachar type)
+{
+    if (type == LESS || type == LESS_LESS 
+            || type == GREAT || type == GREAT_GREAT)
+        return (1);
+    else
+        return (0);           
+}
+
+int validate_cmd_syntax(t_token *token_lst)
+{
+    t_token *tmp;
+
+    tmp = token_lst;
+    while (tmp)
+    {
+        if (tmp->metachar == PIPE && tmp->next == NULL || tmp->metachar == PIPE
+            && tmp->next->metachar == PIPE)
+            prompt_error_message(PIPE);
+        else if (is_redirection(tmp->metachar) && !tmp->next->word)
+            prompt_error_message(tmp->metachar);
+        else if (is_redirection(tmp->metachar) && !tmp->next)
+            //newline error
+        
+
+    }
+    //loop through token_lst, 
+        //if there's no command before or after '|', pipe error
+        //else if there's no filename after redirection, redirection error??
+        //else if 'newline' (kinda tricky, very similar to redirection error)??
+}
 
 t_commands  *parse_tokens(t_token *tokens)
 {
