@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/17 17:04:19 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/19 17:25:55 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	free_array(char **array)
 	int	i;
 
 	i = 0;
+	if (array == NULL || *array == NULL)
+		return ;
 	while (array[i])
 		free(array[i++]);
 	free(array);
@@ -92,7 +94,8 @@ t_process	init_process(t_commands *cmds, char **envp, int pipe_read_end_prev)
 	tmp_redirect = cmds->redirect;
 	process.envp = envp;
 	process.command = cmds->args;
-	process.cmd_path = find_cmd_path(getenv("PATH"), process.command[0]);
+	if (process.command != NULL)
+		process.cmd_path = find_cmd_path(getenv("PATH"), process.command[0]);
 	process.fd_in = pipe_read_end_prev;
 	if (cmds->next)
 	{
@@ -154,11 +157,13 @@ void	execute_all(t_commands *cmds, char **envp)
 	while (tmp)
 	{
 		process = init_process(tmp, envp, pipe_read_end_prev);
-		pid[++i] = create_process(&process);
-        free(process.cmd_path);
+		if (process.command != NULL)
+		{
+			pid[++i] = create_process(&process);
+			free(process.cmd_path);
+		}
 		tmp = tmp->next;
 		pipe_read_end_prev = process.pipe_fd[RD];
-        // free_array(process.command);
 	}
 	wait_process(pid, num_cmd);
 	free(pid);

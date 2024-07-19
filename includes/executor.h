@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/17 22:59:53 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/19 13:18:03 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ int 	lst_size(t_commands *cmds);
 int 	read_here_doc(char *limiter);
 
 t_commands  *parse_tokens(t_token *tokens);
-void	print_parser_cmds(t_commands *cmds);
+void		print_parser_cmds(t_commands *cmds);
+void		ft_free_cmds(t_commands *cmds);
 
 #endif

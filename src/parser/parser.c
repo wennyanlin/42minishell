@@ -110,9 +110,12 @@ t_commands *build_cmd(t_token **token_lst)
 
     cmd = create_cmd_lstnew();
     len = count_cmd_str(*token_lst);
-    cmd->args = malloc(sizeof(char *) * (len + 1));
-    if (!cmd->args)
-        free_array(cmd->args);
+    if (len > 0)
+    {
+        cmd->args = malloc(sizeof(char *) * (len + 1));
+        if (!cmd->args)
+            free_array(cmd->args);
+    }
     i = -1;
     while (*token_lst && (*token_lst)->metachar != PIPE)
     {
@@ -128,7 +131,8 @@ t_commands *build_cmd(t_token **token_lst)
         }
         *token_lst = (*token_lst)->next;
     }
-    cmd->args[len] = NULL;
+    if (cmd->args != NULL)
+        cmd->args[len] = NULL;
     return (cmd);
 }
 
@@ -172,6 +176,11 @@ int validate_cmd_syntax(t_token *token_lst)
         else if (is_redirection(tmp->metachar) && !tmp->next)
         {
             prompt_error_message(tmp->metachar);
+            return (EXIT_FAILURE);
+        }
+        else if (is_redirection(tmp->metachar) && is_redirection(tmp->next->metachar) && tmp->metachar != tmp->next->metachar)
+        {
+            prompt_error_message(tmp->next->metachar);
             return (EXIT_FAILURE);
         }
         else if (is_redirection(tmp->metachar) && !tmp->next->word)
