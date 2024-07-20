@@ -145,7 +145,7 @@ int is_redirection(t_metachar type)
         return (0);           
 }
 
-void    prompt_error_message(t_metachar type)
+int    prompt_error_message(t_metachar type)
 {
     if (type == PIPE)
         printf("minishell: syntax error near unexpected token `%c'\n", C_PIPE);
@@ -159,6 +159,7 @@ void    prompt_error_message(t_metachar type)
     else if (type == GREAT_GREAT)
         printf("minishell: syntax error near unexpected token`%c%c'\n", C_GREAT
             , C_GREAT);
+    return (EXIT_FAILURE);
 }
 
 int validate_cmd_syntax(t_token *token_lst)
@@ -168,25 +169,25 @@ int validate_cmd_syntax(t_token *token_lst)
     tmp = token_lst;
     while (tmp)
     {
-        if (tmp->metachar == PIPE && (tmp->prev == NULL || is_redirection(tmp->prev->metachar)))
+        if (tmp->metachar == PIPE)
         {
-            prompt_error_message(PIPE);
-            return (EXIT_FAILURE);
+            if (tmp->prev == NULL || tmp->next->metachar == PIPE)
+                return (prompt_error_message(PIPE));
+            else if (is_redirection(tmp->next->metachar) && tmp->next->next == NULL)
+                printf("minishell: syntax error near unexpected token`newline'\n");
+            else if (tmp->next->word && tmp->next->next == NULL)
+                return (prompt_error_message(PIPE));
         }
-        else if (is_redirection(tmp->metachar) && !tmp->next)
+        else if (is_redirection(tmp->metachar))
         {
-            prompt_error_message(tmp->metachar);
-            return (EXIT_FAILURE);
-        }
-        else if (is_redirection(tmp->metachar) && is_redirection(tmp->next->metachar) && tmp->metachar != tmp->next->metachar)
-        {
-            prompt_error_message(tmp->next->metachar);
-            return (EXIT_FAILURE);
-        }
-        else if (is_redirection(tmp->metachar) && !tmp->next->word)
-        {
-            printf("minishell: syntax error near unexpected token`newline'\n");
-            return (EXIT_FAILURE);
+            if (tmp->prev == NULL || tmp->next == NULL)
+                return (printf("minishell: syntax error near unexpected token`newline'\n"), EXIT_FAILURE);
+            else if (tmp->next->metachar == PIPE)
+                return (prompt_error_message(PIPE));
+            else if (is_redirection(tmp->next->metachar) && tmp->metachar == tmp->next->metachar)
+                return (prompt_error_message(tmp->metachar));
+            else if (is_redirection(tmp->next->metachar) && tmp->metachar != tmp->next->metachar)
+                return (prompt_error_message(tmp->next->metachar));
         }
         tmp = tmp->next;
     }
