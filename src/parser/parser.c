@@ -58,6 +58,7 @@ int    count_cmd_str(t_token *tokens)
 
     tmp = tokens;
     len = 0;
+
     while (tmp && tmp->metachar != PIPE)
     {
         if (tmp->metachar > PIPE)
@@ -109,9 +110,12 @@ t_commands *build_cmd(t_token **token_lst)
 
     cmd = create_cmd_lstnew();
     len = count_cmd_str(*token_lst);
-    cmd->args = malloc(sizeof(char *) * (len + 1));
-    if (!cmd->args)
-        free_array(cmd->args);
+    if (len > 0)
+    {
+        cmd->args = malloc(sizeof(char *) * (len + 1));
+        if (!cmd->args)
+            free_array(cmd->args);
+    }
     i = -1;
     while (*token_lst && (*token_lst)->metachar != PIPE)
     {
@@ -127,8 +131,67 @@ t_commands *build_cmd(t_token **token_lst)
         }
         *token_lst = (*token_lst)->next;
     }
-    cmd->args[len] = NULL;
+    if (cmd->args != NULL)
+        cmd->args[len] = NULL;
     return (cmd);
+}
+
+int is_redirection(t_metachar type)
+{
+    if (type == LESS || type == LESS_LESS 
+            || type == GREAT || type == GREAT_GREAT)
+        return (1);
+    else
+        return (0);           
+}
+
+int    prompt_error_message(t_metachar type)
+{
+    if (type == PIPE)
+        printf("minishell: syntax error near unexpected token `%c'\n", C_PIPE);
+    else if (type == LESS)
+        printf("minishell: syntax error near unexpected token `%c'\n", C_LESS);
+    else if (type == LESS_LESS)
+        printf("minishell: syntax error near unexpected token `%c%c'\n", C_LESS
+            , C_LESS);
+    else if (type == GREAT)
+        printf("minishell: syntax error near unexpected token `%c'\n", C_GREAT);
+    else if (type == GREAT_GREAT)
+        printf("minishell: syntax error near unexpected token`%c%c'\n", C_GREAT
+            , C_GREAT);
+    return (EXIT_FAILURE);
+}
+
+int validate_cmd_syntax(t_token *token_lst)
+{
+    t_token *tmp;
+
+    tmp = token_lst;
+    while (tmp)
+    {
+        if (tmp->metachar == PIPE)
+        {
+            if (tmp->prev == NULL || tmp->next->metachar == PIPE)
+                return (prompt_error_message(PIPE));
+            else if (is_redirection(tmp->next->metachar) && tmp->next->next == NULL)
+                return (printf("minishell: syntax error near unexpected token`newline'\n"), EXIT_FAILURE);
+            else if (tmp->next->word && tmp->next->next == NULL)
+                return (prompt_error_message(PIPE));
+        }
+        else if (is_redirection(tmp->metachar))
+        {
+            if (tmp->next == NULL)
+                return (printf("minishell: syntax error near unexpected token`newline'\n"), EXIT_FAILURE);
+            else if (tmp->next->metachar == PIPE)
+                return (prompt_error_message(PIPE));
+            else if (is_redirection(tmp->next->metachar) && tmp->metachar == tmp->next->metachar)
+                return (prompt_error_message(tmp->metachar));
+            else if (is_redirection(tmp->next->metachar) && tmp->metachar != tmp->next->metachar)
+                return (prompt_error_message(tmp->next->metachar));
+        }
+        tmp = tmp->next;
+    }
+    return (EXIT_SUCCESS);
 }
 
 t_commands  *parse_tokens(t_token *tokens)
@@ -136,6 +199,8 @@ t_commands  *parse_tokens(t_token *tokens)
     t_commands  *cmds;
     t_commands  *new;
 
+    if (validate_cmd_syntax(tokens) == EXIT_FAILURE)
+        return (NULL);
     cmds = NULL;
     while (tokens)
     {

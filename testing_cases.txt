@@ -1,0 +1,39 @@
+
+test | >
+test | >>  
+test | <
+echo >
+258, bash: syntax error near unexpected token `newline'
+
+
+echo >>>
+bash: syntax error near unexpected token `>'
+
+echo hi >< file
+258, bash: syntax error near unexpected token `<'
+
+echo hi ><<<< file
+258, bash: syntax error near unexpected token `<<<'
+
+<<< Makefile grep src
+echo hi >>>> file
+258, bash: syntax error near unexpected token `>>'
+
+
+|test
+echo hi >| file
+< | test
+<< | test
+> | test
+>> | test
+| < test
+| << test
+| > test
+| >> test
+| test
+echo hi | | echo hi
+258, bash: syntax error near unexpected token `|'
+
+>
+>>
+<<

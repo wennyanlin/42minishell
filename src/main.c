@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
+/*                                      														                  :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/14 11:37:13 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/15 14:27:56 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	perror_and_exit(char *file, int code)
 void	ft_free_lst(t_token *lst)
 {
 	t_token	*tmp;
+
 	while (lst)
 	{
 		tmp = lst;
@@ -35,6 +36,29 @@ void	ft_free_lst(t_token *lst)
 		free(tmp);
 	}
 	lst = NULL;
+}
+
+void	ft_free_cmds(t_commands *cmds)
+{
+	t_commands	*tmp;
+	t_redirect	*tmp_redirect;
+
+	while (cmds)
+	{
+		free_array(cmds->args);
+		while (cmds->redirect)
+		{
+			free(cmds->redirect->filename);
+			cmds->redirect->filename = NULL;
+			tmp_redirect = cmds->redirect;
+			cmds->redirect = cmds->redirect->next;
+			free(tmp_redirect);
+		}
+		cmds->redirect = NULL;
+		tmp = cmds;
+		cmds = cmds->next;
+		free(tmp);
+	}
 }
 
 char	**convert_lst_to_array(t_token *token_lst)
@@ -141,6 +165,27 @@ void	print_parser_cmds(t_commands *cmds)
 	printf("\n");
 }
 
+void	trim_whitespaces(char *line)
+{
+	int	start_back;
+	int	front;
+
+	if (!line)
+		return ;
+	start_back = ft_strlen(line) - 1;
+	while (start_back >= 0 && is_whitespace(line[start_back]))
+	{
+		line[start_back] = '\0';
+		start_back--;
+	}
+	start_back++;
+	front = 0;
+	while (line[front] && is_whitespace(line[front]))
+		front++;
+	if (front > 0)
+		ft_memmove(line, line + front, start_back - front + 1);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char	*line;
@@ -156,13 +201,19 @@ int	main(int argc, char **argv, char **envp)
 		while (1)
 		{
 			line = readline(PROMPT);
+			trim_whitespaces(line);
+			if (line == NULL || *line == '\0')
+				continue ;
 			token_lst = tokenize(line);
 			free(line);
 			cmds = parse_tokens(token_lst);
-			print_parser_cmds(cmds);
+			if (cmds == NULL)
+				continue ;
+			ft_free_lst(token_lst);
+			// print_parser_cmds(cmds);
 			execute_all(cmds, envp);
+			ft_free_cmds(cmds);
 		}
-		// free_array(cmd_arr);
 		return (0);
 	}
 }
