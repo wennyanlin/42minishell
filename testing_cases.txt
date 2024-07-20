@@ -1,8 +1,4 @@
 
-<<< Makefile grep src
-1, no error message
-
-
 test | >
 test | >>  
 test | <
@@ -19,11 +15,13 @@ echo hi >< file
 echo hi ><<<< file
 258, bash: syntax error near unexpected token `<<<'
 
+<<< Makefile grep src
 echo hi >>>> file
 258, bash: syntax error near unexpected token `>>'
 
 
 |test
+echo hi >| file
 < | test
 << | test
 > | test
@@ -36,5 +34,6 @@ echo hi >>>> file
 echo hi | | echo hi
 258, bash: syntax error near unexpected token `|'
 
-
-echo hi >| file
+>
+>>
+<<

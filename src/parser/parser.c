@@ -174,13 +174,13 @@ int validate_cmd_syntax(t_token *token_lst)
             if (tmp->prev == NULL || tmp->next->metachar == PIPE)
                 return (prompt_error_message(PIPE));
             else if (is_redirection(tmp->next->metachar) && tmp->next->next == NULL)
-                printf("minishell: syntax error near unexpected token`newline'\n");
+                return (printf("minishell: syntax error near unexpected token`newline'\n"), EXIT_FAILURE);
             else if (tmp->next->word && tmp->next->next == NULL)
                 return (prompt_error_message(PIPE));
         }
         else if (is_redirection(tmp->metachar))
         {
-            if (tmp->prev == NULL || tmp->next == NULL)
+            if (tmp->next == NULL)
                 return (printf("minishell: syntax error near unexpected token`newline'\n"), EXIT_FAILURE);
             else if (tmp->next->metachar == PIPE)
                 return (prompt_error_message(PIPE));
