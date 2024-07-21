@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/19 13:18:03 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/21 14:19:07 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,4 +78,14 @@ t_commands  *parse_tokens(t_token *tokens);
 void		print_parser_cmds(t_commands *cmds);
 void		ft_free_cmds(t_commands *cmds);
 
+/*==========================BUILTIN==============================*/
+
+void	ft_echo();
+void	ft_echo();
+void	ft_cd();
+void	ft_pwd();
+void	ft_export();
+void	ft_unset();
+void	ft_env();
+void	ft_exit();
 #endif
