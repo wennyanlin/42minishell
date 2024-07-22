@@ -6,7 +6,7 @@
 #    By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 13:11:23 by wlin              #+#    #+#              #
-#    Updated: 2024/06/11 16:17:43 by wlin             ###   ########.fr        #
+#    Updated: 2024/07/22 14:09:32 by wlin             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ AUTHOR		= wlin, aglanuss
 NAME			= minishell
 
 CC				= gcc
-CFLAGS		= -Wall -Wextra -Werror -g -Iincludes -I${LIBFT_DIR} -fsanitize=address
+CFLAGS		= -Wall -Wextra -Werror -g -Iincludes -I${LIBFT_DIR} -fsanitize=address -MMD
 RM				= rm -fr
 
 # *******************************	FILES	********************************** #
@@ -27,9 +27,11 @@ LIBRARY_PATHS = -L$(LIBFT_DIR)
 LIBRARY_NAMES = -lft -lreadline
 LDFLAGS     += $(LIBRARY_PATHS) $(LIBRARY_NAMES)
 
-HEADERS		= $(wildcard includes/*.h)
+# HEADERS		= $(wildcard includes/*.h)
 SRCS			= $(shell find src -name '*.c')
 OBJS			= $(SRCS:.c=.o)
+DEPS			= $(SRCS:.c=.d)
+INCLUDES		= include
 
 # *******************************  COLORS	******************************* #
 
@@ -43,6 +45,7 @@ RESET			=	\033[0m
 GREEN_BOLD	=	\033[1;32m
 BLUE_BOLD	=	\033[1;34m
 CYAN_BOLD	=	\033[1;36m
+MAKE		=	make --no-print-directory
 
 # ********************************	RULES	********************************** #
 
@@ -66,28 +69,32 @@ header:
 	@echo
 
 libft:
-	@$(MAKE) -C $(LIBFT_DIR) --no-print-directory
+	@$(MAKE) -C $(LIBFT_DIR)
 
 $(NAME): libft $(OBJS)
 	@echo "\n\n${BLUE_BOLD}[$(NAME)] $(GREEN)object files were created$(RESET)"
-	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LDFLAGS)
-	@echo "${BLUE_BOLD}[$(NAME)] $(GREEN)executable was created$(RESET)"
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LDFLAGS)
+	echo "${BLUE_BOLD}[$(NAME)] $(GREEN)executable was created$(RESET)"
 
-%.o: %.c Makefile $(HEADERS)
-	@$(CC) $(CFLAGS) -DREADLINE_LIBRARY=1 $(RDFLAGS) -c $< -o $@
+%.o: %.c Makefile
+	@$(CC) $(CFLAGS) -DREADLINE_LIBRARY=1 $(RDFLAGS) -I $(INCLUDES) -I $(LIBFT_DIR) -c $< -o $@
 	@echo "$(GREEN).$(RESET)\c"
 
 clean:
-	@$(MAKE) -C $(LIBFT_DIR) clean --no-print-directory
+	@$(MAKE) -C $(LIBFT_DIR) clean
 	@$(RM) $(OBJS)
 	@echo "${BLUE_BOLD}[$(NAME)] $(RED)removed object files$(RESET)"
 
 fclean: clean
-	@$(MAKE) -C $(LIBFT_DIR) fclean --no-print-directory
+	@$(MAKE) -C $(LIBFT_DIR) fclean
 	@$(RM) $(NAME)
 	@echo "${BLUE_BOLD}[$(NAME)] $(RED)executable was deleted$(RESET)"
 
 re: fclean
 	@$(MAKE) all
+
+-include $(DEPS)
+
+.SILENT:
 
 .PHONY: all clean fclean re libft
