@@ -1,27 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/21 14:12:10 by wlin              #+#    #+#             */
+/*   Updated: 2024/07/21 14:12:24 by wlin             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "executor.h"
 #include "macros.h"
-
-//1. Calculate how many pipes
-    //1.1. Checks the syntax errors, when after pipe there is no characters???
-//2. extract **str and redirs list
-    //Loop through the token_lst, find the redirections, else if words
-
-// int count_token_lst_size(t_token *lst)
-// {
-//     int     len;
-//     t_token *tmp_lst;
-
-//     len = 0;
-//     tmp_lst = lst;
-//     while (tmp_lst)
-//     {
-//         if (tmp_lst->metachar == PIPE)
-//             ++len;
-//         tmp_lst = tmp_lst->next;
-//     }
-//     return (len);
-// }
 
 void    add_cmd_str(char *str, int i, t_commands *cmd)
 {

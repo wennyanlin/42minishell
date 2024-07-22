@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/19 17:25:55 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/21 20:49:47 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,37 @@ void	handle_redirection(t_process *process, t_redirect *redirect)
 	redirection_error_handling(redirect->filename, process->fd_in);
 }
 
+int	is_equal(char *s1, char *s2)
+{
+	if (ft_strlen(s1) == ft_strlen(s2))
+	{
+		if (ft_strncmp(s1, s2, ft_strlen(s1)) == 0)
+			return (EXIT_SUCCESS);
+	}
+	return (EXIT_FAILURE);
+}
+
+int	is_builtin(char *cmd)
+{
+	if (is_equal("echo", cmd) == EXIT_SUCCESS)
+		ft_echo();
+	else if (is_equal("cd", cmd) == EXIT_SUCCESS)
+		ft_cd();
+	else if (is_equal("pwd", cmd) == EXIT_SUCCESS)
+		ft_pwd();
+	else if (is_equal("export", cmd) == EXIT_SUCCESS)
+		ft_export();
+	else if (is_equal("unset", cmd) == EXIT_SUCCESS)
+		ft_unset();
+	else if (is_equal("env", cmd) == EXIT_SUCCESS)
+		ft_env();
+	else if (is_equal("exit", cmd) == EXIT_SUCCESS)
+		ft_exit();
+	else
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
+}
+
 t_process	init_process(t_commands *cmds, char **envp, int pipe_read_end_prev)
 {
 	t_process	process;
@@ -159,8 +190,11 @@ void	execute_all(t_commands *cmds, char **envp)
 		process = init_process(tmp, envp, pipe_read_end_prev);
 		if (process.command != NULL)
 		{
-			pid[++i] = create_process(&process);
-			free(process.cmd_path);
+			if (is_builtin(process.command[0]) == EXIT_FAILURE)
+			{
+				pid[++i] = create_process(&process);
+				free(process.cmd_path);
+			}
 		}
 		tmp = tmp->next;
 		pipe_read_end_prev = process.pipe_fd[RD];
