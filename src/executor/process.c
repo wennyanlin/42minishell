@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 18:16:01 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/06 21:48:16 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/23 15:50:14 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ pid_t create_process(t_process *process)
         perror_and_exit("fork", EXIT_FAILURE);
     else if (pid == CHILD)
         child_process(process);
-    close(process->fd_in);
-    close(process->fd_out);
-    close(process->pipe_fd[WR]);//NOT SURE
+    // close(process->fd_in);
+    // close(process->fd_out);
+    // close(process->pipe_fd[WR]);//NOT SURE
     return (pid);
 }
