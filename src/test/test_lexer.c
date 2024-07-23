@@ -211,6 +211,29 @@ void test_lexer_should_return_metachars(void)
     ft_free_lst(result);
 }
 
+
+void test_lexer_should_return_unclose_single_quote(void)
+{
+    char *input = "echo \"'\"";
+    t_token *result;
+    t_token expected;
+    t_token expected_second;
+
+    result = tokenize(input);
+
+    expected.word = "echo";
+    expected.metachar = 0;
+    expected_second.word = "\"'\"";
+    expected_second.metachar = 0;
+    expected.next = &expected_second;
+    expected.prev = NULL;
+    expected_second.next = NULL;
+    expected_second.prev = &expected;
+
+    compare_lst(&expected, result, "Should unclose_single_quote");
+    ft_free_lst(result);
+}
+
 void test_lexer_should_return_word_and_metachars(void)
 {
     char *input = "ls|grep";
@@ -249,4 +272,5 @@ void test_lexer(void)
     test_lexer_should_return_multiple_types_of_chars();
     test_lexer_should_return_metachars();
     test_lexer_should_return_word_and_metachars();
+    test_lexer_should_return_unclose_single_quote();
 }
