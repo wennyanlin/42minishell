@@ -6,7 +6,7 @@
 #    By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/09 20:06:48 by wlin              #+#    #+#              #
-#    Updated: 2024/06/22 15:56:02 by wlin             ###   ########.fr        #
+#    Updated: 2024/07/22 14:03:04 by wlin             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,10 +46,10 @@ BLUE_BOLD	=	\033[1;34m
 CYAN_BOLD	=	\033[1;36m
 
 %.o: %.c Makefile ${INCLUDES}
-	@$(COMPILER) $(FLAGS) -I $(INCLUDES) -c $< -o $@
+	@$(COMPILER) $(FLAGS) -c $< -o $@
 	@echo "$(GREEN).$(RESET)\c"
 
-$(NAME): $(OBJS) $(INCLUDES) Makefile
+$(NAME): $(OBJS) Makefile
 	@echo "\n\n${BLUE_BOLD}[libft] $(GREEN)object files were created$(RESET)"
 	@ar -rcs $(NAME) $(OBJS)
 	@echo "${BLUE_BOLD}[libft] $(GREEN)library was created$(RESET)\n"

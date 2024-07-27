@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/21 14:19:07 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/27 18:30:11 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,11 @@ typedef struct s_str
 	int		continue_from_index;
 }			t_str;
 
+
 pid_t	waitpid(pid_t pid, int *status, int options); 
+
+/*======================================LEXER=================================*/
+
 int		str_size(const char *args);
 char	*str_cpy(char *src);
 int	    char_index(char *args, char ref);
@@ -64,19 +68,31 @@ char	*find_cmd_path(char *env, char *cmd);
 char	**array_concat(char *shell_path, char **args);
 void	free_array(char **array);
 
-void	child_process(t_process *process);
-pid_t 	create_process(t_process *process);
-void	fd_dup2(int oldfd, int newfd);
-void	execute_command(char *command_path, char **cmd_args, char **envp, int pipe_fd[2]);
-void	perror_and_exit(char *file, int code);
-void	execute_all(t_commands *cmds, char **envp);
-int 	lst_size(t_commands *cmds);
+/*====================================Parser==================================*/
 
-int 	read_here_doc(char *limiter);
-
+int 		validate_cmd_syntax(t_token *token_lst);
 t_commands  *parse_tokens(t_token *tokens);
 void		print_parser_cmds(t_commands *cmds);
+int 		is_redirection(t_metachar type);
+int			count_cmd_str(t_token *tokens);
+t_commands  *create_cmd_lstnew();
+void    	cmd_lst_addback(t_commands **cmds, t_commands *new);
+
+/*====================================EXECUTOR================================*/
+
+t_process	init_process(t_commands *cmds, char **envp, int pipe_read_end_prev);
+void		child_process(t_process *process);
+pid_t 		create_process(t_process *process);
+void		fd_dup2(int oldfd, int newfd);
+void		execute_command(char *command_path, char **cmd_args, char **envp);
+void		perror_and_exit(char *file, int code);
+void		execute_all(t_commands *cmds, char **envp);
+int 		lst_size(t_commands *cmds);
+
+int 		read_here_doc(char *limiter);
+
 void		ft_free_cmds(t_commands *cmds);
+int			is_equal(char *s1, char *s2);
 
 /*==========================BUILTIN==============================*/
 
@@ -88,4 +104,6 @@ void	ft_export();
 void	ft_unset();
 void	ft_env();
 void	ft_exit();
+int		is_builtin(char *cmd);
+
 #endif
