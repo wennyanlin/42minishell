@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_utils.c                                       :+:      :+:    :+:   */
+/*   exec_find_cmd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:12:56 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/27 18:55:31 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/28 00:41:08 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ char	*find_cmd_path(char *env, char *cmd)
 	while (path_dirs[++i])
 	{
 		full_path = make_path(path_dirs[i], cmd);
+		printf("full_path = %s\n", full_path);
 		if (access(full_path, X_OK) == 0)
 		{
 			free_array(path_dirs);

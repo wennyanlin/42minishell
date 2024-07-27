@@ -133,11 +133,12 @@ int	main(int argc, char **argv, char **envp)
 				continue ;
 			token_lst = tokenize(line);
 			free(line);
+			if (token_lst == NULL)
+				continue ;
 			cmds = parse_tokens(token_lst);
 			if (cmds == NULL)
 				continue ;
 			ft_free_lst(token_lst);
-			// print_parser_cmds(cmds);
 			execute_all(cmds, envp);
 			ft_free_cmds(cmds);
 		}
