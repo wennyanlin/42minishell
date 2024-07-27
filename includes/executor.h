@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/23 15:16:02 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/27 17:39:08 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	free_array(char **array);
 void	child_process(t_process *process);
 pid_t 	create_process(t_process *process);
 void	fd_dup2(int oldfd, int newfd);
-void	execute_command(char *command_path, char **cmd_args, char **envp, int pipe_fd[2]);
+void	execute_command(char *command_path, char **cmd_args, char **envp);
 void	perror_and_exit(char *file, int code);
 void	execute_all(t_commands *cmds, char **envp);
 int 	lst_size(t_commands *cmds);

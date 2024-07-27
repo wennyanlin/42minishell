@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 18:16:01 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/23 21:16:05 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/27 18:03:42 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,12 @@ void	child_process(t_process *process)
         exit (126);
     }
     if (process->fd_in == -1)
-    { 
-        close(process->pipe_fd[WR]);
-        close(process->pipe_fd[RD]);
         exit (127);
-    } 
     fd_dup2(process->fd_in, STDIN_FILENO);
-	close(process->pipe_fd[RD]); 
     close(process->fd_in); 
     fd_dup2(process->fd_out, STDOUT_FILENO);
-    close(process->pipe_fd[WR]);
     close(process->fd_out);
-	execute_command(process->cmd_path, process->command, process->envp, process->pipe_fd);
+	execute_command(process->cmd_path, process->command, process->envp);
 	exit(127);
 }
 
@@ -63,6 +57,5 @@ pid_t create_process(t_process *process)
         child_process(process);
     close(process->fd_in);
     close(process->fd_out);
-    close(process->pipe_fd[WR]);//NOT SURE
     return (pid);
 }

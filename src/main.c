@@ -202,6 +202,7 @@ int	main(int argc, char **argv, char **envp)
 		{
 			line = readline(PROMPT);
 			trim_whitespaces(line);
+			sleep(1);
 			if (line == NULL || *line == '\0')
 				continue ;
 			token_lst = tokenize(line);
