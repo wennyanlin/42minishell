@@ -61,79 +61,6 @@ void	ft_free_cmds(t_commands *cmds)
 	}
 }
 
-char	**convert_lst_to_array(t_token *token_lst)
-{
-	int		i;
-	int		len;
-	int		lst_size;
-	t_token	*tmp_lst;
-	char	**cmd_args;
-	
-	tmp_lst = token_lst;
-	lst_size = 0;
-	while (tmp_lst)
-	{
-		++lst_size;
-		tmp_lst = tmp_lst->next;
-	}
-	cmd_args = malloc(sizeof(char *) * (lst_size + 1));
-	if (!cmd_args)
-		return (NULL);
-	i = 0;
-	tmp_lst = token_lst;
-	while (tmp_lst)
-	{
-		len = ft_strlen(tmp_lst->word);
-		cmd_args[i] = malloc(sizeof(char) * (len + 1));
-		ft_strlcpy(cmd_args[i], tmp_lst->word, (len + 1));
-		tmp_lst = tmp_lst->next;
-		i++;
-	}
-	cmd_args[i] = NULL;
-	return (cmd_args);
-}
-
-// t_commands	create_cmd_arr(t_commands *cmd2, t_commands *cmd3, t_redirect *redirect1, t_redirect *redirect3)
-// {
-// 	char		**arr1;
-// 	char		**arr2;
-// 	char		**arr3;
-// 	t_commands	cmd1;
-// 	t_redirect	*redirect1_2 = malloc(sizeof(t_redirect));
-	
-// 	arr1 = calloc(3, sizeof(char*));
-// 	arr1[0] = "ls";
-// 	arr1[1] = "-l";
-// 	arr1[2] = NULL;
-// 	redirect1->filename = "infile1";
-// 	redirect1->type = LESS;
-// 	redirect1_2->filename = "infile2";
-// 	redirect1_2->type = LESS;
-// 	redirect1->next = redirect1_2;
-// 	redirect1_2->next = NULL;
-// 	arr2 = calloc(3, sizeof(char*));
-// 	arr2[0] = "grep";
-// 	arr2[1] = "src";
-// 	arr2[2] = NULL;
-// 	arr3 = calloc(3, sizeof(char*));
-// 	arr3[0] = "wc";
-// 	arr3[1] = "-w";
-// 	arr3[2] = NULL;
-// 	redirect3->filename = "outfile";
-// 	redirect3->type = GREAT;
-// 	redirect3->next = NULL;
-// 	cmd1.args = arr1;
-// 	cmd2->args = arr2;
-// 	cmd2->redirect = redirect1;
-// 	cmd3->args = arr3;
-// 	cmd1.redirect = NULL;
-// 	cmd3->redirect = redirect3;
-// 	cmd1.next = cmd2;
-// 	cmd2->next = cmd3;
-// 	cmd3->next = NULL;
-// 	return (cmd1);
-// }
-
 void	print_parser_cmds(t_commands *cmds)
 {
 	t_commands	*tmp;
@@ -202,7 +129,6 @@ int	main(int argc, char **argv, char **envp)
 		{
 			line = readline(PROMPT);
 			trim_whitespaces(line);
-			sleep(1);
 			if (line == NULL || *line == '\0')
 				continue ;
 			token_lst = tokenize(line);

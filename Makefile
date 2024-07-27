@@ -6,7 +6,7 @@
 #    By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 13:11:23 by wlin              #+#    #+#              #
-#    Updated: 2024/07/22 14:09:32 by wlin             ###   ########.fr        #
+#    Updated: 2024/07/27 18:50:16 by wlin             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -82,7 +82,7 @@ $(NAME): libft $(OBJS)
 
 clean:
 	@$(MAKE) -C $(LIBFT_DIR) clean
-	@$(RM) $(OBJS)
+	@$(RM) $(OBJS) $(DEPS)
 	@echo "${BLUE_BOLD}[$(NAME)] $(RED)removed object files$(RESET)"
 
 fclean: clean

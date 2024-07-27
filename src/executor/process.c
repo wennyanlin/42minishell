@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 18:16:01 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/27 18:03:42 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/27 18:46:55 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ void	child_process(t_process *process)
 	exit(127);
 }
 
-//parent and child has its on fd table
-//before execute_command, both parent and child need to set the new fd_in as pipe read-end and new pipe write_end
 pid_t create_process(t_process *process)
 {
     pid_t   pid;
