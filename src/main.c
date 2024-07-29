@@ -18,7 +18,13 @@
 
 void	perror_and_exit(char *file, int code)
 {
-	perror(file);
+	int	fd;
+
+	fd = open(file, O_RDWR);
+	if (fd == -1 && errno == EISDIR)
+		printf("minisell: %s: %s\n", file, strerror(errno));
+	else
+		perror(file);
 	exit(code);
 }
 

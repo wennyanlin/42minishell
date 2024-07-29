@@ -6,11 +6,11 @@
 #    By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 13:11:23 by wlin              #+#    #+#              #
-#    Updated: 2024/07/27 18:50:16 by wlin             ###   ########.fr        #
+#    Updated: 2024/07/29 13:18:27 by wlin             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-AUTHOR		= wlin, aglanuss
+AUTHOR		= wlin
 NAME			= minishell
 
 CC				= gcc
