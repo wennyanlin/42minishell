@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/27 18:44:05 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/28 13:50:22 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	execute_command(char *command_path, char **cmd_args, char **envp)
 			perror(cmd_args[0]);
 		else
 		{
+			write(STDERR_FILENO, "minishell: ", 11);
 			write(STDERR_FILENO, cmd_args[0], str_size(cmd_args[0]));
 			write(STDERR_FILENO, ": command not found\n", 20);
 			exit(127);

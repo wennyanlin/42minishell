@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:12:56 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/28 00:41:08 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/28 15:50:27 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,25 @@ char *make_path(char *dir, char *cmd)
 	return (full_path);
 }
 
+int	directory_error(char *cmd)
+{
+	if (is_equal(".", cmd) == EXIT_SUCCESS)
+	{
+		// printf("minishell: .: command not found\n");
+		return (127);
+	}
+	if (is_equal("/", cmd) == EXIT_SUCCESS)
+	{
+		// printf("minishell: /: is a directory\n");
+		return (126);
+	}
+	return (0);
+}
+
 char	*find_cmd_path(char *env, char *cmd)
 {
 	int		i;
+	int		exit_code;
 	char 	*full_path;
 	char 	**path_dirs;
 
@@ -96,6 +112,9 @@ char	*find_cmd_path(char *env, char *cmd)
 		return (str_cpy(cmd));	
 	if (char_index(cmd, '/') != NOT_FOUND)
 		return (str_cpy(cmd));
+	exit_code = directory_error(cmd);
+	if (exit_code != 0)
+		return (cmd);
 	path_dirs = split_path(env, ':');
 	i = -1;
 	while (path_dirs[++i])
