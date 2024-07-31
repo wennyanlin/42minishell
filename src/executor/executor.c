@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/29 13:48:26 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/31 18:05:41 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void	execute_command(char *command_path, char **cmd_args, char **envp)
 {
 	char	**result_array_concat = NULL;
 
-	printf("executing exeve\n");
 	execve(command_path, cmd_args, envp);
 	if (errno == ENOEXEC)
 	{

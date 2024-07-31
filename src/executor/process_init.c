@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:46:09 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/29 13:18:12 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/31 17:45:10 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ t_process	init_process(t_commands *cmds, char **envp, int pipe_read_end_prev)
 	process.command = cmds->args;
 	if (process.command != NULL)
 		process.cmd_path = find_cmd_path(getenv("PATH"), process.command[0]);
-	printf("process.cmd_path = %s\n", process.cmd_path);
 	process.fd_in = pipe_read_end_prev;
 	if (cmds->next)
 	{
