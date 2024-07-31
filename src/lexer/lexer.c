@@ -6,15 +6,13 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:07:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/17 16:59:34 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/27 23:23:24 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "lexer.h"
 #include "macros.h"
-
-
 
 int	add_token(t_token **token_lst, char *word, t_metachar metachar)
 {
@@ -36,19 +34,6 @@ int	add_token(t_token **token_lst, char *word, t_metachar metachar)
 	return (1);
 }
 
-int	handle_quotes(char *input, int start)
-{
-	int		matching_quote;
-	
-	matching_quote = find_matching_quote(input, start + 1, input[start]);
-	if (matching_quote == NOT_FOUND)
-	{
-		ft_error(input, start);
-		exit(EXIT_FAILURE);
-	}
-	return (matching_quote);
-}
-
 int	handle_word(t_token **token_lst, char *input, int start)
 {
 	int		i;
@@ -58,12 +43,20 @@ int	handle_word(t_token **token_lst, char *input, int start)
 	while (input[++i])
 	{
 		if (input[i] == QUOTE_D || input[i] == QUOTE_S)
-			i = handle_quotes(input, i);
+		{
+			i = find_matching_quote(input, i + 1, input[i]);
+			if (i == NOT_FOUND)
+			{
+				ft_error(input, start);
+				return (i);
+			}
+		}
 		else if (is_delimiter(input[i]) == TRUE)
 			break ;
 	}
 	word = ft_substr(input, (unsigned int)start, i - start);
 	add_token(token_lst, word, NONE);
+	// printf("token_lst->word = %s\n", (*token_lst)->word);
 	return (i);
 }
 
@@ -86,6 +79,8 @@ int	get_next_token(t_token **token_lst, char *input, int start)
 			i += add_token(token_lst, NULL, GREAT_GREAT);
 		else
 			i = handle_word(token_lst, input, i) - 1;
+		if (i == -2)
+			break ;
 	}
 	return (i);
 }
@@ -99,17 +94,19 @@ t_token	*tokenize(char *input)
 	if (!input)
 		return (NULL);
 	token_lst = create_lst_node(NULL, -1);
+	if (token_lst == NULL)
+		return (NULL);
 	while (input[++i])
 	{
-
 		if (is_whitespace(input[i]))
 			i = skip_spaces(input, i) - 1;
 		else
             i = get_next_token(&token_lst, input, i);
-		if (!input[i])
-			break;
+		if (i < 0)
+			return (NULL);
+		else if (!input[i])
+			break ;
 	}
-	// printf_list(token_lst);
 	return (token_lst);
 }
 

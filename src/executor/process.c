@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 18:16:01 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/27 18:46:55 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/29 13:43:29 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,13 @@ void	fd_dup2(int oldfd, int newfd)
 
 void	child_process(t_process *process)
 {
+    
     if (access(process->cmd_path, X_OK) == -1
         && access(process->cmd_path, F_OK) == 0)
     {
+        write(STDERR_FILENO, "minishell: permission denied\n", 20);
+        printf("a\n");
         write(STDERR_FILENO, process->command[0], str_size(process->command[0]));
-        write(STDERR_FILENO, ": permission denied\n", 20);
         exit (126);
     }
     if (process->fd_in == -1)

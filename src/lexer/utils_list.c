@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:59:45 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/15 16:33:37 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/27 23:22:49 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_token	*create_lst_node(char *word, int metachar)
     
     node = malloc(sizeof(t_token));
     if (!node)
-        exit(EXIT_FAILURE);
+        return (NULL);
     node->word = word;
     node->metachar = metachar;
     node->next = NULL;
