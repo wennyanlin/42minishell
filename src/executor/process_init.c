@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:46:09 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/01 03:48:35 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/01 08:39:28 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,10 @@ static void	construct_new_arg(char **args, char **arg)
 	str2 = ft_strjoin(*args, getenv(str1));
 	free(str1);
 	str1 = ft_strjoin(str2, *arg);
+	*arg = str1 + ft_strlen(str2) - 1;
 	free(str2);
 	free(*args);
 	*args = str1;
-	--*arg;
 }
 
 void	parameter_expansion(char **args)
