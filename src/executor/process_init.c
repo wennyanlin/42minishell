@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:46:09 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/01 11:10:40 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/01 11:38:28 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static void	construct_new_arg(char **args, char **arg)
 	char		*str2;
 	int			ok_first;
 
-	*(*arg++) = '\0';
+	*(*arg)++ = '\0';
 	ok_first = (ft_isalpha(**arg) || **arg == UNDERSCORE);
 	++*arg;
 	while (ok_first && (ft_isalnum(**arg) || **arg == UNDERSCORE))
