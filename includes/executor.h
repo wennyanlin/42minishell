@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/27 18:30:11 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/01 02:23:28 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void    	cmd_lst_addback(t_commands **cmds, t_commands *new);
 
 /*====================================EXECUTOR================================*/
 
+void		parameter_expansion(char **args);
 t_process	init_process(t_commands *cmds, char **envp, int pipe_read_end_prev);
 void		child_process(t_process *process);
 pid_t 		create_process(t_process *process);
