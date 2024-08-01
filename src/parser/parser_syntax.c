@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:17:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/27 18:17:56 by wlin             ###   ########.fr       */
+/*   Updated: 2024/07/31 12:32:40 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int validate_cmd_syntax(t_token *token_lst)
                 return (prompt_error_message(PIPE));
             else if (is_redirection(tmp->next->metachar) && tmp->next->next == NULL)
                 return (printf("minishell: syntax error near unexpected token`newline'\n"), EXIT_FAILURE);
-            else if (tmp->next->word && tmp->next->next == NULL)
+            else if (tmp->prev == NULL && tmp->next->word && tmp->next->next == NULL)
                 return (prompt_error_message(PIPE));
         }
         else if (is_redirection(tmp->metachar))

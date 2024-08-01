@@ -18,7 +18,13 @@
 
 void	perror_and_exit(char *file, int code)
 {
-	perror(file);
+	int	fd;
+
+	fd = open(file, O_RDWR);
+	if (fd == -1 && errno == EISDIR)
+		printf("minisell: %s: %s\n", file, strerror(errno));
+	else
+		perror(file);
 	exit(code);
 }
 
@@ -133,11 +139,12 @@ int	main(int argc, char **argv, char **envp)
 				continue ;
 			token_lst = tokenize(line);
 			free(line);
+			if (token_lst == NULL)
+				continue ;
 			cmds = parse_tokens(token_lst);
 			if (cmds == NULL)
 				continue ;
 			ft_free_lst(token_lst);
-			// print_parser_cmds(cmds);
 			execute_all(cmds, envp);
 			ft_free_cmds(cmds);
 		}
