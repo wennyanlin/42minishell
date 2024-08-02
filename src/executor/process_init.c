@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:46:09 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/01 11:38:28 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/02 13:02:29 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,20 +74,25 @@ t_process	init_process(t_commands *cmds, char **envp, int pipe_read_end_prev)
 	return (process);
 }
 
-static void	construct_new_arg(char **args, char **arg)
+static void	construct_new_arg(char **args, char **const arg)
 {
-	char *const	arg0 = *arg + 1;
+	char *const	empty = "";
+	char		*arg_param;
 	char		*str1;
 	char		*str2;
 	int			ok_first;
 
 	*(*arg)++ = '\0';
+	arg_param = *arg;
 	ok_first = (ft_isalpha(**arg) || **arg == UNDERSCORE);
 	++*arg;
 	while (ok_first && (ft_isalnum(**arg) || **arg == UNDERSCORE))
 		++*arg;
-	str1 = ft_substr(arg0, 0, *arg - arg0);
-	str2 = ft_strjoin(*args, getenv(str1));
+	str1 = ft_substr(arg_param, 0, *arg - arg_param);
+	arg_param = getenv(str1);
+	if (!arg_param)
+		arg_param = empty;
+	str2 = ft_strjoin(*args, arg_param);
 	free(str1);
 	str1 = ft_strjoin(str2, *arg);
 	*arg = str1 + ft_strlen(str2) - 1;
