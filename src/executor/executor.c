@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/01 11:09:54 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/03 20:32:20 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	execute_all(t_commands *cmds, char **envp)
 	pipe_read_end_prev = dup(STDIN_FILENO);
 	while (cmds)
 	{
-		parameter_expansion(cmds->args);
+		shell_expansion(cmds->args);
 		process = init_process(cmds, envp, pipe_read_end_prev);
 		if (process.command != NULL)
 		{
