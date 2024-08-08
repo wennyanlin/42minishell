@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:46:09 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/03 19:12:20 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/08 13:30:32 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,37 +14,49 @@
 #include "macros.h"
 #include "minishell.h"
 
-void	redirection_error_handling(char *filename, int fd_in)
+int	redirection_error_handling(char *filename, int fd_in)
 {
 	if ((errno == ENOENT || errno == EACCES)&& fd_in == INVALID)
+	{
 		printf("%s: %s\n", filename, strerror(errno));
+		return (TRUE);
+	}
+	return (FALSE);
 }
 
-void	handle_redirection(t_process *process, t_redirect *redirect)
+int	handle_redirection(t_process *process, t_redirect *redirect)
 {
-	if (redirect->type == GREAT)
+	if (redirect->type == LESS)
+	{
+		close(process->fd_in);
+		process->fd_in = open(redirect->filename, O_RDONLY);
+		if (redirection_error_handling(redirect->filename, process->fd_in))
+			return (INVALID);
+	}
+	else if (redirect->type == LESS_LESS)
+	{
+		close(process->fd_in);
+		process->fd_in = read_here_doc(redirect->filename);
+		if (redirection_error_handling(redirect->filename, process->fd_in))
+			return (INVALID);
+	}
+	else if (redirect->type == GREAT)
 	{
 		close(process->fd_out);
 		process->fd_out = open(redirect->filename, O_CREAT | O_TRUNC
 			| O_RDWR, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+		if (redirection_error_handling(redirect->filename, process->fd_out))
+			return (INVALID);
 	}
 	else if (redirect->type == GREAT_GREAT)
 	{
 		close(process->fd_out);
 		process->fd_out = open(redirect->filename, O_CREAT | O_APPEND
 			| O_RDWR, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+		if (redirection_error_handling(redirect->filename, process->fd_out))
+			return (INVALID);
 	}
-	else if (redirect->type == LESS)
-	{
-		close(process->fd_in);
-		process->fd_in = open(redirect->filename, O_RDONLY);
-	}
-	else if (redirect->type == LESS_LESS)
-	{
-		close(process->fd_in);
-		process->fd_in = read_here_doc(redirect->filename);
-	}
-	redirection_error_handling(redirect->filename, process->fd_in);
+	return (TRUE);
 }
 
 t_process	init_process(t_commands *cmds, char **envp, int pipe_read_end_prev)
@@ -68,7 +80,8 @@ t_process	init_process(t_commands *cmds, char **envp, int pipe_read_end_prev)
 		process.fd_out = dup(STDOUT_FILENO);
 	while (tmp_redirect)
 	{
-		handle_redirection(&process, tmp_redirect);
+		if (handle_redirection(&process, tmp_redirect) == INVALID)
+			break;
 		tmp_redirect = tmp_redirect->next;
 	}
 	return (process);
