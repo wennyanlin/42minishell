@@ -6,13 +6,11 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:59:45 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/27 23:22:49 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/12 16:53:16 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "lexer.h"
-#include "macros.h"
 
 t_token	*create_lst_node(char *word, int metachar)
 {

@@ -3,18 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   shell_expansion.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 19:12:32 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/08/11 20:43:30 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/12 17:14:50 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "executor.h"
-#include "macros.h"
 
-static int	is_paramter(char *arg)
+static int	is_parameter(char *arg)
 {
 	return (*arg++ == DOLLAR && (*arg == QUESTION
 			|| ft_isalpha(*arg) || *arg == UNDERSCORE));
@@ -59,7 +57,7 @@ static void	quote_removal(char **const args, char **const parg, const char q)
 		str2 = str1;
 		while (*str2)
 		{
-			if (is_paramter(str2))
+			if (is_parameter(str2))
 				parameter_expansion(&str1, &str2);
 			else
 				++str2;
@@ -85,7 +83,7 @@ void	shell_expansion(char **args)
 		{
 			if (*arg == QUOTE_S || *arg == QUOTE_D)
 				quote_removal(args, &arg, *arg);
-			else if (is_paramter(arg))
+			else if (is_parameter(arg))
 				parameter_expansion(args, &arg);
 			else
 				++arg;

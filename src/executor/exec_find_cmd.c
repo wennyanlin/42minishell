@@ -6,12 +6,10 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:12:56 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/31 12:35:15 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/12 16:54:02 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "executor.h"
-#include "macros.h"
 #include "minishell.h"
 
 void	free_array(char **array)

@@ -6,13 +6,11 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:17:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/31 12:32:40 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/12 16:53:35 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "executor.h"
-#include "macros.h"
 
 int    prompt_error_message(t_metachar type)
 {

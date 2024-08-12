@@ -6,12 +6,11 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 17:34:51 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/17 12:28:41 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/12 16:53:19 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "macros.h"
 
 int	is_whitespace(char c)
 {

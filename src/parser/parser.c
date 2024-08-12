@@ -6,13 +6,11 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 14:12:10 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/27 18:20:52 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/12 16:53:28 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "executor.h"
-#include "macros.h"
 
 void    add_cmd_str(char *str, int i, t_commands *cmd)
 {
@@ -41,9 +39,29 @@ void    add_cmd_redirect(t_metachar type, char *filename, t_commands *cmd)
     }
 }
 
+void    add_command(t_token **token_lst, t_commands *cmd)
+{
+    int i;
+    
+    i = -1;
+    while (*token_lst && (*token_lst)->metachar != PIPE)
+    {
+        if ((*token_lst)->metachar > PIPE)
+        {
+            add_cmd_redirect((*token_lst)->metachar, (*token_lst)->next->word, cmd);
+            *token_lst = (*token_lst)->next;
+        }
+        else if ((*token_lst)->word)
+        {
+            ++i;
+            add_cmd_str((*token_lst)->word, i, cmd);
+        }
+        *token_lst = (*token_lst)->next;
+    }
+}
+
 t_commands *build_cmd(t_token **token_lst)
 {
-    int     i;
     int     len;
     t_commands  *cmd;
 
@@ -55,21 +73,7 @@ t_commands *build_cmd(t_token **token_lst)
         if (!cmd->args)
             free_array(cmd->args);
     }
-    i = -1;
-    while (*token_lst && (*token_lst)->metachar != PIPE)
-    {
-        if (token_lst && (*token_lst)->metachar > PIPE)
-        {
-            add_cmd_redirect((*token_lst)->metachar, (*token_lst)->next->word, cmd);
-            *token_lst = (*token_lst)->next;
-        }
-        else if (token_lst && (*token_lst)->word)
-        {
-            ++i;
-            add_cmd_str((*token_lst)->word, i, cmd);
-        }
-        *token_lst = (*token_lst)->next;
-    }
+    add_command(token_lst, cmd);
     if (cmd->args != NULL)
         cmd->args[len] = NULL;
     return (cmd);

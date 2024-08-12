@@ -6,13 +6,11 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 19:15:28 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/09 21:40:27 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/12 16:54:16 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "executor.h"
-#include "macros.h"
 
 int check_limiter(char *next_line, char *limiter)
 {

@@ -6,12 +6,10 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:46:09 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/08 13:30:32 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/12 16:57:55 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "executor.h"
-#include "macros.h"
 #include "minishell.h"
 
 int	redirection_error_handling(char *filename, int fd_in)
@@ -44,7 +42,7 @@ int	handle_redirection(t_process *process, t_redirect *redirect)
 	{
 		close(process->fd_out);
 		process->fd_out = open(redirect->filename, O_CREAT | O_TRUNC
-			| O_RDWR, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+			| O_RDWR, 00400 | 00200 | 00040 | 00004);
 		if (redirection_error_handling(redirect->filename, process->fd_out))
 			return (INVALID);
 	}
@@ -52,7 +50,7 @@ int	handle_redirection(t_process *process, t_redirect *redirect)
 	{
 		close(process->fd_out);
 		process->fd_out = open(redirect->filename, O_CREAT | O_APPEND
-			| O_RDWR, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+			| O_RDWR, 00400 | 00200 | 00040 | 00004);
 		if (redirection_error_handling(redirect->filename, process->fd_out))
 			return (INVALID);
 	}

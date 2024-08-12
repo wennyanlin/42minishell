@@ -6,13 +6,11 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:18:58 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/27 18:20:49 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/12 16:53:31 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "executor.h"
-#include "macros.h"
 
 t_commands  *create_cmd_lstnew()
 {

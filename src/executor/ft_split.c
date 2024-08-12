@@ -6,11 +6,11 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:14:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/06/22 13:44:39 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/12 16:54:12 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "executor.h"
+#include "minishell.h"
 
 int	count_words(char *string, char separator)
 {

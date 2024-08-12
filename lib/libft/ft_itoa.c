@@ -6,26 +6,11 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 14:30:30 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/17 17:12:01 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/12 17:02:10 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-size_t	ft_strlen(const char *s)
-{
-	int	count;
-
-	count = 0;
-	if (!*s)
-		return (0);
-	while (*s)
-	{
-		count++;
-		s++;
-	}
-	return (count);
-}
 
 char	*ft_strdup(const char *s1)
 {

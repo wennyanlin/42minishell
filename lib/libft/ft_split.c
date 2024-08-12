@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wlin <wlin@student.42barcelona.>           +#+  +:+       +#+        */
+/*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 20:53:53 by wlin              #+#    #+#             */
-/*   Updated: 2023/10/02 17:48:16 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/12 17:02:51 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,8 @@ char	**ft_split(char const *s, char c)
      in each position in the array.
      - find starting point of one word at the position
        when the current isn't separater but before it is.
-	 - find stopping point where the char it's at before the separater of the '\0'.
+	 - find stopping point where the char it's at before the separater of 
+	the '\0'.
 4 -> Add NULL to the end of the big array.
 ----*//*
 #include <stdio.h>
@@ -93,7 +94,8 @@ int	main(int argc, char *argv[])
 		while (h[i])
 			printf("%s\n", h[i++]);
 		printf("total palabras estatico: %d\n", count_words(str, argv[2][0]));
-		printf("total palabras dinamico: %d\n", count_words(argv[1], argv[2][0]));
+		printf("total palabras dinamico: %d\n",
+		count_words(argv[1], argv[2][0]));
 	}
 	return (0);
 }*/

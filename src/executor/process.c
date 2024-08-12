@@ -6,12 +6,10 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 18:16:01 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/31 17:44:49 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/12 16:54:25 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "executor.h"
-#include "macros.h"
 #include "minishell.h"
 
 void	fd_dup2(int oldfd, int newfd)

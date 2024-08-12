@@ -6,13 +6,11 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:07:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/27 23:23:24 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/12 16:53:11 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "lexer.h"
-#include "macros.h"
 
 int	add_token(t_token **token_lst, char *word, t_metachar metachar)
 {
