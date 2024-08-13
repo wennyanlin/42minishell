@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                      														                  :::      ::::::::   */
+/*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/15 14:27:56 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/13 12:02:07 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,11 @@ void	ft_free_cmds(t_commands *cmds)
 // 	t_commands	*tmp;
 // 	t_redirect	*tmp_redirect;
 // 	int			i;
-	
+
 // 	tmp = cmds;
 // 	while (tmp != NULL)
 // 	{
-		
+
 // 		i = 0;
 // 		printf("\n============NEW COMMAND============\n\n");
 // 		printf("  WORD:     [");
@@ -117,14 +117,13 @@ void	ft_free_cmds(t_commands *cmds)
 
 void	start_minishell(char **envp)
 {
-	char	*line;
+	char		*line;
 	t_commands	*cmds;
-	t_token	*token_lst;
+	t_token		*token_lst;
 
 	while (1)
 	{
 		line = readline(PROMPT);
-		// trim_whitespaces(line);
 		if (line == NULL || *line == '\0')
 			continue ;
 		token_lst = tokenize(line);

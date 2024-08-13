@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/12 17:09:21 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/13 12:48:45 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,16 +77,16 @@ typedef struct s_redirect
 typedef struct s_commands
 {
 	char				**args;
-	struct	s_redirect	*redirect;
-	struct	s_commands	*prev;
-	struct	s_commands	*next;
+	struct s_redirect	*redirect;
+	struct s_commands	*prev;
+	struct s_commands	*next;
 }	t_commands;
 
 typedef struct s_token
 {
 	char			*word;
 	t_metachar		metachar;
-    struct s_token	*prev;
+	struct s_token	*prev;
 	struct s_token	*next;
 }	t_token;
 
@@ -108,69 +108,70 @@ typedef struct s_str
 	int		continue_from_index;
 }			t_str;
 
-pid_t	waitpid(pid_t pid, int *status, int options); 
+pid_t		waitpid(pid_t pid, int *status, int options);
 
 /*======================================LEXER=================================*/
 
-int		str_size(const char *args);
-char	*str_cpy(char *src);
-int	    char_index(char *args, char ref);
-char	*string_concat(char *path, char *cmd);
-char    *make_path(char *dir, char *cmd);
-char	**split_path(char *string, char separator);
-char	*find_cmd_path(char *env, char *cmd);
-char	**array_concat(char *shell_path, char **args);
-void	free_array(char **array);
-void	ft_error(char *input, int start);
-void	printf_list(t_token *lst);
-int		is_whitespace(char c);
-int		skip_spaces(char *str, int i);
-int		is_delimiter(char c);
-t_token	*create_lst_node(char *word, int metachar);
-void    lst_add_back(t_token **token_lst, t_token *new_node);
-int		find_matching_quote(char *input, int i, char quote);
-int		find_end_chars_index(char *input, int i);
-t_token	*tokenize(char *input);
-void	test_lexer(void);
-void	ft_free_lst(t_token *lst);
+int			str_size(const char *args);
+char		*str_cpy(char *src);
+int			char_index(char *args, char ref);
+char		*string_concat(char *path, char *cmd);
+char		*make_path(char *dir, char *cmd);
+char		**split_path(char *string, char separator);
+char		*find_cmd_path(char *env, char *cmd);
+char		**array_concat(char *shell_path, char **args);
+void		free_array(char **array);
+void		ft_error(char *input, int start);
+void		printf_list(t_token *lst);
+int			is_whitespace(char c);
+int			skip_spaces(char *str, int i);
+int			is_delimiter(char c);
+t_token		*create_lst_node(char *word, int metachar);
+void		lst_add_back(t_token **token_lst, t_token *new_node);
+int			find_matching_quote(char *input, int i, char quote);
+int			find_end_chars_index(char *input, int i);
+t_token		*tokenize(char *input);
+void		test_lexer(void);
+void		ft_free_lst(t_token *lst);
 
 /*====================================Parser==================================*/
 
-int 		validate_cmd_syntax(t_token *token_lst);
-t_commands  *parse_tokens(t_token *tokens);
+int			validate_cmd_syntax(t_token *token_lst);
+t_commands	*parse_tokens(t_token *tokens);
 void		print_parser_cmds(t_commands *cmds);
-int 		is_redirection(t_metachar type);
+int			is_redirection(t_metachar type);
 int			count_cmd_str(t_token *tokens);
-t_commands  *create_cmd_lstnew();
-void    	cmd_lst_addback(t_commands **cmds, t_commands *new);
+t_commands	*create_cmd_lstnew(void);
+void		cmd_lst_addback(t_commands **cmds, t_commands *new);
 
 /*====================================EXECUTOR================================*/
 
 void		shell_expansion(char **args);
 t_process	init_process(t_commands *cmds, char **envp, int pipe_read_end_prev);
 void		child_process(t_process *process);
-pid_t 		create_process(t_process *process);
+pid_t		create_process(t_process *process);
 void		fd_dup2(int oldfd, int newfd);
 void		execute_command(char *command_path, char **cmd_args, char **envp);
 void		perror_and_exit(char *file, int code);
 void		execute_all(t_commands *cmds, char **envp);
-int 		lst_size(t_commands *cmds);
+int			lst_size(t_commands *cmds);
 
-int 		read_here_doc(char *limiter);
+int			read_here_doc(char *limiter);
+int			directory_error(char *cmd);
 
 void		ft_free_cmds(t_commands *cmds);
 int			is_equal(char *s1, char *s2);
 
 /*==========================BUILTIN==============================*/
 
-void	ft_echo();
-void	ft_echo();
-void	ft_cd();
-void	ft_pwd();
-void	ft_export();
-void	ft_unset();
-void	ft_env();
-void	ft_exit();
-int		is_builtin(char *cmd);
+void		ft_echo(void);
+void		ft_echo(void);
+void		ft_cd(void);
+void		ft_pwd(void);
+void		ft_export(void);
+void		ft_unset(void);
+void		ft_env(void);
+void		ft_exit(void);
+int			is_builtin(char *cmd);
 
 #endif

@@ -6,24 +6,24 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/12 16:53:49 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/13 13:46:13 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int get_wait_status(int status)
+int	get_wait_status(int status)
 {
-    int stat_code;
+	int	stat_code;
 
-    stat_code = 0;
-    if (WIFEXITED(status))
-        stat_code = WEXITSTATUS(status);
-    else if (WIFSIGNALED(status))
-        stat_code = WTERMSIG(status);
-    else if (WIFSTOPPED(status))
-        stat_code = WSTOPSIG(status);
-    return (stat_code);
+	stat_code = 0;
+	if (WIFEXITED(status))
+		stat_code = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		stat_code = WTERMSIG(status);
+	else if (WIFSTOPPED(status))
+		stat_code = WSTOPSIG(status);
+	return (stat_code);
 }
 
 void	wait_process(pid_t *pid_array, int num_cmd)
@@ -41,8 +41,9 @@ void	wait_process(pid_t *pid_array, int num_cmd)
 
 void	execute_command(char *command_path, char **cmd_args, char **envp)
 {
-	char	**result_array_concat = NULL;
+	char	**result_array_concat;
 
+	result_array_concat = NULL;
 	execve(command_path, cmd_args, envp);
 	if (errno == ENOEXEC)
 	{
@@ -84,7 +85,7 @@ void	execute_all(t_commands *cmds, char **envp)
 		process = init_process(cmds, envp, pipe_read_end_prev);
 		if (process.command != NULL)
 		{
-			if (is_builtin(process.command[0]) == EXIT_FAILURE && process.fd_out != INVALID)
+			if (is_builtin(process.command[0]) == 1 && process.fd_out != -1)
 			{
 				pid[++i] = create_process(&process);
 				free(process.cmd_path);
