@@ -1,16 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_redir_utils.c                                 :+:      :+:    :+:   */
+/*   exec_utils2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:58 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/13 12:48:20 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/13 16:26:26 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	free_array(char **array)
+{
+	int	i;
+
+	i = 0;
+	if (array == NULL || *array == NULL)
+		return ;
+	while (array[i])
+		free(array[i++]);
+	free(array);
+	array = NULL;
+}
 
 int	directory_error(char *cmd)
 {

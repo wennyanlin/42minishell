@@ -1,9 +1,8 @@
-includes/minishell.h: OK!
-src/main.c: OK!
-src/lexer/lexer.c: OK!
-src/lexer/utils_list.c: OK!
-src/lexer/utils_str.c: OK!
-src/test/test_lexer.c: Error!
+main.c: OK!
+lexer/utils_str.c: OK!
+lexer/lexer.c: OK!
+lexer/utils_list.c: OK!
+test/test_lexer.c: Error!
 Error: INVALID_HEADER       (line:   1, col:   1):	Missing or invalid 42 header
 Error: SPACE_BEFORE_FUNC    (line:   3, col:   5):	space before function name
 Error: TOO_FEW_TAB          (line:   5, col:   1):	Missing tabs for indent level
@@ -521,62 +520,31 @@ Error: SPACE_REPLACE_TAB    (line: 272, col:   5):	Found space when expecting ta
 Error: TOO_FEW_TAB          (line: 273, col:   1):	Missing tabs for indent level
 Error: SPACE_REPLACE_TAB    (line: 273, col:   5):	Found space when expecting tab
 Error: BRACE_SHOULD_EOL     (line: 274, col:   1):	Expected newline after brace
-src/executor/exec_find_cmd.c: OK!
-src/executor/exec_utils.c: OK!
-src/executor/executor.c: Error!
+executor/process.c: OK!
+executor/executor.c: Error!
 Error: TOO_MANY_LINES       (line:  99, col:   1):	Function has more than 25 lines
-src/executor/here_doc.c: OK!
-src/executor/exec_utils2.c: OK!
-src/executor/shell_expansion.c: OK!
-src/executor/process.c: OK!
-src/executor/process_init.c: OK!
-src/executor/split_path.c: OK!
-src/parser/parser.c: OK!
-src/parser/parser_syntax.c: OK!
-src/parser/parser_utils.c: OK!
-src/builtin/builtin.c: OK!
-src/builtin/builtin2.c: OK!
-lib/libft/ft_atoi.c: OK!
-lib/libft/ft_bzero.c: OK!
-lib/libft/ft_calloc.c: OK!
-lib/libft/ft_isalnum.c: OK!
-lib/libft/ft_isalpha.c: OK!
-lib/libft/ft_isascii.c: OK!
-lib/libft/ft_isdigit.c: OK!
-lib/libft/ft_isprint.c: OK!
-lib/libft/libft.h: OK!
-lib/libft/ft_itoa.c: OK!
-lib/libft/ft_lstadd_front_bonus.c: OK!
-lib/libft/ft_strlen.c: OK!
-lib/libft/ft_memchr.c: OK!
-lib/libft/ft_memcmp.c: OK!
-lib/libft/ft_memcpy.c: OK!
-lib/libft/ft_memset.c: OK!
-lib/libft/ft_putchar_fd.c: OK!
-lib/libft/ft_putendl_fd.c: OK!
-lib/libft/ft_putnbr_fd.c: OK!
-lib/libft/ft_putstr_fd.c: OK!
-lib/libft/ft_split.c: OK!
-lib/libft/ft_strchr.c: OK!
-lib/libft/ft_strdup.c: OK!
-lib/libft/ft_striteri.c: OK!
-lib/libft/ft_strjoin.c: OK!
-lib/libft/ft_strlcat.c: OK!
-lib/libft/ft_strlcpy.c: OK!
-lib/libft/ft_strmapi.c: OK!
-lib/libft/ft_strncmp.c: OK!
-lib/libft/ft_strnstr.c: OK!
-lib/libft/ft_strrchr.c: OK!
-lib/libft/ft_strtrim.c: OK!
-lib/libft/ft_substr.c: OK!
-lib/libft/ft_tolower.c: OK!
-lib/libft/ft_toupper.c: OK!
-lib/libft/ft_lstiter_bonus.c: OK!
-lib/libft/ft_lstdelone_bonus.c: OK!
-lib/libft/ft_memmove.c: OK!
-lib/libft/ft_lstadd_back_bonus.c: OK!
-lib/libft/ft_lstsize_bonus.c: OK!
-lib/libft/ft_lstclear_bonus.c: OK!
-lib/libft/ft_lstlast_bonus.c: OK!
-lib/libft/ft_lstmap_bonus.c: OK!
-lib/libft/ft_lstnew_bonus.c: OK!
+executor/exec_utils.c: OK!
+executor/exec_find_cmd.c: Error!
+Error: WRONG_SCOPE_COMMENT  (line:  91, col:   9):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line:  96, col:   9):	Comment is invalid in this scope
+Error: TOO_MANY_FUNCS       (line: 102, col:   1):	Too many functions in file
+Error: TOO_MANY_LINES       (line: 132, col:   1):	Function has more than 25 lines
+executor/process_init.c: Error!
+Error: TOO_MANY_LINES       (line:  58, col:   1):	Function has more than 25 lines
+executor/ft_split.c: OK!
+executor/here_doc.c: OK!
+executor/shell_expansion.c: OK!
+parser/parser_utils.c: OK!
+parser/parser_syntax.c: Error!
+Error: LINE_TOO_LONG        (line:  43, col:  84):	line too long
+Error: LINE_TOO_LONG        (line:  44, col:  90):	line too long
+Error: LINE_TOO_LONG        (line:  45, col:  85):	line too long
+Error: LINE_TOO_LONG        (line:  51, col:  90):	line too long
+Error: LINE_TOO_LONG        (line:  54, col:  83):	line too long
+Error: LINE_TOO_LONG        (line:  56, col:  83):	line too long
+Error: TOO_MANY_LINES       (line:  62, col:   1):	Function has more than 25 lines
+parser/parser.c: OK!
+builtin/builtin.c: Error!
+Error: TOO_MANY_FUNCS       (line:  40, col:   1):	Too many functions in file
+Error: TOO_MANY_FUNCS       (line:  45, col:   1):	Too many functions in file
+Error: TOO_MANY_FUNCS       (line:  50, col:   1):	Too many functions in file

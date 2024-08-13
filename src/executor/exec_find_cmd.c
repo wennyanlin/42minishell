@@ -6,24 +6,11 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:12:56 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/13 12:47:39 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/13 16:29:51 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	free_array(char **array)
-{
-	int	i;
-
-	i = 0;
-	if (array == NULL || *array == NULL)
-		return ;
-	while (array[i])
-		free(array[i++]);
-	free(array);
-	array = NULL;
-}
 
 char	*string_concat(char *path, char *cmd)
 {
@@ -84,9 +71,28 @@ char	*make_path(char *dir, char *cmd)
 	return (full_path);
 }
 
-char	*find_cmd_path(char *env, char *cmd)
+char	*examine_path(char **path_dirs, char *cmd)
 {
 	int		i;
+	char	*full_path;
+
+	i = -1;
+	while (path_dirs[++i])
+	{
+		full_path = make_path(path_dirs[i], cmd);
+		if (access(full_path, X_OK) == 0)
+		{
+			free_array(path_dirs);
+			break ;
+		}
+		free(full_path);
+		full_path = NULL;
+	}
+	return (full_path);
+}
+
+char	*find_cmd_path(char *env, char *cmd)
+{
 	int		exit_code;
 	char	*full_path;
 	char	**path_dirs;
@@ -99,18 +105,9 @@ char	*find_cmd_path(char *env, char *cmd)
 	if (exit_code != 0)
 		return (cmd);
 	path_dirs = split_path(env, ':');
-	i = -1;
-	while (path_dirs[++i])
-	{
-		full_path = make_path(path_dirs[i], cmd);
-		if (access(full_path, X_OK) == 0)
-		{
-			free_array(path_dirs);
-			return (full_path);
-		}
-		free(full_path);
-		full_path = NULL;
-	}
+	full_path = examine_path(path_dirs, cmd);
+	if (full_path != NULL)
+		return (full_path);
 	free_array(path_dirs);
 	path_dirs = NULL;
 	return (str_cpy(cmd));
