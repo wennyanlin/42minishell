@@ -1,6 +1,4 @@
-#include "lexer.h"
 #include "minishell.h"
-#include "macros.h"
 
 void compare_lst(t_token *expected, t_token *actual, char *description)
 {

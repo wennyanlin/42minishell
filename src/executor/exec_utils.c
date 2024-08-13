@@ -1,39 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_utils_lst.c                                   :+:      :+:    :+:   */
+/*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 18:27:19 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/27 18:55:34 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/13 12:09:34 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "macros.h"
-#include "executor.h"
 
-int lst_size(t_commands *cmds)
+int	lst_size(t_commands *cmds)
 {
-    int             i;
-    t_commands		*tmp;
-    
-    i = 0;
-    tmp = cmds;
+	int			i;
+	t_commands	*tmp;
+
+	i = 0;
+	tmp = cmds;
 	while (tmp)
 	{
 		++i;
 		tmp = tmp->next;
 	}
-    return (i);
+	return (i);
 }
 
 char	*str_cpy(char *src)
 {
-	int	i;
-	int	src_len;
-	char *copy;
+	int		i;
+	int		src_len;
+	char	*copy;
 
 	i = -1;
 	src_len = str_size(src);
@@ -68,7 +66,7 @@ int	str_size(const char *str)
 		return (0);
 	while (str[len])
 		len++;
-	return(len);
+	return (len);
 }
 
 int	is_equal(char *s1, char *s2)

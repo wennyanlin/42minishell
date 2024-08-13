@@ -6,42 +6,40 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:59:45 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/27 23:22:49 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/13 12:04:29 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "lexer.h"
-#include "macros.h"
 
 t_token	*create_lst_node(char *word, int metachar)
 {
-	t_token   *node;
-    
-    node = malloc(sizeof(t_token));
-    if (!node)
-        return (NULL);
-    node->word = word;
-    node->metachar = metachar;
-    node->next = NULL;
-    node->prev = NULL;
-    return (node);
+	t_token	*node;
+
+	node = malloc(sizeof(t_token));
+	if (!node)
+		return (NULL);
+	node->word = word;
+	node->metachar = metachar;
+	node->next = NULL;
+	node->prev = NULL;
+	return (node);
 }
 
-void    lst_add_back(t_token **token_lst, t_token *new_node)
+void	lst_add_back(t_token **token_lst, t_token *new_node)
 {
-    t_token   *tmp;
+	t_token	*tmp;
 
-    if (*token_lst)
-    {
-        tmp = *token_lst;
-        while (tmp->next)
-            tmp = tmp->next;
-        tmp->next = new_node;
-        new_node->prev = tmp;
-    }
-    else
-        *token_lst = new_node;
+	if (*token_lst)
+	{
+		tmp = *token_lst;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = new_node;
+		new_node->prev = tmp;
+	}
+	else
+		*token_lst = new_node;
 }
 
 void	printf_list(t_token *lst)
@@ -52,11 +50,12 @@ void	printf_list(t_token *lst)
 	while (tmp)
 	{
 		if (tmp->word && tmp->metachar == 0)
-			printf("`%s`  =>  ", tmp->word);	
+			printf("`%s`  =>  ", tmp->word);
 		else if (!tmp->word && tmp->metachar != 0)
 			printf("%i  =>  ", tmp->metachar);
-		else 
-			printf("%sERROR!%s `%s` %i, ", RED, tmp->word, RESET, tmp->metachar);
+		else
+			printf("%sERROR!%s `%s` %i, ",
+				RED, tmp->word, RESET, tmp->metachar);
 		tmp = tmp->next;
 	}
 	printf("null\n");

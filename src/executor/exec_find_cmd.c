@@ -6,30 +6,15 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:12:56 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/31 12:35:15 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/13 16:29:51 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "executor.h"
-#include "macros.h"
 #include "minishell.h"
-
-void	free_array(char **array)
-{
-	int	i;
-
-	i = 0;
-	if (array == NULL || *array == NULL)
-		return ;
-	while (array[i])
-		free(array[i++]);
-	free(array);
-	array = NULL;
-}
 
 char	*string_concat(char *path, char *cmd)
 {
-	char 	*result_path;
+	char	*result_path;
 	size_t	path_len;
 	size_t	cmd_len;
 	size_t	total_len;
@@ -53,7 +38,7 @@ char	*string_concat(char *path, char *cmd)
 
 char	**array_concat(char *shell_path, char **args)
 {
-	char 	**result_args;
+	char	**result_args;
 	int		len;
 	int		i;
 
@@ -61,7 +46,7 @@ char	**array_concat(char *shell_path, char **args)
 	i = 0;
 	while (args[len])
 		len++;
-	result_args = malloc(sizeof(char*) * (len + 2));
+	result_args = malloc(sizeof(char *) * (len + 2));
 	if (!result_args)
 		return (NULL);
 	result_args[i] = shell_path;
@@ -75,10 +60,10 @@ char	**array_concat(char *shell_path, char **args)
 	return (result_args);
 }
 
-char *make_path(char *dir, char *cmd)
+char	*make_path(char *dir, char *cmd)
 {
-	char *full_dir;
-	char *full_path;
+	char	*full_dir;
+	char	*full_path;
 
 	full_dir = string_concat(dir, "/");
 	full_path = string_concat(full_dir, cmd);
@@ -86,49 +71,43 @@ char *make_path(char *dir, char *cmd)
 	return (full_path);
 }
 
-int	directory_error(char *cmd)
+char	*examine_path(char **path_dirs, char *cmd)
 {
-	if (is_equal(".", cmd) == EXIT_SUCCESS)
+	int		i;
+	char	*full_path;
+
+	i = -1;
+	while (path_dirs[++i])
 	{
-		// printf("minishell: .: command not found\n");
-		return (127);
+		full_path = make_path(path_dirs[i], cmd);
+		if (access(full_path, X_OK) == 0)
+		{
+			free_array(path_dirs);
+			break ;
+		}
+		free(full_path);
+		full_path = NULL;
 	}
-	if (is_equal("/", cmd) == EXIT_SUCCESS)
-	{
-		// printf("minishell: /: is a directory\n");
-		return (126);
-	}
-	return (0);
+	return (full_path);
 }
 
 char	*find_cmd_path(char *env, char *cmd)
 {
-	int		i;
 	int		exit_code;
-	char 	*full_path;
-	char 	**path_dirs;
+	char	*full_path;
+	char	**path_dirs;
 
 	if (!env)
-		return (str_cpy(cmd));	
+		return (str_cpy(cmd));
 	if (char_index(cmd, '/') != NOT_FOUND)
 		return (str_cpy(cmd));
 	exit_code = directory_error(cmd);
 	if (exit_code != 0)
 		return (cmd);
 	path_dirs = split_path(env, ':');
-	i = -1;
-	while (path_dirs[++i])
-	{
-		full_path = make_path(path_dirs[i], cmd);
-		// printf("full_path = %s\n", full_path);
-		if (access(full_path, X_OK) == 0)
-		{
-			free_array(path_dirs);
-			return (full_path);
-		}
-		free(full_path);
-		full_path = NULL;
-	}
+	full_path = examine_path(path_dirs, cmd);
+	if (full_path != NULL)
+		return (full_path);
 	free_array(path_dirs);
 	path_dirs = NULL;
 	return (str_cpy(cmd));

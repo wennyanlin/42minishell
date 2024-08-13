@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstiter_bonus.c                                 :+:      :+:    :+:   */
+/*   builtin2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/27 20:12:56 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/12 17:01:00 by wlin             ###   ########.fr       */
+/*   Created: 2024/08/13 12:53:31 by wlin              #+#    #+#             */
+/*   Updated: 2024/08/13 12:54:01 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-void	ft_lstiter(t_list *lst, void (*f)(void *))
+void	ft_unset(void)
 {
-	if (!lst)
-		return ;
-	while (lst)
-	{
-		f(lst->content);
-		lst = lst->next;
-	}
+	printf("EXECUTING #unset# BUILTIN FUNCTION.\n");
+}
+
+void	ft_env(void)
+{
+	printf("EXECUTING #env# BUILTIN FUNCTION.\n");
+}
+
+void	ft_exit(void)
+{
+	printf("EXECUTING #exit# BUILTIN FUNCTION.\n");
 }

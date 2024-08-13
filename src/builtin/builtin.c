@@ -6,45 +6,30 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 14:12:00 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/27 18:04:35 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/13 12:54:08 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "executor.h"
-#include "macros.h"
 
-void	ft_echo()
+void	ft_echo(void)
 {
-    printf("EXECUTING #echo# BUILTIN FUNCTION.\n");
-}
-void    ft_cd()
-{
-    printf("EXECUTING #cd# BUILTIN FUNCTION.\n");
-}
-void    ft_pwd()
-{
-    printf("EXECUTING #pwd# BUILTIN FUNCTION.\n");
+	printf("EXECUTING #echo# BUILTIN FUNCTION.\n");
 }
 
-void	ft_export()
+void	ft_cd(void)
 {
-    printf("EXECUTING #export# BUILTIN FUNCTION.\n");
+	printf("EXECUTING #cd# BUILTIN FUNCTION.\n");
 }
 
-void	ft_unset()
+void	ft_pwd(void)
 {
-    printf("EXECUTING #unset# BUILTIN FUNCTION.\n");
+	printf("EXECUTING #pwd# BUILTIN FUNCTION.\n");
 }
 
-void	ft_env()
+void	ft_export(void)
 {
-    printf("EXECUTING #env# BUILTIN FUNCTION.\n");
-}
-
-void	ft_exit()
-{
-    printf("EXECUTING #exit# BUILTIN FUNCTION.\n");
+	printf("EXECUTING #export# BUILTIN FUNCTION.\n");
 }
 
 int	is_builtin(char *cmd)

@@ -1,24 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstiter_bonus.c                                 :+:      :+:    :+:   */
+/*   exec_utils2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/27 20:12:56 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/12 17:01:00 by wlin             ###   ########.fr       */
+/*   Created: 2024/08/13 12:46:58 by wlin              #+#    #+#             */
+/*   Updated: 2024/08/13 16:26:26 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-void	ft_lstiter(t_list *lst, void (*f)(void *))
+void	free_array(char **array)
 {
-	if (!lst)
+	int	i;
+
+	i = 0;
+	if (array == NULL || *array == NULL)
 		return ;
-	while (lst)
-	{
-		f(lst->content);
-		lst = lst->next;
-	}
+	while (array[i])
+		free(array[i++]);
+	free(array);
+	array = NULL;
+}
+
+int	directory_error(char *cmd)
+{
+	if (is_equal(".", cmd) == EXIT_SUCCESS)
+		return (127);
+	if (is_equal("/", cmd) == EXIT_SUCCESS)
+		return (126);
+	return (0);
 }

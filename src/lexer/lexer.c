@@ -6,26 +6,23 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:07:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/07/27 23:23:24 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/13 12:03:17 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "lexer.h"
-#include "macros.h"
 
 int	add_token(t_token **token_lst, char *word, t_metachar metachar)
 {
-	t_token *new_node;
-	t_token *head;
+	t_token	*new_node;
+	t_token	*head;
 
 	head = *token_lst;
-
 	if ((int)head->metachar == UNINITIALIZED)
 	{
 		head->word = word;
-		head->metachar = metachar;	
-	} 
+		head->metachar = metachar;
+	}
 	else
 	{
 		new_node = create_lst_node(word, metachar);
@@ -56,14 +53,13 @@ int	handle_word(t_token **token_lst, char *input, int start)
 	}
 	word = ft_substr(input, (unsigned int)start, i - start);
 	add_token(token_lst, word, NONE);
-	// printf("token_lst->word = %s\n", (*token_lst)->word);
 	return (i);
 }
 
 int	get_next_token(t_token **token_lst, char *input, int start)
 {
 	int	i;
-	
+
 	i = start - 1;
 	while (input[++i] && !is_whitespace(input[i]))
 	{
@@ -101,7 +97,7 @@ t_token	*tokenize(char *input)
 		if (is_whitespace(input[i]))
 			i = skip_spaces(input, i) - 1;
 		else
-            i = get_next_token(&token_lst, input, i);
+			i = get_next_token(&token_lst, input, i);
 		if (i < 0)
 			return (NULL);
 		else if (!input[i])
@@ -109,5 +105,3 @@ t_token	*tokenize(char *input)
 	}
 	return (token_lst);
 }
-
-
