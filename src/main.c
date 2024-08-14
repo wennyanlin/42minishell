@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/14 06:12:58 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/14 16:02:55 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ void	start_minishell(char **envp)
 	t_commands	*cmds;
 	t_token		*token_lst;
 
-	dt = (t_data){NULL, 0, ft_itoa(0)};
+	dt.exit_status = ft_itoa(0);
 	new_lst_env(&dt.env, envp);
 	while (1)
 	{
@@ -140,6 +140,7 @@ void	start_minishell(char **envp)
 		execute_all(cmds, &dt);
 		ft_free_cmds(cmds);
 	}
+	del_data(&dt);
 }
 
 int	main(int argc, char **argv, char **envp)

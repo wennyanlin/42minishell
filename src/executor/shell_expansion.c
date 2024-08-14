@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 19:12:32 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/08/14 04:06:24 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/14 17:22:43 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	parameter_expansion(char **args, char **parg, t_data *data)
 		free(str1);
 	}
 	else
-		arg_param = data->a_exit_status;
+		arg_param = data->exit_status;
 	str2 = ft_strjoin(*args, arg_param);
 	str1 = ft_strjoin(str2, *parg);
 	*parg = str1 + ft_strlen(str2);
