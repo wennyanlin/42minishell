@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/13 12:48:45 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/14 06:09:16 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,13 @@ typedef enum e_metachar
 	LESS_LESS
 }	t_metachar;
 
+typedef struct s_data
+{
+	t_list	*env;
+	int		i_exit_status;
+	char	*a_exit_status;
+}	t_data;
+
 typedef struct s_redirect
 {
 	t_metachar			type;
@@ -92,13 +99,13 @@ typedef struct s_token
 
 typedef struct s_process
 {
-	pid_t				pid;
-	int					fd_in;
-	int					fd_out;
-	int					pipe_fd[2];
-	char				*cmd_path;
-	char				**command;
-	char				**envp;
+	pid_t	pid;
+	int		fd_in;
+	int		fd_out;
+	int		pipe_fd[2];
+	char	*cmd_path;
+	char	**command;
+	char	**envp;
 }	t_process;
 
 typedef struct s_str
@@ -109,6 +116,12 @@ typedef struct s_str
 }			t_str;
 
 pid_t		waitpid(pid_t pid, int *status, int options);
+
+/*=================================ENVIRONMENT================================*/
+
+char		**lst_to_array(t_list *lst);
+char		*get_lst_env(t_list *lst, const char *identifier);
+void		new_lst_env(t_list **plst, char **envp);
 
 /*======================================LEXER=================================*/
 
@@ -134,7 +147,7 @@ t_token		*tokenize(char *input);
 void		test_lexer(void);
 void		ft_free_lst(t_token *lst);
 
-/*====================================Parser==================================*/
+/*====================================PARSER==================================*/
 
 int			validate_cmd_syntax(t_token *token_lst);
 t_commands	*parse_tokens(t_token *tokens);
@@ -146,14 +159,15 @@ void		cmd_lst_addback(t_commands **cmds, t_commands *new);
 
 /*====================================EXECUTOR================================*/
 
-void		shell_expansion(char **args);
-t_process	init_process(t_commands *cmds, char **envp, int pipe_read_end_prev);
+void		shell_expansion(char **args, t_data *data);
+t_process	init_process(t_commands *cmds, char **envp, t_data *data,
+				int pipe_read_end_prev);
 void		child_process(t_process *process);
 pid_t		create_process(t_process *process);
 void		fd_dup2(int oldfd, int newfd);
 void		execute_command(char *command_path, char **cmd_args, char **envp);
 void		perror_and_exit(char *file, int code);
-void		execute_all(t_commands *cmds, char **envp);
+void		execute_all(t_commands *cmds, t_data *data);
 int			lst_size(t_commands *cmds);
 
 int			read_here_doc(char *limiter);

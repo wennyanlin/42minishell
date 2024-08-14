@@ -6,29 +6,11 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 14:30:30 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/12 17:02:10 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/14 04:20:44 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-char	*ft_strdup(const char *s1)
-{
-	char	*s2;
-	int		i;	
-
-	i = 0;
-	s2 = malloc(ft_strlen(s1) + 1);
-	if (s2 == NULL)
-		return (NULL);
-	while (s1[i] != '\0')
-	{
-		s2[i] = s1[i];
-		i++;
-	}
-	s2[i] = '\0';
-	return (s2);
-}
 
 int	calculate_digits(int n)
 {
