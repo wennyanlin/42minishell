@@ -6,7 +6,7 @@
 /*   By: rtorrent <rtorrent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 20:17:37 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/08/14 17:25:58 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/14 19:07:53 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	new_lst_env(t_list **plst, char **envp)
 		new = malloc(sizeof(t_var));
 		eql_idx = ft_strchr(*envp, '=') - *envp;
 		new->name = ft_substr(*envp, 0, eql_idx);
-		new->value = ft_substr(*envp, eql_idx + 1, -1);
+		new->value = ft_strdup(*envp + eql_idx + 1);
 		ft_lstadd_front(plst, ft_lstnew(new));
 		envp++;
 	}
