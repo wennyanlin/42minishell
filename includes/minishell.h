@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/14 17:19:08 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/15 13:04:37 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ void		cmd_lst_addback(t_commands **cmds, t_commands *new);
 /*====================================EXECUTOR================================*/
 
 void		shell_expansion(char **args, t_data *data);
-t_process	init_process(t_commands *cmds, char **envp, t_data *data,
+t_process	init_process(t_commands *cmds, char **envp, char *path,
 				int pipe_read_end_prev);
 void		child_process(t_process *process);
 pid_t		create_process(t_process *process);

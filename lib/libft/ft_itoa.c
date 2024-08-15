@@ -3,84 +3,58 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: rtorrent <rtorrent@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/23 14:30:30 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/14 04:20:44 by rtorrent         ###   ########.fr       */
+/*   Created: 2023/05/03 18:33:27 by rtorrent          #+#    #+#             */
+/*   Updated: 2023/05/14 18:56:31 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	calculate_digits(int n)
+static void	place_digit(int n, char **pstr)
 {
-	int	digits;
+	int	x;
 
-	digits = 0;
-	while (n != '\0')
+	x = n / 10;
+	if (x)
+		place_digit(x, pstr);
+	if (n < 0)
+		x = '0' - n % 10;
+	else
+		x = '0' + n % 10;
+	*(*pstr)++ = x;
+}
+
+static size_t	count_chars(int n)
+{
+	size_t	count;
+
+	if (n <= 0)
+		count = 1;
+	else
+		count = 0;
+	while (n)
 	{
 		n /= 10;
-		digits++;
+		count++;
 	}
-	return (digits);
-}
-
-char	*ft_caso_zero(char n)
-{
-	char	*result;
-
-	result = (char *)malloc(sizeof(char) * 2);
-	if (result == NULL)
-		return (NULL);
-	result[0] = n;
-	result[1] = '\0';
-	return (result);
-}
-
-int	ft_is_negative(int *n)
-{
-	int	neg;
-
-	neg = 0;
-	if (*n < 0)
-	{
-		neg = 1;
-		*n = *n * -1;
-	}
-	return (neg);
+	return (count);
 }
 
 char	*ft_itoa(int n)
 {
-	int		i;
-	char	*result;
-	int		digits;
-	int		is_negative;
+	const size_t	nc = count_chars(n);
+	char *const		p = malloc(nc + 1);
+	char			*p1;
 
-	if (n == 0)
-		return (ft_caso_zero('0'));
-	if (n == -2147483648)
-		return (ft_strdup("-2147483648"));
-	digits = calculate_digits(n);
-	is_negative = ft_is_negative(&n);
-	result = (char *)malloc(digits + is_negative + 1);
-	if (result == NULL)
-		return (NULL);
-	i = digits + is_negative - 1;
-	while (n != 0)
+	if (p)
 	{
-		result[i--] = '0' + (n % 10);
-		n /= 10;
+		p1 = p;
+		if (n < 0)
+			*p1++ = '-';
+		place_digit(n, &p1);
+		*(p + nc) = '\0';
 	}
-	if (is_negative)
-		result[0] = '-';
-	result[digits + is_negative] = '\0';
-	return (result);
+	return (p);
 }
-
-// #include <stdio.h>
-// int	main()
-// {
-// 	printf("%s", ft_itoa(-564));
-// 	return (0);
-// }
