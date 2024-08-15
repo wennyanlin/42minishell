@@ -28,24 +28,22 @@ void	del_data(t_data *data)
 char	**lst_to_array(t_list *lst)
 {
 	size_t	n;
-	char	**a;
+	char	**arr;
 	t_var	*content;
 	char	*str;
 
 	n = ft_lstsize(lst);
-	a = malloc((n + 1) * sizeof(char *));
-	a[n] = NULL;
+	arr = malloc((n + 1) * sizeof(char *));
+	arr[n] = NULL;
 	while (n--)
 	{
 		content = lst->content;
-		a[n] = ft_strdup(content->name);
-		str = ft_strjoin(a[n], "=");
-		free(a[n]);
-		a[n] = ft_strjoin(str, content->value);
+		str = ft_strjoin(content->name, "=");
+		arr[n] = ft_strjoin(str, content->value);
 		free(str);
 		lst = lst->next;
 	}
-	return (a);
+	return (arr);
 }
 
 char	*get_lst_env(t_list *lst, const char *identifier)
