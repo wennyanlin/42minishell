@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/13 13:46:13 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/15 13:16:09 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,31 +66,32 @@ void	execute_command(char *command_path, char **cmd_args, char **envp)
 		perror_and_exit(cmd_args[0], EXIT_FAILURE);
 }
 
-void	execute_all(t_commands *cmds, char **envp)
+void	execute_all(t_commands *cmds, t_data *data)
 {
-	t_process	process;
-	pid_t		*pid;
-	int			i;
-	int			num_cmd;
-	int			pipe_read_end_prev;
+	t_process		process;
+	pid_t			*pid;
+	int				i;
+	const int		num_cmd = lst_size(cmds);
+	int				pipe_read_end_prev;
+	char			**envp;
 
 	i = -1;
-	num_cmd = lst_size(cmds);
 	pid = malloc(sizeof(pid_t) * num_cmd);
 	pipe_read_end_prev = dup(STDIN_FILENO);
 	while (cmds)
 	{
 		if (cmds->args != NULL)
-			shell_expansion(cmds->args);
-		process = init_process(cmds, envp, pipe_read_end_prev);
+			shell_expansion(cmds->args, data);
+		envp = lst_to_array(data->env);
+		process = init_process(cmds, envp, get_lst_env(data->env, "PATH"),
+				pipe_read_end_prev);
 		if (process.command != NULL)
 		{
 			if (is_builtin(process.command[0]) == 1 && process.fd_out != -1)
-			{
 				pid[++i] = create_process(&process);
-				free(process.cmd_path);
-			}
+			free(process.cmd_path);
 		}
+		free_array(envp);
 		cmds = cmds->next;
 		pipe_read_end_prev = process.pipe_fd[RD];
 	}

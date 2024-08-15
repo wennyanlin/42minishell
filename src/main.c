@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/13 12:02:07 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/14 16:02:55 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,10 +117,13 @@ void	ft_free_cmds(t_commands *cmds)
 
 void	start_minishell(char **envp)
 {
+	t_data		dt;
 	char		*line;
 	t_commands	*cmds;
 	t_token		*token_lst;
 
+	dt.exit_status = ft_itoa(0);
+	new_lst_env(&dt.env, envp);
 	while (1)
 	{
 		line = readline(PROMPT);
@@ -134,9 +137,10 @@ void	start_minishell(char **envp)
 		if (cmds == NULL)
 			continue ;
 		ft_free_lst(token_lst);
-		execute_all(cmds, envp);
+		execute_all(cmds, &dt);
 		ft_free_cmds(cmds);
 	}
+	del_data(&dt);
 }
 
 int	main(int argc, char **argv, char **envp)

@@ -3,51 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wlin <wlin@student.42barcelona.>           +#+  +:+       +#+        */
+/*   By: rtorrent <rtorrent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/21 10:06:38 by wlin              #+#    #+#             */
-/*   Updated: 2023/10/03 12:13:48 by wlin             ###   ########.fr       */
+/*   Created: 2023/05/07 12:43:27 by rtorrent          #+#    #+#             */
+/*   Updated: 2024/08/14 21:40:13 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
-#include <string.h>
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_substr(const char *s, unsigned int start, size_t len)
 {
-	size_t	s_len;
-	size_t	substr_len;
-	char	*substr;
+	size_t	size;
+	char	*p;
 
-	if (!s)
-		return (NULL);
-	s_len = ft_strlen(s);
-	substr_len = len;
-	if (start >= s_len)
-	{
-		substr = (char *)malloc(sizeof(char));
-		if (substr == NULL)
-			return (NULL);
-		*substr = '\0';
-		return (substr);
-	}
-	if ((start + substr_len) > s_len)
-		substr_len = s_len - start;
-	substr = (char *)malloc(substr_len + 1);
-	if (!substr)
-		return (NULL);
-	ft_strlcpy(substr, s + start, substr_len + 1);
-	return (substr);
+	size = ft_strlen(s);
+	if (start > size)
+		return (ft_calloc(1, 1));
+	size -= start;
+	if (len < size)
+		size = len;
+	p = malloc(++size);
+	if (p)
+		ft_strlcpy(p, s + start, size);
+	return (p);
 }
-/*
-#include <stdio.h>
-int	main()
-{
-	char			*s = "holaquetal";
-	unsigned int	start = 0;
-	size_t			len = 10;
-
-	printf("%s", ft_substr(s, start, len));
-	return (0);
-}*/
