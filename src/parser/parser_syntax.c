@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:17:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/13 13:38:25 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/15 22:49:41 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ int	prompt_error_message(t_metachar type)
 	return (EXIT_FAILURE);
 }
 
-int	syntax_error_start_with_pipe(t_token *token_lst)
+int	check_pipe_error(t_token *token_lst)
 {
-	if (token_lst->prev == NULL || token_lst->next->metachar == PIPE)
+	if (token_lst->prev == NULL || token_lst->next == NULL || token_lst->next->metachar == PIPE)
 		return (prompt_error_message(PIPE));
 	else if (is_redirection(token_lst->next->metachar)
 		&& token_lst->next->next == NULL)
@@ -44,7 +44,7 @@ int	syntax_error_start_with_pipe(t_token *token_lst)
 		return (EXIT_SUCCESS);
 }
 
-int	syntax_error_start_with_redirection(t_token *token_lst)
+int	check_redirection_error(t_token *token_lst)
 {
 	if (token_lst->next == NULL)
 		return (printf("minishell: syntax error near unexpected "
@@ -65,10 +65,12 @@ int	validate_cmd_syntax(t_token *token_lst)
 {
 	while (token_lst)
 	{
-		if (token_lst->metachar == PIPE)
-			return (syntax_error_start_with_pipe(token_lst));
-		else if (is_redirection(token_lst->metachar))
-			return (syntax_error_start_with_redirection(token_lst));
+		if (token_lst->metachar == PIPE 
+			&& check_pipe_error(token_lst) != EXIT_SUCCESS)
+				return (EXIT_FAILURE);
+		else if (is_redirection(token_lst->metachar)
+			&& check_redirection_error(token_lst) != EXIT_SUCCESS)
+				return (EXIT_FAILURE);
 		token_lst = token_lst->next;
 	}
 	return (EXIT_SUCCESS);
