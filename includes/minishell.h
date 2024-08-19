@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/19 16:26:16 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/19 16:37:23 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ int			char_index(char *args, char ref);
 char		*string_concat(char *path, char *cmd);
 char		*make_path(char *dir, char *cmd);
 char		**split_path(char *string, char separator);
-char		*find_cmd_path(char *env, char **cmd);
+char		*find_cmd_path(char *env, char *cmd);
 char		**array_concat(char *shell_path, char **args);
 void		free_array(char **array);
 void		ft_error(char *input, int start);
