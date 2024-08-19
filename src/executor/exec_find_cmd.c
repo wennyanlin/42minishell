@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:12:56 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/13 16:29:51 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/19 16:13:54 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,10 @@ char	*string_concat(char *path, char *cmd)
 	size_t	total_len;
 	size_t	i;
 
-	path_len = str_size(path);
-	cmd_len = str_size(cmd);
+	if (path == NULL || cmd == NULL)
+		return (NULL);
+	path_len = ft_strlen(path);
+	cmd_len = ft_strlen(cmd);
 	total_len = path_len + cmd_len;
 	result_path = malloc(sizeof(char) * (total_len + 1));
 	if (!result_path)
@@ -77,6 +79,8 @@ char	*examine_path(char **path_dirs, char *cmd)
 	char	*full_path;
 
 	i = -1;
+	if (path_dirs == NULL)
+		return (NULL);
 	while (path_dirs[++i])
 	{
 		full_path = make_path(path_dirs[i], cmd);
@@ -91,24 +95,24 @@ char	*examine_path(char **path_dirs, char *cmd)
 	return (full_path);
 }
 
-char	*find_cmd_path(char *env, char *cmd)
+char	*find_cmd_path(char *env, char **cmd)
 {
 	int		exit_code;
 	char	*full_path;
 	char	**path_dirs;
 
 	if (!env)
-		return (str_cpy(cmd));
-	if (char_index(cmd, '/') != NOT_FOUND)
-		return (str_cpy(cmd));
-	exit_code = directory_error(cmd);
+		return (ft_strdup(*cmd));
+	if (char_index(*cmd, '/') != NOT_FOUND)
+		return (ft_strdup(*cmd));
+	exit_code = directory_error(*cmd);
 	if (exit_code != 0)
-		return (cmd);
+		return (ft_strdup(*cmd));
 	path_dirs = split_path(env, ':');
-	full_path = examine_path(path_dirs, cmd);
+	full_path = examine_path(path_dirs, *cmd);
 	if (full_path != NULL)
 		return (full_path);
 	free_array(path_dirs);
 	path_dirs = NULL;
-	return (str_cpy(cmd));
+	return (ft_strdup(*cmd));
 }

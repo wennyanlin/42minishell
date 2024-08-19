@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/15 13:04:37 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/19 16:26:16 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ int			char_index(char *args, char ref);
 char		*string_concat(char *path, char *cmd);
 char		*make_path(char *dir, char *cmd);
 char		**split_path(char *string, char separator);
-char		*find_cmd_path(char *env, char *cmd);
+char		*find_cmd_path(char *env, char **cmd);
 char		**array_concat(char *shell_path, char **args);
 void		free_array(char **array);
 void		ft_error(char *input, int start);
@@ -173,7 +173,7 @@ pid_t		create_process(t_process *process);
 void		fd_dup2(int oldfd, int newfd);
 void		execute_command(char *command_path, char **cmd_args, char **envp);
 void		perror_and_exit(char *file, int code);
-void		execute_all(t_commands *cmds, t_data *data);
+char		*execute_all(t_commands *cmds, t_data *data);
 int			lst_size(t_commands *cmds);
 
 int			read_here_doc(char *limiter);

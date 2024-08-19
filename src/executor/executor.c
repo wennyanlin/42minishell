@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/15 13:16:09 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/19 16:31:05 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	execute_command(char *command_path, char **cmd_args, char **envp)
 		else
 		{
 			write(STDERR_FILENO, "minishell: ", 11);
-			write(STDERR_FILENO, cmd_args[0], str_size(cmd_args[0]));
+			write(STDERR_FILENO, cmd_args[0], ft_strlen(cmd_args[0]));
 			write(STDERR_FILENO, ": command not found\n", 20);
 			exit(127);
 		}
@@ -66,7 +66,7 @@ void	execute_command(char *command_path, char **cmd_args, char **envp)
 		perror_and_exit(cmd_args[0], EXIT_FAILURE);
 }
 
-void	execute_all(t_commands *cmds, t_data *data)
+char	*execute_all(t_commands *cmds, t_data *data)
 {
 	t_process		process;
 	pid_t			*pid;
@@ -89,7 +89,6 @@ void	execute_all(t_commands *cmds, t_data *data)
 		{
 			if (is_builtin(process.command[0]) == 1 && process.fd_out != -1)
 				pid[++i] = create_process(&process);
-			free(process.cmd_path);
 		}
 		free_array(envp);
 		cmds = cmds->next;
@@ -97,4 +96,5 @@ void	execute_all(t_commands *cmds, t_data *data)
 	}
 	wait_process(pid, num_cmd);
 	free(pid);
+	return (process.cmd_path);
 }
