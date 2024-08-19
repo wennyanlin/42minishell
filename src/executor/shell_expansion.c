@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 19:12:32 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/08/14 17:22:43 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/19 17:32:52 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ void	shell_expansion(char **args, t_data *data)
 {
 	char	*arg;
 
+	if (args == NULL || *args == NULL)
+		return ;
 	while (*args)
 	{
 		arg = *args;

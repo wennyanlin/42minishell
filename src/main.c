@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/19 16:28:05 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/19 17:35:34 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ void	start_minishell(char **envp)
 		ft_free_lst(token_lst);
 		line = execute_all(cmds, &dt);
 		ft_free_cmds(cmds);
-		free(line);
+		if (line != NULL)
+			free(line);
 	}
 	del_data(&dt);
 }
