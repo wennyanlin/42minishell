@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:07:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/13 12:03:17 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/19 17:54:43 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ t_token	*tokenize(char *input)
 	int		i;
 
 	i = -1;
-	if (!input)
+	if (!input || *input == '\0')
 		return (NULL);
 	token_lst = create_lst_node(NULL, -1);
 	if (token_lst == NULL)
@@ -98,10 +98,8 @@ t_token	*tokenize(char *input)
 			i = skip_spaces(input, i) - 1;
 		else
 			i = get_next_token(&token_lst, input, i);
-		if (i < 0)
+		if (i <= 0 || is_whitespace(input[i]))
 			return (NULL);
-		else if (!input[i])
-			break ;
 	}
 	return (token_lst);
 }

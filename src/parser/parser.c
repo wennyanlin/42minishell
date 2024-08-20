@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 14:12:10 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/13 12:20:28 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/19 14:41:58 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ t_commands	*parse_tokens(t_token *tokens)
 	t_commands	*cmds;
 	t_commands	*new;
 
+	if (tokens == NULL)
+		return (NULL);
 	if (validate_cmd_syntax(tokens) == EXIT_FAILURE)
 		return (NULL);
 	cmds = NULL;

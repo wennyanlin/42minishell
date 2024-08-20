@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/14 16:02:55 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/19 17:35:34 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void	ft_free_lst(t_token *lst)
 {
 	t_token	*tmp;
 
+	if (lst == NULL)
+		return ;
 	while (lst)
 	{
 		tmp = lst;
@@ -45,6 +47,8 @@ void	ft_free_cmds(t_commands *cmds)
 	t_commands	*tmp;
 	t_redirect	*tmp_redirect;
 
+	if (cmds == NULL)
+		return ;
 	while (cmds)
 	{
 		free_array(cmds->args);
@@ -63,58 +67,6 @@ void	ft_free_cmds(t_commands *cmds)
 	}
 }
 
-// void	print_parser_cmds(t_commands *cmds)
-// {
-// 	t_commands	*tmp;
-// 	t_redirect	*tmp_redirect;
-// 	int			i;
-
-// 	tmp = cmds;
-// 	while (tmp != NULL)
-// 	{
-
-// 		i = 0;
-// 		printf("\n============NEW COMMAND============\n\n");
-// 		printf("  WORD:     [");
-// 		while (tmp->args[i])
-// 			printf("[%s], ", tmp->args[i++]);
-// 		printf("\\0]\n");
-// 		tmp_redirect = tmp->redirect;
-// 		printf("  REDIRECT: ");
-// 		while (tmp_redirect)
-// 		{
-// 			printf("%d->", tmp_redirect->type);
-// 			printf("%s->", tmp_redirect->filename);
-// 			tmp_redirect = tmp_redirect->next;
-// 		}
-// 		printf("\n\n===================================\n\n");
-// 		printf("  NEXT->\n");
-// 		tmp = tmp->next;	
-// 	}
-// 	printf("\n");
-// }
-
-// void	trim_whitespaces(char *line)
-// {
-// 	int	start_back;
-// 	int	front;
-
-// 	if (!line)
-// 		return ;
-// 	start_back = ft_strlen(line) - 1;
-// 	while (start_back >= 0 && is_whitespace(line[start_back]))
-// 	{
-// 		line[start_back] = '\0';
-// 		start_back--;
-// 	}
-// 	start_back++;
-// 	front = 0;
-// 	while (line[front] && is_whitespace(line[front]))
-// 		front++;
-// 	if (front > 0)
-// 		ft_memmove(line, line + front, start_back - front + 1);
-// }
-
 void	start_minishell(char **envp)
 {
 	t_data		dt;
@@ -127,18 +79,14 @@ void	start_minishell(char **envp)
 	while (1)
 	{
 		line = readline(PROMPT);
-		if (line == NULL || *line == '\0')
-			continue ;
 		token_lst = tokenize(line);
 		free(line);
-		if (token_lst == NULL)
-			continue ;
 		cmds = parse_tokens(token_lst);
-		if (cmds == NULL)
-			continue ;
 		ft_free_lst(token_lst);
-		execute_all(cmds, &dt);
+		line = execute_all(cmds, &dt);
 		ft_free_cmds(cmds);
+		if (line != NULL)
+			free(line);
 	}
 	del_data(&dt);
 }

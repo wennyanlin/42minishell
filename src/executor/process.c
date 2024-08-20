@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 18:16:01 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/13 12:06:30 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/19 16:31:37 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	child_process(t_process *process)
 	{
 		write(STDERR_FILENO, "minishell: permission denied\n", 20);
 		write(STDERR_FILENO, process->command[0],
-			str_size(process->command[0]));
+			ft_strlen(process->command[0]));
 		exit (126);
 	}
 	if (process->fd_in == -1)
