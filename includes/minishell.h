@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/21 11:57:42 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/21 13:18:47 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ int			find_matching_quote(char *input, int i, char quote);
 int			find_end_chars_index(char *input, int i);
 t_token		*tokenize(char *input);
 void		test_lexer(void);
-void		ft_free_lst(t_token *lst);
+void		free_token_lst(t_token **plst);
 
 /*====================================PARSER==================================*/
 
@@ -169,7 +169,7 @@ int			lst_size(t_commands *cmds);
 int			read_here_doc(char *limiter);
 int			directory_error(char *cmd);
 
-void		ft_free_cmds(t_commands *cmds);
+void		free_cmds_lst(t_commands **pcmds);
 int			is_equal(char *s1, char *s2);
 
 /*==========================BUILTIN==============================*/

@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/21 12:11:39 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/21 13:39:24 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,46 +24,39 @@ void	perror_and_exit(char *file, int code)
 	exit(code);
 }
 
-void	ft_free_lst(t_token *lst)
+void	free_token_lst(t_token **plst)
 {
-	t_token	*tmp;
+	t_token	*next;
 
-	if (lst == NULL)
-		return ;
-	while (lst)
+	while (*plst)
 	{
-		tmp = lst;
-		lst = lst->next;
-		if (tmp->word)
-			free(tmp->word);
-		tmp->word = NULL;
-		free(tmp);
+		next = (*plst)->next;
+		free((*plst)->word);
+		free(*plst);
+		*plst = next;
 	}
-	lst = NULL;
 }
 
-void	ft_free_cmds(t_commands *cmds)
+void	free_cmds_lst(t_commands **pcmds)
 {
-	t_commands	*tmp;
-	t_redirect	*tmp_redirect;
+	t_commands	*next_cmds;
+	t_redirect	*redirect;
+	t_redirect	*next_redirect;
 
-	if (cmds == NULL)
-		return ;
-	while (cmds)
+	while (*pcmds)
 	{
-		free_array(cmds->args);
-		while (cmds->redirect)
+		next_cmds = (*pcmds)->next;
+		free_array((*pcmds)->args);
+		redirect = (*pcmds)->redirect;
+		while (redirect)
 		{
-			free(cmds->redirect->filename);
-			cmds->redirect->filename = NULL;
-			tmp_redirect = cmds->redirect;
-			cmds->redirect = cmds->redirect->next;
-			free(tmp_redirect);
+			next_redirect = redirect->next;
+			free(redirect->filename);
+			free(redirect);
+			redirect = next_redirect;
 		}
-		cmds->redirect = NULL;
-		tmp = cmds;
-		cmds = cmds->next;
-		free(tmp);
+		free(*pcmds);
+		*pcmds = next_cmds;
 	}
 }
 
@@ -81,11 +74,10 @@ void	start_minishell(void)
 		token_lst = tokenize(line);
 		free(line);
 		cmds = parse_tokens(token_lst);
-		ft_free_lst(token_lst);
+		free_token_lst(&token_lst);
 		line = execute_all(cmds, &dt);
-		ft_free_cmds(cmds);
-		if (line != NULL)
-			free(line);
+		free_cmds_lst(&cmds);
+		free(line);
 	}
 }
 
