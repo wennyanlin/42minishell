@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:46:09 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/21 12:02:39 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/21 14:39:04 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,29 +60,28 @@ int	handle_redirection(t_process *process, t_redirect *redirect)
 	return (TRUE);
 }
 
-t_process	init_process(t_commands *cmds, char *path, int pipe_read_end_prev)
+void	init_process(t_process *process, t_commands *cmds, char *path,
+		int pipe_read_end_prev)
 {
-	t_process	process;
 	t_redirect	*tmp_redirect;
 
 	tmp_redirect = cmds->redirect;
-	process.command = cmds->args;
-	if (process.command != NULL)
-		process.cmd_path = find_cmd_path(path, process.command[0]);
-	process.fd_in = pipe_read_end_prev;
+	process->command = cmds->args;
+	if (process->command != NULL)
+		process->cmd_path = find_cmd_path(path, process->command[0]);
+	process->fd_in = pipe_read_end_prev;
 	if (cmds->next)
 	{
-		if (pipe(process.pipe_fd) == INVALID)
+		if (pipe(process->pipe_fd) == INVALID)
 			perror_and_exit("pipe", EXIT_FAILURE);
-		process.fd_out = process.pipe_fd[WR];
+		process->fd_out = process->pipe_fd[WR];
 	}
 	else
-		process.fd_out = dup(STDOUT_FILENO);
+		process->fd_out = dup(STDOUT_FILENO);
 	while (tmp_redirect)
 	{
-		if (handle_redirection(&process, tmp_redirect) == INVALID)
+		if (handle_redirection(process, tmp_redirect) == INVALID)
 			break ;
 		tmp_redirect = tmp_redirect->next;
 	}
-	return (process);
 }

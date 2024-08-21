@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/21 12:06:40 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/21 14:37:27 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,12 @@ char	*execute_all(t_commands *cmds, t_data *data)
 		return (NULL);
 	pid = malloc(sizeof(pid_t) * num_cmd);
 	pipe_read_end_prev = dup(STDIN_FILENO);
+	if (pid == NULL || pipe_read_end_prev == -1)
+		return (NULL);
 	while (cmds)
 	{
-		if (cmds->args != NULL)
-			shell_expansion(cmds->args, data);
-		process = init_process(cmds, getenv("PATH"), pipe_read_end_prev);
+		shell_expansion(cmds->args, data);
+		init_process(&process, cmds, getenv("PATH"), pipe_read_end_prev);
 		if (process.command != NULL)
 		{
 			if (is_builtin(process.command[0]) == 1 && process.fd_out != -1)

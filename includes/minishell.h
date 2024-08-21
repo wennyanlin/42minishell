@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/21 13:18:47 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/21 14:50:29 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,6 @@ typedef struct s_data
 {
 	int	exit_status;
 }	t_data;
-
-typedef struct s_var
-{
-	char	*name;
-	char	*value;
-}	t_var;
 
 typedef struct s_redirect
 {
@@ -157,7 +151,8 @@ void		cmd_lst_addback(t_commands **cmds, t_commands *new);
 /*====================================EXECUTOR================================*/
 
 void		shell_expansion(char **args, t_data *data);
-t_process	init_process(t_commands *cmds, char *path, int pipe_read_end_prev);
+void		init_process(t_process *process, t_commands *cmds, char *path,
+				int pipe_read_end_prev);
 void		child_process(t_process *process);
 pid_t		create_process(t_process *process);
 void		fd_dup2(int oldfd, int newfd);
