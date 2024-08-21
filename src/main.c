@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/19 17:35:34 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/21 15:53:20 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,50 +24,43 @@ void	perror_and_exit(char *file, int code)
 	exit(code);
 }
 
-void	ft_free_lst(t_token *lst)
+void	free_token_lst(t_token **plst)
 {
-	t_token	*tmp;
+	t_token	*next;
 
-	if (lst == NULL)
-		return ;
-	while (lst)
+	while (*plst)
 	{
-		tmp = lst;
-		lst = lst->next;
-		if (tmp->word)
-			free(tmp->word);
-		tmp->word = NULL;
-		free(tmp);
+		next = (*plst)->next;
+		free((*plst)->word);
+		free(*plst);
+		*plst = next;
 	}
-	lst = NULL;
 }
 
-void	ft_free_cmds(t_commands *cmds)
+void	free_cmds_lst(t_commands **pcmds)
 {
-	t_commands	*tmp;
-	t_redirect	*tmp_redirect;
+	t_commands	*next_cmds;
+	t_redirect	*redirect;
+	t_redirect	*next_redirect;
 
-	if (cmds == NULL)
-		return ;
-	while (cmds)
+	while (*pcmds)
 	{
-		free_array(cmds->args);
-		while (cmds->redirect)
+		next_cmds = (*pcmds)->next;
+		free_array((*pcmds)->args);
+		redirect = (*pcmds)->redirect;
+		while (redirect)
 		{
-			free(cmds->redirect->filename);
-			cmds->redirect->filename = NULL;
-			tmp_redirect = cmds->redirect;
-			cmds->redirect = cmds->redirect->next;
-			free(tmp_redirect);
+			next_redirect = redirect->next;
+			free(redirect->filename);
+			free(redirect);
+			redirect = next_redirect;
 		}
-		cmds->redirect = NULL;
-		tmp = cmds;
-		cmds = cmds->next;
-		free(tmp);
+		free(*pcmds);
+		*pcmds = next_cmds;
 	}
 }
 
-void	start_minishell(char **envp)
+void	start_minishell(void)
 {
 	t_data		dt;
 	char		*line;
@@ -75,29 +68,26 @@ void	start_minishell(char **envp)
 	t_token		*token_lst;
 
 	dt.exit_status = ft_itoa(0);
-	new_lst_env(&dt.env, envp);
 	while (1)
 	{
 		line = readline(PROMPT);
 		token_lst = tokenize(line);
 		free(line);
 		cmds = parse_tokens(token_lst);
-		ft_free_lst(token_lst);
-		line = execute_all(cmds, &dt);
-		ft_free_cmds(cmds);
-		if (line != NULL)
-			free(line);
+		free_token_lst(&token_lst);
+		execute_all(cmds, &dt);
+		free_cmds_lst(&cmds);
 	}
-	del_data(&dt);
+	free(dt.exit_status);
 }
 
-int	main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv)
 {
 	if (argc == 2 && ft_strncmp(argv[1], "test", 5) == 0)
 		test_lexer();
 	else if (argc == 2 && ft_strncmp(argv[1], "-v", 3) == 0)
 		return (printf("%s, version %s\n", NAME, VERSION), 0);
 	else
-		start_minishell(envp);
+		start_minishell();
 	return (0);
 }

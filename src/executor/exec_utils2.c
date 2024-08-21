@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:58 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/13 16:26:26 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/21 13:26:28 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	free_array(char **array)
 	int	i;
 
 	i = 0;
-	if (array == NULL || *array == NULL)
+	if (array == NULL)
 		return ;
 	while (array[i])
 		free(array[i++]);

@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 18:16:01 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/19 16:31:37 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/21 12:03:28 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	child_process(t_process *process)
 	fd_dup2(process->fd_out, STDOUT_FILENO);
 	close(process->fd_out);
 	close(process->pipe_fd[RD]);
-	execute_command(process->cmd_path, process->command, process->envp);
+	execute_command(process->cmd_path, process->command);
 	exit(127);
 }
 
