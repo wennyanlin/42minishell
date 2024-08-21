@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/19 17:35:34 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/21 12:11:39 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,15 +67,14 @@ void	ft_free_cmds(t_commands *cmds)
 	}
 }
 
-void	start_minishell(char **envp)
+void	start_minishell(void)
 {
 	t_data		dt;
 	char		*line;
 	t_commands	*cmds;
 	t_token		*token_lst;
 
-	dt.exit_status = ft_itoa(0);
-	new_lst_env(&dt.env, envp);
+	dt.exit_status = 0;
 	while (1)
 	{
 		line = readline(PROMPT);
@@ -88,16 +87,15 @@ void	start_minishell(char **envp)
 		if (line != NULL)
 			free(line);
 	}
-	del_data(&dt);
 }
 
-int	main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv)
 {
 	if (argc == 2 && ft_strncmp(argv[1], "test", 5) == 0)
 		test_lexer();
 	else if (argc == 2 && ft_strncmp(argv[1], "-v", 3) == 0)
 		return (printf("%s, version %s\n", NAME, VERSION), 0);
 	else
-		start_minishell(envp);
+		start_minishell();
 	return (0);
 }

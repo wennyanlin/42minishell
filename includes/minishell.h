@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/19 16:37:23 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/21 11:57:42 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,7 @@ typedef enum e_metachar
 
 typedef struct s_data
 {
-	t_list	*env;
-	char	*exit_status;
+	int	exit_status;
 }	t_data;
 
 typedef struct s_var
@@ -110,7 +109,6 @@ typedef struct s_process
 	int		pipe_fd[2];
 	char	*cmd_path;
 	char	**command;
-	char	**envp;
 }	t_process;
 
 typedef struct s_str
@@ -121,13 +119,6 @@ typedef struct s_str
 }	t_str;
 
 pid_t		waitpid(pid_t pid, int *status, int options);
-
-/*=================================ENVIRONMENT================================*/
-
-void		del_data(t_data *data);
-char		*get_lst_env(t_list *lst, const char *identifier);
-char		**lst_to_array(t_list *lst);
-void		new_lst_env(t_list **plst, char **envp);
 
 /*======================================LEXER=================================*/
 
@@ -166,12 +157,11 @@ void		cmd_lst_addback(t_commands **cmds, t_commands *new);
 /*====================================EXECUTOR================================*/
 
 void		shell_expansion(char **args, t_data *data);
-t_process	init_process(t_commands *cmds, char **envp, char *path,
-				int pipe_read_end_prev);
+t_process	init_process(t_commands *cmds, char *path, int pipe_read_end_prev);
 void		child_process(t_process *process);
 pid_t		create_process(t_process *process);
 void		fd_dup2(int oldfd, int newfd);
-void		execute_command(char *command_path, char **cmd_args, char **envp);
+void		execute_command(char *command_path, char **cmd_args);
 void		perror_and_exit(char *file, int code);
 char		*execute_all(t_commands *cmds, t_data *data);
 int			lst_size(t_commands *cmds);

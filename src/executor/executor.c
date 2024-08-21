@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/19 17:38:27 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/21 12:06:40 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,17 @@ void	wait_process(pid_t *pid_array, int num_cmd)
 	}
 }
 
-void	execute_command(char *command_path, char **cmd_args, char **envp)
+void	execute_command(char *command_path, char **cmd_args)
 {
-	char	**result_array_concat;
+	extern char	**environ;
+	char		**result_array_concat;
 
 	result_array_concat = NULL;
-	execve(command_path, cmd_args, envp);
+	execve(command_path, cmd_args, environ);
 	if (errno == ENOEXEC)
 	{
 		result_array_concat = array_concat("/bin/sh", cmd_args);
-		execve("/bin/sh", result_array_concat, envp);
+		execve("/bin/sh", result_array_concat, environ);
 	}
 	else if (errno == ENOENT)
 	{
@@ -73,7 +74,6 @@ char	*execute_all(t_commands *cmds, t_data *data)
 	int				i;
 	const int		num_cmd = lst_size(cmds);
 	int				pipe_read_end_prev;
-	char			**envp;
 
 	i = -1;
 	if (cmds == NULL)
@@ -84,15 +84,12 @@ char	*execute_all(t_commands *cmds, t_data *data)
 	{
 		if (cmds->args != NULL)
 			shell_expansion(cmds->args, data);
-		envp = lst_to_array(data->env);
-		process = init_process(cmds, envp, get_lst_env(data->env, "PATH"),
-				pipe_read_end_prev);
+		process = init_process(cmds, getenv("PATH"), pipe_read_end_prev);
 		if (process.command != NULL)
 		{
 			if (is_builtin(process.command[0]) == 1 && process.fd_out != -1)
 				pid[++i] = create_process(&process);
 		}
-		free_array(envp);
 		cmds = cmds->next;
 		pipe_read_end_prev = process.pipe_fd[RD];
 	}

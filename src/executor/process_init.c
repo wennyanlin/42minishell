@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:46:09 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/19 16:37:40 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/21 12:02:39 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,12 @@ int	handle_redirection(t_process *process, t_redirect *redirect)
 	return (TRUE);
 }
 
-t_process	init_process(t_commands *cmds, char **envp, char *path,
-		int pipe_read_end_prev)
+t_process	init_process(t_commands *cmds, char *path, int pipe_read_end_prev)
 {
 	t_process	process;
 	t_redirect	*tmp_redirect;
 
 	tmp_redirect = cmds->redirect;
-	process.envp = envp;
 	process.command = cmds->args;
 	if (process.command != NULL)
 		process.cmd_path = find_cmd_path(path, process.command[0]);

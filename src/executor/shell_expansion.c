@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 19:12:32 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/08/19 17:32:52 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/21 12:09:44 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@ static void	parameter_expansion(char **args, char **parg, t_data *data)
 		while (ft_isalnum(**parg) || **parg == UNDERSCORE)
 			++*parg;
 		str1 = ft_substr(arg_param, 0, *parg - arg_param);
-		arg_param = get_lst_env(data->env, str1);
+		arg_param = getenv(str1);
 		if (!arg_param)
 			arg_param = empty;
 		free(str1);
 	}
 	else
-		arg_param = data->exit_status;
+		arg_param = ft_itoa(data->exit_status);
 	str2 = ft_strjoin(*args, arg_param);
 	str1 = ft_strjoin(str2, *parg);
 	*parg = str1 + ft_strlen(str2);
@@ -80,7 +80,7 @@ void	shell_expansion(char **args, t_data *data)
 {
 	char	*arg;
 
-	if (args == NULL || *args == NULL)
+	if (args == NULL)
 		return ;
 	while (*args)
 	{
