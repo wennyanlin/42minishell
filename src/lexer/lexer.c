@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:07:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/19 17:54:43 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/20 23:07:19 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,24 +60,19 @@ int	get_next_token(t_token **token_lst, char *input, int start)
 {
 	int	i;
 
-	i = start - 1;
-	while (input[++i] && !is_whitespace(input[i]))
-	{
-		if (input[i] == C_PIPE)
-			add_token(token_lst, NULL, PIPE);
-		else if (input[i] == C_LESS && input[i + 1] != C_LESS)
-			add_token(token_lst, NULL, LESS);
-		else if (input[i] == C_LESS && input[i + 1] == C_LESS)
-			i += add_token(token_lst, NULL, LESS_LESS);
-		else if (input[i] == C_GREAT && input[i + 1] != C_GREAT)
-			add_token(token_lst, NULL, GREAT);
-		else if (input[i] == C_GREAT && input[i + 1] == C_GREAT)
-			i += add_token(token_lst, NULL, GREAT_GREAT);
-		else
-			i = handle_word(token_lst, input, i) - 1;
-		if (i == -2)
-			break ;
-	}
+	i = start;
+	if (input[i] == C_PIPE)
+		i += add_token(token_lst, NULL, PIPE);
+	else if (input[i] == C_LESS && input[i + 1] != C_LESS)
+		i += add_token(token_lst, NULL, LESS);
+	else if (input[i] == C_LESS && input[i + 1] == C_LESS)
+		i += add_token(token_lst, NULL, LESS_LESS) + 1;
+	else if (input[i] == C_GREAT && input[i + 1] != C_GREAT)
+		i += add_token(token_lst, NULL, GREAT);
+	else if (input[i] == C_GREAT && input[i + 1] == C_GREAT)
+		i += add_token(token_lst, NULL, GREAT_GREAT) + 1;
+	else
+		i = handle_word(token_lst, input, i);
 	return (i);
 }
 
@@ -86,19 +81,25 @@ t_token	*tokenize(char *input)
 	t_token	*token_lst;
 	int		i;
 
-	i = -1;
+	i = 0;
 	if (!input || *input == '\0')
 		return (NULL);
-	token_lst = create_lst_node(NULL, -1);
-	if (token_lst == NULL)
-		return (NULL);
-	while (input[++i])
+	token_lst = NULL;
+	while (input[i])
 	{
 		if (is_whitespace(input[i]))
-			i = skip_spaces(input, i) - 1;
+			i = skip_spaces(input, i);
 		else
+		{
+			if (token_lst == NULL)
+			{
+				token_lst = create_lst_node(NULL, -1);
+				if (token_lst == NULL)
+					return (NULL);
+			}
 			i = get_next_token(&token_lst, input, i);
-		if (i <= 0 || is_whitespace(input[i]))
+		}
+		if (i < 0)
 			return (NULL);
 	}
 	return (token_lst);
