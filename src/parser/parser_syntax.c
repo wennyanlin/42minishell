@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:17:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/21 12:03:46 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/21 16:33:25 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	check_pipe_error(t_token *token_lst)
 {
 	if (token_lst->prev == NULL || token_lst->next == NULL
 		|| token_lst->next->metachar == PIPE)
-			return (prompt_error_message(PIPE));
+		return (prompt_error_message(PIPE));
 	else if (is_redirection(token_lst->next->metachar)
 		&& token_lst->next->next == NULL)
 		return (ft_putstr_fd("minishell: syntax error near unexpected "
@@ -64,12 +64,12 @@ int	validate_cmd_syntax(t_token *token_lst)
 {
 	while (token_lst)
 	{
-		if (token_lst->metachar == PIPE 
+		if (token_lst->metachar == PIPE
 			&& check_pipe_error(token_lst) != EXIT_SUCCESS)
-				return (EXIT_FAILURE);
+			return (EXIT_FAILURE);
 		else if (is_redirection(token_lst->metachar)
 			&& check_redirection_error(token_lst) != EXIT_SUCCESS)
-				return (EXIT_FAILURE);
+			return (EXIT_FAILURE);
 		token_lst = token_lst->next;
 	}
 	return (EXIT_SUCCESS);
