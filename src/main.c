@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/21 13:39:24 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/21 15:53:20 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	start_minishell(void)
 	t_commands	*cmds;
 	t_token		*token_lst;
 
-	dt.exit_status = 0;
+	dt.exit_status = ft_itoa(0);
 	while (1)
 	{
 		line = readline(PROMPT);
@@ -75,10 +75,10 @@ void	start_minishell(void)
 		free(line);
 		cmds = parse_tokens(token_lst);
 		free_token_lst(&token_lst);
-		line = execute_all(cmds, &dt);
+		execute_all(cmds, &dt);
 		free_cmds_lst(&cmds);
-		free(line);
 	}
+	free(dt.exit_status);
 }
 
 int	main(int argc, char **argv)

@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/21 14:50:29 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/21 15:52:50 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ typedef enum e_metachar
 
 typedef struct s_data
 {
-	int	exit_status;
+	char	*exit_status;
 }	t_data;
 
 typedef struct s_redirect
@@ -158,7 +158,7 @@ pid_t		create_process(t_process *process);
 void		fd_dup2(int oldfd, int newfd);
 void		execute_command(char *command_path, char **cmd_args);
 void		perror_and_exit(char *file, int code);
-char		*execute_all(t_commands *cmds, t_data *data);
+void		execute_all(t_commands *cmds, t_data *data);
 int			lst_size(t_commands *cmds);
 
 int			read_here_doc(char *limiter);

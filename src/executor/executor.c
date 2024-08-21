@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/21 14:37:27 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/21 15:52:33 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	execute_command(char *command_path, char **cmd_args)
 		perror_and_exit(cmd_args[0], EXIT_FAILURE);
 }
 
-char	*execute_all(t_commands *cmds, t_data *data)
+void	execute_all(t_commands *cmds, t_data *data)
 {
 	t_process		process;
 	pid_t			*pid;
@@ -77,11 +77,11 @@ char	*execute_all(t_commands *cmds, t_data *data)
 
 	i = -1;
 	if (cmds == NULL)
-		return (NULL);
+		return ;
 	pid = malloc(sizeof(pid_t) * num_cmd);
 	pipe_read_end_prev = dup(STDIN_FILENO);
 	if (pid == NULL || pipe_read_end_prev == -1)
-		return (NULL);
+		return ;
 	while (cmds)
 	{
 		shell_expansion(cmds->args, data);
@@ -91,10 +91,10 @@ char	*execute_all(t_commands *cmds, t_data *data)
 			if (is_builtin(process.command[0]) == 1 && process.fd_out != -1)
 				pid[++i] = create_process(&process);
 		}
+		free(process.cmd_path);
 		cmds = cmds->next;
 		pipe_read_end_prev = process.pipe_fd[RD];
 	}
 	wait_process(pid, num_cmd);
 	free(pid);
-	return (process.cmd_path);
 }
