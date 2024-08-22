@@ -6,52 +6,73 @@
 #    By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 13:11:23 by wlin              #+#    #+#              #
-#    Updated: 2024/08/14 06:15:54 by rtorrent         ###   ########.fr        #
+#    Updated: 2024/08/22 17:52:45 by wlin             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-AUTHOR		= wlin
+AUTHOR			= wlin rtorrent
 NAME			= minishell
 
 CC				= gcc
-CFLAGS		= -Wall -Wextra -Werror -g -Iincludes -I${LIBFT_DIR} -fsanitize=address -MMD
+CFLAGS			= -Wall -Wextra -Werror -g -Iincludes -I${LIBFT_DIR} -fsanitize=address -MMD
 RM				= rm -fr
 
-# *******************************	FILES	********************************** #
+#<--------------------------------->FILES<------------------------------------>#
 
-LIB         = lib/
+LIBRARIES		= libft
+LIBFT_DIR		= lib/libft/
+LIBRARY_PATHS	= -L$(LIBFT_DIR)
+LIBRARY_NAMES	= -lft -lreadline
+LDFLAGS			+= $(LIBRARY_PATHS) $(LIBRARY_NAMES)
 
-LIBRARIES   = libft
-LIBFT_DIR   = $(LIB)libft/
-LIBRARY_PATHS = -L$(LIBFT_DIR)
-LIBRARY_NAMES = -lft -lreadline
-LDFLAGS     += $(LIBRARY_PATHS) $(LIBRARY_NAMES)
+HEADERS			= includes/minishell.h
+FILES_MAIN		= main.c
+FILES_LEXR		= lexer.c utils_list.c utils_str.c
+FILES_PARS		= parser.c parser_syntax.c parser_utils.c
+FILES_EXEC		= executor.c exec_find_cmd.c here_doc.c process_init.c\
+				  process.c exec_utils.c exec_utils2.c split_path.c\
+				  shell_expansion.c
+FILES_BLT		= builtin.c builtin2.c
+FILES_TEST		= test_lexer.c
 
-# HEADERS		= $(wildcard includes/*.h)
-SRCS			= $(shell find src -name '*.c')
-OBJS			= $(SRCS:.c=.o)
-DEPS			= $(SRCS:.c=.d)
-INCLUDES		= include
+DIR_SRC			= src/
+DIR_OBJ_DEPS	= obj_deps/
+DIR_LEXR_TEST	= test/
+INCLUDES		= include/
 
-# *******************************  COLORS	******************************* #
+DIR_LEXR		= lexer/
+DIR_PARS		= parser/
+DIR_EXEC		= executor/
+DIR_BLT			= builtin/
+
+SRCS_MAIN		= $(FILES_MAIN)
+SRCS_TEST		= $(addprefix $(DIR_LEXR_TEST),$(FILES_TEST))
+SRCS_LEXR		= $(addprefix $(DIR_LEXR),$(FILES_LEXR))
+SRCS_PARS		= $(addprefix $(DIR_PARS),$(FILES_PARS))
+SRCS_EXEC		= $(addprefix $(DIR_EXEC),$(FILES_EXEC))
+SRCS_BLT		= $(addprefix $(DIR_BLT),$(FILES_BLT))
+ALL_SRCS		:= $(SRCS_MAIN) $(SRCS_LEXR) $(SRCS_PARS) $(SRCS_EXEC) $(SRCS_BLT)\
+				   $(SRCS_TEST)
+ALL_OBJS		:= $(addprefix $(DIR_OBJ_DEPS),$(ALL_SRCS:.c=.o))
+ALL_DEPS		:= $(ALL_OBJS:.o=.d)
+ALL_SRCS		:= $(addprefix $(DIR_SRC),$(ALL_SRCS))
+#<-------------------------------->COLORS<------------------------------------>#
 
 RED				=	\033[0;31m
 GREEN			=	\033[0;32m
-YELLOW		=	\033[0;33m
+YELLOW			=	\033[0;33m
 BLUE			=	\033[0;34m
-PURPLE		=	\033[0;35m
+PURPLE			=	\033[0;35m
 CYAN			=	\033[0;36m
 RESET			=	\033[0m
-GREEN_BOLD	=	\033[1;32m
-BLUE_BOLD	=	\033[1;34m
-CYAN_BOLD	=	\033[1;36m
-MAKE		=	make --no-print-directory
+GREEN_BOLD		=	\033[1;32m
+BLUE_BOLD		=	\033[1;34m
+CYAN_BOLD		=	\033[1;36m
+MAKE			=	make
 
-# ********************************	RULES	********************************** #
+#<--------------------------------->RULES<------------------------------------>#
 
-all:
-	@$(MAKE) header
-	@$(MAKE) $(NAME)
+all: header $(NAME)
 
 header:
 	@printf "%b" "$(GREEN)"
@@ -71,30 +92,31 @@ header:
 libft:
 	@$(MAKE) -C $(LIBFT_DIR) bonus
 
-$(NAME): libft $(OBJS)
+$(NAME): libft $(ALL_OBJS)
 	@echo "\n\n${BLUE_BOLD}[$(NAME)] $(GREEN)object files were created$(RESET)"
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LDFLAGS)
-	echo "${BLUE_BOLD}[$(NAME)] $(GREEN)executable was created$(RESET)"
+	$(CC) $(CFLAGS) $(ALL_OBJS) -o $(NAME) $(LDFLAGS)
+	@echo "${BLUE_BOLD}[$(NAME)] $(GREEN)executable was created$(RESET)"
 
-%.o: %.c Makefile
-	@$(CC) $(CFLAGS) -DREADLINE_LIBRARY=1 $(RDFLAGS) -I $(INCLUDES) -I $(LIBFT_DIR) -c $< -o $@
-	@echo "$(GREEN).$(RESET)\c"
+obj_deps/%.o: src/%.c Makefile
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -DREADLINE_LIBRARY=1 $(RDFLAGS) -I $(INCLUDES) -I $(LIBFT_DIR) -o $@ -c $<
+	@echo "$(GREEN)$<$(RESET)\n"
 
 clean:
 	@$(MAKE) -C $(LIBFT_DIR) clean
-	@$(RM) $(OBJS) $(DEPS)
+	$(RM) $(ALL_OBJS) $(ALL_DEPS)
 	@echo "${BLUE_BOLD}[$(NAME)] $(RED)removed object files$(RESET)"
 
 fclean: clean
 	@$(MAKE) -C $(LIBFT_DIR) fclean
-	@$(RM) $(NAME)
+	$(RM) $(NAME)
 	@echo "${BLUE_BOLD}[$(NAME)] $(RED)executable was deleted$(RESET)"
 
 re: fclean
-	@$(MAKE) all
+	$(MAKE) all
 
--include $(DEPS)
+-include $(ALL_DEPS)
 
-.SILENT:
+# .SILENT:
 
-.PHONY: all clean fclean re libft
+.PHONY: all clean fclean re libft header
