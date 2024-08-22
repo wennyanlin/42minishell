@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/21 15:53:20 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/21 16:25:48 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,13 @@ void	perror_and_exit(char *file, int code)
 
 	fd = open(file, O_RDWR);
 	if (fd == -1 && errno == EISDIR)
-		printf("minisell: %s: %s\n", file, strerror(errno));
+	{
+		ft_putstr_fd("minisell: ", 2);
+		ft_putstr_fd(file, 2);
+		ft_putstr_fd(": ", 2);
+		ft_putstr_fd(strerror(errno), 2);
+		ft_putstr_fd("\n", 2);
+	}
 	else
 		perror(file);
 	exit(code);

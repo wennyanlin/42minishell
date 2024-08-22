@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:59:45 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/13 12:04:29 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/21 12:43:30 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,24 +42,24 @@ void	lst_add_back(t_token **token_lst, t_token *new_node)
 		*token_lst = new_node;
 }
 
-void	printf_list(t_token *lst)
-{
-	t_token	*tmp;
+// void	printf_list(t_token *lst)
+// {
+// 	t_token	*tmp;
 
-	tmp = lst;
-	while (tmp)
-	{
-		if (tmp->word && tmp->metachar == 0)
-			printf("`%s`  =>  ", tmp->word);
-		else if (!tmp->word && tmp->metachar != 0)
-			printf("%i  =>  ", tmp->metachar);
-		else
-			printf("%sERROR!%s `%s` %i, ",
-				RED, tmp->word, RESET, tmp->metachar);
-		tmp = tmp->next;
-	}
-	printf("null\n");
-}
+// 	tmp = lst;
+// 	while (tmp)
+// 	{
+// 		if (tmp->word && tmp->metachar == 0)
+// 			printf("`%s`  =>  ", tmp->word);
+// 		else if (!tmp->word && tmp->metachar != 0)
+// 			printf("%i  =>  ", tmp->metachar);
+// 		else
+// 			printf("%sERROR!%s `%s` %i, ",
+// 				RED, tmp->word, RESET, tmp->metachar);
+// 		tmp = tmp->next;
+// 	}
+// 	printf("null\n");
+// }
 
 void	ft_error(char *input, int start)
 {
@@ -68,6 +68,8 @@ void	ft_error(char *input, int start)
 		++input;
 		--start;
 	}
-	printf("Syntax error at `%s`\n", input);
+	ft_putstr_fd("Syntax error at `", 2);
+	ft_putstr_fd(input, 2);
+	ft_putstr_fd("`\n", 2);
 	return ;
 }
