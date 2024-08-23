@@ -6,7 +6,7 @@
 #    By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 13:11:23 by wlin              #+#    #+#              #
-#    Updated: 2024/08/22 17:52:45 by wlin             ###   ########.fr        #
+#    Updated: 2024/08/23 13:34:37 by wlin             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -90,30 +90,37 @@ header:
 	@echo
 
 libft:
-	@$(MAKE) -C $(LIBFT_DIR) bonus
+	@$(MAKE) -C $(LIBFT_DIR) --no-print-directory bonus
+	@echo "\n${BLUE_BOLD}[libft] $(GREEN)object files were created$(RESET)"
 
 $(NAME): libft $(ALL_OBJS)
-	@echo "\n\n${BLUE_BOLD}[$(NAME)] $(GREEN)object files were created$(RESET)"
-	$(CC) $(CFLAGS) $(ALL_OBJS) -o $(NAME) $(LDFLAGS)
-	@echo "${BLUE_BOLD}[$(NAME)] $(GREEN)executable was created$(RESET)"
+	@echo "\n${BLUE_BOLD}[$(NAME)] $(GREEN)object files were created$(RESET)"
+	@$(CC) $(CFLAGS) $(ALL_OBJS) -o $(NAME) $(LDFLAGS)
+	@echo "\n${BLUE_BOLD}[$(NAME)] $(GREEN)executable was created$(RESET)"
 
 obj_deps/%.o: src/%.c Makefile
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -DREADLINE_LIBRARY=1 $(RDFLAGS) -I $(INCLUDES) -I $(LIBFT_DIR) -o $@ -c $<
-	@echo "$(GREEN)$<$(RESET)\n"
+	@$(CC) $(CFLAGS) -DREADLINE_LIBRARY=1 $(RDFLAGS) -I $(INCLUDES) -I\
+	$(LIBFT_DIR) -o $@ -c $<
+	@echo "\n$(CC) $(CFLAGS) -DREADLINE_LIBRARY=1 $(RDFLAGS) -I $(INCLUDES)\
+	-I $(LIBFT_DIR) -o $@ -c $<\c"
+	@echo "$(GREEN)$(RESET)\c"
 
 clean:
-	@$(MAKE) -C $(LIBFT_DIR) clean
+	@$(MAKE) --no-print-directory -C $(LIBFT_DIR) clean
+	@echo "${BLUE_BOLD}[$(NAME)] ${RED}Removing object and dependecy files...\
+	${RESET}"
 	$(RM) $(ALL_OBJS) $(ALL_DEPS)
-	@echo "${BLUE_BOLD}[$(NAME)] $(RED)removed object files$(RESET)"
+	@echo "${BLUE_BOLD}[$(NAME)] ${GREEN}Object and dependecy files removed\
+	from $(DIR_OBJ_DEPS), $(LIBFT_DIR)\n"
 
 fclean: clean
-	@$(MAKE) -C $(LIBFT_DIR) fclean
+	@$(MAKE) --no-print-directory -C $(LIBFT_DIR) fclean
+	@echo "${BLUE_BOLD}[$(NAME)] ${RED}Removing executable...${RESET}"
 	$(RM) $(NAME)
-	@echo "${BLUE_BOLD}[$(NAME)] $(RED)executable was deleted$(RESET)"
+	@echo "${BLUE_BOLD}[$(NAME)] ${GREEN}Executable deleted${RESET}"
 
-re: fclean
-	$(MAKE) all
+re: fclean all
 
 -include $(ALL_DEPS)
 

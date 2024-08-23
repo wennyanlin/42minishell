@@ -6,7 +6,7 @@
 #    By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/09 20:06:48 by wlin              #+#    #+#              #
-#    Updated: 2024/08/22 17:54:00 by wlin             ###   ########.fr        #
+#    Updated: 2024/08/23 13:33:57 by wlin             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,7 @@ CYAN_BOLD	=	\033[1;36m
 
 
 $(NAME): $(OBJS) Makefile
-	echo "\n\n${BLUE_BOLD}[libft] $(GREEN)object files were created$(RESET)"
+	echo "\n\n\n${BLUE_BOLD}[libft] $(GREEN)object files were created$(RESET)"
 	ar -rcs $(NAME) $(OBJS)
 	echo "${BLUE_BOLD}[libft] $(GREEN)library was created$(RESET)\n"
 
