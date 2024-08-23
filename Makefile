@@ -6,7 +6,7 @@
 #    By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 13:11:23 by wlin              #+#    #+#              #
-#    Updated: 2024/08/23 13:34:37 by wlin             ###   ########.fr        #
+#    Updated: 2024/08/23 13:44:19 by wlin             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -118,6 +118,7 @@ fclean: clean
 	@$(MAKE) --no-print-directory -C $(LIBFT_DIR) fclean
 	@echo "${BLUE_BOLD}[$(NAME)] ${RED}Removing executable...${RESET}"
 	$(RM) $(NAME)
+	@$(RM) $(DIR_OBJ_DEPS)
 	@echo "${BLUE_BOLD}[$(NAME)] ${GREEN}Executable deleted${RESET}"
 
 re: fclean all
