@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 18:16:01 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/21 12:03:28 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/26 15:13:52 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,13 @@ void	fd_dup2(int oldfd, int newfd)
 
 void	child_process(t_process *process)
 {
-	if (access(process->cmd_path, X_OK) == -1
-		&& access(process->cmd_path, F_OK) == 0)
+	char *const		cmd_path = process->cmd_path;
+	char **const	command = process->command;
+
+	if (access(cmd_path, X_OK) == -1 && access(cmd_path, F_OK) == 0)
 	{
 		write(STDERR_FILENO, "minishell: permission denied\n", 20);
-		write(STDERR_FILENO, process->command[0],
-			ft_strlen(process->command[0]));
+		write(STDERR_FILENO, command[0], ft_strlen(command[0]));
 		exit (126);
 	}
 	if (process->fd_in == -1)
@@ -39,7 +40,9 @@ void	child_process(t_process *process)
 	fd_dup2(process->fd_out, STDOUT_FILENO);
 	close(process->fd_out);
 	close(process->pipe_fd[RD]);
-	execute_command(process->cmd_path, process->command);
+	if (process->builtin)
+		exit((*process->builtin)(array_len(command), command));
+	execute_command(cmd_path, command);
 	exit(127);
 }
 

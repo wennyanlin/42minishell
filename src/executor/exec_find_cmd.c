@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:12:56 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/19 16:36:59 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/26 14:00:31 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,11 +95,12 @@ char	*examine_path(char **path_dirs, char *cmd)
 	return (full_path);
 }
 
-char	*find_cmd_path(char *env, char *cmd)
+char	*find_cmd_path(char *cmd)
 {
-	int		exit_code;
-	char	*full_path;
-	char	**path_dirs;
+	char *const	env = getenv("PATH");
+	int			exit_code;
+	char		*full_path;
+	char		**path_dirs;
 
 	if (!env)
 		return (ft_strdup(cmd));

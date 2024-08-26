@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:58 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/21 13:26:28 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/26 15:19:17 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,15 @@ void	free_array(char **array)
 		free(array[i++]);
 	free(array);
 	array = NULL;
+}
+
+size_t	array_len(char **array)
+{
+	char **const	array0 = array;
+
+	while (*array)
+		array++;
+	return (array - array0);
 }
 
 int	directory_error(char *cmd)

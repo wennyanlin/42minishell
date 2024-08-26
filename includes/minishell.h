@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/21 15:52:50 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/26 14:43:12 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
+typedef int	(*t_bfunc)(int argc, char *argv[]);
+
 typedef struct s_process
 {
 	pid_t	pid;
@@ -102,6 +104,7 @@ typedef struct s_process
 	int		fd_out;
 	int		pipe_fd[2];
 	char	*cmd_path;
+	t_bfunc	builtin;
 	char	**command;
 }	t_process;
 
@@ -122,9 +125,10 @@ int			char_index(char *args, char ref);
 char		*string_concat(char *path, char *cmd);
 char		*make_path(char *dir, char *cmd);
 char		**split_path(char *string, char separator);
-char		*find_cmd_path(char *env, char *cmd);
+char		*find_cmd_path(char *cmd);
 char		**array_concat(char *shell_path, char **args);
 void		free_array(char **array);
+size_t		array_len(char **array);
 void		ft_error(char *input, int start);
 void		printf_list(t_token *lst);
 int			is_whitespace(char c);
@@ -151,7 +155,7 @@ void		cmd_lst_addback(t_commands **cmds, t_commands *new);
 /*====================================EXECUTOR================================*/
 
 void		shell_expansion(char **args, t_data *data);
-void		init_process(t_process *process, t_commands *cmds, char *path,
+void		init_process(t_process *process, t_commands *cmds,
 				int pipe_read_end_prev);
 void		child_process(t_process *process);
 pid_t		create_process(t_process *process);
@@ -169,14 +173,12 @@ int			is_equal(char *s1, char *s2);
 
 /*==========================BUILTIN==============================*/
 
-void		ft_echo(void);
-void		ft_echo(void);
-void		ft_cd(void);
-void		ft_pwd(void);
-void		ft_export(void);
-void		ft_unset(void);
-void		ft_env(void);
-void		ft_exit(void);
-int			is_builtin(char *cmd);
+int			bt_cd(int argc, char *argv[]);
+int			bt_env(int argc, char *argv[]);
+int			bt_exit(int argc, char *argv[]);
+int			bt_export(int argc, char *argv[]);
+int			bt_pwd(int argc, char *argv[]);
+int			bt_unset(int argc, char *argv[]);
+int			is_builtin(t_bfunc *dst, char *cmd);
 
 #endif

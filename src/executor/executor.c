@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/21 15:52:33 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/26 15:00:32 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,13 +85,11 @@ void	execute_all(t_commands *cmds, t_data *data)
 	while (cmds)
 	{
 		shell_expansion(cmds->args, data);
-		init_process(&process, cmds, getenv("PATH"), pipe_read_end_prev);
-		if (process.command != NULL)
-		{
-			if (is_builtin(process.command[0]) == 1 && process.fd_out != -1)
-				pid[++i] = create_process(&process);
-		}
-		free(process.cmd_path);
+		init_process(&process, cmds, pipe_read_end_prev);
+		if (process.command != NULL && process.fd_out != -1)
+			pid[++i] = create_process(&process);
+		if (!process.builtin)
+			free(process.cmd_path);
 		cmds = cmds->next;
 		pipe_read_end_prev = process.pipe_fd[RD];
 	}

@@ -6,13 +6,13 @@
 /*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 12:41:57 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/08/23 13:25:47 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/26 15:04:01 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	env(int argc, char *argv[])
+int	bt_env(int argc, char *argv[])
 {
 	extern char	**environ;
 	char		**ep;
@@ -24,4 +24,5 @@ int	env(int argc, char *argv[])
 		return (1);
 	while (*ep)
 		printf("%s\n", *ep++);
+	return (0);
 }
