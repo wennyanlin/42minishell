@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 14:12:10 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/19 14:41:58 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/26 16:42:35 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,7 @@ t_commands	*build_cmd(t_token **token_lst)
 
 	cmd = create_cmd_lstnew();
 	len = count_cmd_str(*token_lst);
-	if (len > 0)
-	{
-		cmd->args = malloc(sizeof(char *) * (len + 1));
-		if (!cmd->args)
-			free_array(cmd->args);
-	}
+	cmd->args = malloc(sizeof(char *) * (len + 1));
 	add_command(token_lst, cmd);
 	if (cmd->args != NULL)
 		cmd->args[len] = NULL;
