@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 14:12:00 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/26 14:52:05 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/26 18:05:33 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	is_builtin(t_bfunc *dst, char *cmd)
 			break ;
 		b++;
 	}
-	*dst = bt_func[b - builtin];
-	return (*dst != NULL);
+	if (dst)
+		*dst = bt_func[b - builtin];
+	return (bt_func[b - builtin] != NULL);
 }
