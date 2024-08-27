@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin2.c                                         :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/13 12:53:31 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/13 12:54:01 by wlin             ###   ########.fr       */
+/*   Created: 2024/08/23 12:41:57 by rtorrent          #+#    #+#             */
+/*   Updated: 2024/08/26 15:04:01 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_unset(void)
+int	bt_env(int argc, char *argv[])
 {
-	printf("EXECUTING #unset# BUILTIN FUNCTION.\n");
-}
+	extern char	**environ;
+	char		**ep;
 
-void	ft_env(void)
-{
-	printf("EXECUTING #env# BUILTIN FUNCTION.\n");
-}
-
-void	ft_exit(void)
-{
-	printf("EXECUTING #exit# BUILTIN FUNCTION.\n");
+	(void)argc;
+	(void)argv;
+	ep = environ;
+	if (!ep)
+		return (1);
+	while (*ep)
+		printf("%s\n", *ep++);
+	return (0);
 }

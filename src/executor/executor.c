@@ -6,11 +6,34 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/21 15:52:33 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/27 13:22:45 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	simple_command(t_process *process, int pipe_read_end_prev,
+		t_commands *cmds, t_data *data)
+{
+	int	fd_storage[2];
+
+	shell_expansion(cmds->args, data);
+	init_process(process, cmds, pipe_read_end_prev);
+	if (process->command != NULL && process->fd_out != -1)
+	{
+		fd_storage[RD] = dup(STDIN_FILENO);
+		fd_storage[WR] = dup(STDOUT_FILENO);
+		fd_dup2(process->fd_in, STDIN_FILENO);
+		fd_dup2(process->fd_out, STDOUT_FILENO);
+		close(process->fd_in);
+		close(process->fd_out);
+		(*process->builtin)(array_len(process->command), process->command);
+		fd_dup2(fd_storage[RD], STDIN_FILENO);
+		fd_dup2(fd_storage[WR], STDOUT_FILENO);
+		close(fd_storage[RD]);
+		close(fd_storage[WR]);
+	}
+}
 
 int	get_wait_status(int status)
 {
@@ -69,32 +92,37 @@ void	execute_command(char *command_path, char **cmd_args)
 
 void	execute_all(t_commands *cmds, t_data *data)
 {
-	t_process		process;
-	pid_t			*pid;
-	int				i;
-	const int		num_cmd = lst_size(cmds);
-	int				pipe_read_end_prev;
+	t_process	process;
+	pid_t		*pid;
+	int			i;
+	const int	num_cmd = lst_size(cmds);
+	int			pipe_read_end_prev;
 
 	i = -1;
 	if (cmds == NULL)
 		return ;
-	pid = malloc(sizeof(pid_t) * num_cmd);
 	pipe_read_end_prev = dup(STDIN_FILENO);
-	if (pid == NULL || pipe_read_end_prev == -1)
+	if (pipe_read_end_prev == -1)
 		return ;
-	while (cmds)
+	if (!is_builtin(NULL, cmds->args[0]) || num_cmd > 1)
 	{
-		shell_expansion(cmds->args, data);
-		init_process(&process, cmds, getenv("PATH"), pipe_read_end_prev);
-		if (process.command != NULL)
+		pid = malloc(sizeof(pid_t) * num_cmd);
+		if (pid == NULL)
+			return ;
+		while (cmds)
 		{
-			if (is_builtin(process.command[0]) == 1 && process.fd_out != -1)
+			shell_expansion(cmds->args, data);
+			init_process(&process, cmds, pipe_read_end_prev);
+			if (process.command != NULL && process.fd_out != -1)
 				pid[++i] = create_process(&process);
+			if (!process.builtin)
+				free(process.cmd_path);
+			cmds = cmds->next;
+			pipe_read_end_prev = process.pipe_fd[RD];
 		}
-		free(process.cmd_path);
-		cmds = cmds->next;
-		pipe_read_end_prev = process.pipe_fd[RD];
+		wait_process(pid, num_cmd);
+		free(pid);
 	}
-	wait_process(pid, num_cmd);
-	free(pid);
+	else
+		simple_command(&process, pipe_read_end_prev, cmds, data);
 }
