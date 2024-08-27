@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/26 19:32:38 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/27 13:22:45 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,23 @@
 void	simple_command(t_process *process, int pipe_read_end_prev,
 		t_commands *cmds, t_data *data)
 {
+	int	fd_storage[2];
+
 	shell_expansion(cmds->args, data);
 	init_process(process, cmds, pipe_read_end_prev);
 	if (process->command != NULL && process->fd_out != -1)
 	{
-		process->pipe_fd[RD] = dup(STDIN_FILENO);
-		process->pipe_fd[WR] = dup(STDOUT_FILENO);
+		fd_storage[RD] = dup(STDIN_FILENO);
+		fd_storage[WR] = dup(STDOUT_FILENO);
 		fd_dup2(process->fd_in, STDIN_FILENO);
 		fd_dup2(process->fd_out, STDOUT_FILENO);
 		close(process->fd_in);
 		close(process->fd_out);
 		(*process->builtin)(array_len(process->command), process->command);
-		fd_dup2(process->pipe_fd[RD], STDIN_FILENO);
-		fd_dup2(process->pipe_fd[WR], STDOUT_FILENO);
-		close(process->pipe_fd[RD]);
-		close(process->pipe_fd[WR]);
+		fd_dup2(fd_storage[RD], STDIN_FILENO);
+		fd_dup2(fd_storage[WR], STDOUT_FILENO);
+		close(fd_storage[RD]);
+		close(fd_storage[WR]);
 	}
 }
 
