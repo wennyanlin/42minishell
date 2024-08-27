@@ -6,7 +6,7 @@
 #    By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 13:11:23 by wlin              #+#    #+#              #
-#    Updated: 2024/08/26 14:50:10 by rtorrent         ###   ########.fr        #
+#    Updated: 2024/08/27 14:09:17 by rtorrent         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ FILES_PARS		= parser.c parser_syntax.c parser_utils.c
 FILES_EXEC		= executor.c exec_find_cmd.c here_doc.c process_init.c\
 				  process.c exec_utils.c exec_utils2.c split_path.c\
 				  shell_expansion.c
-FILES_BLT		= builtin.c env.c
+FILES_BLT		= builtin.c env.c pwd.c
 FILES_TEST		= test_lexer.c
 
 DIR_SRC			= src/
