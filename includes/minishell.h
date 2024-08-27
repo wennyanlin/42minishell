@@ -6,19 +6,19 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/26 14:43:12 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/27 14:37:30 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <fcntl.h>
-# include <stdlib.h>
-# include <unistd.h>
 # include <errno.h>
+# include <fcntl.h>
+# include <linux/limits.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <unistd.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../lib/libft/libft.h"
