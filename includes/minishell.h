@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/27 14:37:30 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/28 14:54:09 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ char		*find_cmd_path(char *cmd);
 char		**array_concat(char *shell_path, char **args);
 void		free_array(char **array);
 size_t		array_len(char **array);
+char		**array_dup(char **array);
 void		ft_error(char *input, int start);
 void		printf_list(t_token *lst);
 int			is_whitespace(char c);
