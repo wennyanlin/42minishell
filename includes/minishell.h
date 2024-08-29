@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/29 03:16:27 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/29 12:30:59 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@
 # define QUOTE_D 34
 # define DOLLAR 36
 # define C_LESS 60
+# define EQUALS 61
 # define C_GREAT 62
 # define QUESTION 63
 # define UNDERSCORE 95
