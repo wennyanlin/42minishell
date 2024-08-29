@@ -6,11 +6,11 @@
 #    By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 13:11:23 by wlin              #+#    #+#              #
-#    Updated: 2024/08/28 12:33:33 by rtorrent         ###   ########.fr        #
+#    Updated: 2024/08/29 03:27:28 by rtorrent         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-AUTHOR			= wlin rtorrent
+AUTHORS			= wlin rtorrent
 NAME			= minishell
 
 CC				= gcc
@@ -30,19 +30,21 @@ FILES_MAIN		= main.c
 FILES_LEXR		= lexer.c utils_list.c utils_str.c
 FILES_PARS		= parser.c parser_syntax.c parser_utils.c
 FILES_EXEC		= executor.c exec_find_cmd.c here_doc.c process_init.c\
-				  process.c exec_utils.c exec_utils2.c split_path.c\
-				  shell_expansion.c
+				  process.c exec_utils.c  split_path.c shell_expansion.c
 FILES_BLT		= builtin.c env.c pwd.c unset.c
+FILES_AUX		= aux_array.c aux_str.c
 FILES_TEST		= test_lexer.c
 
 DIR_SRC			= src/
 DIR_OBJ_DEPS	= obj_deps/
-DIR_LEXR_TEST	= test/
+
 INCLUDES		= include/
 
+DIR_LEXR_TEST	= test/
 DIR_LEXR		= lexer/
 DIR_PARS		= parser/
 DIR_EXEC		= executor/
+DIR_AUX			= auxiliaries/
 DIR_BLT			= builtin/
 
 SRCS_MAIN		= $(FILES_MAIN)
@@ -50,9 +52,11 @@ SRCS_TEST		= $(addprefix $(DIR_LEXR_TEST),$(FILES_TEST))
 SRCS_LEXR		= $(addprefix $(DIR_LEXR),$(FILES_LEXR))
 SRCS_PARS		= $(addprefix $(DIR_PARS),$(FILES_PARS))
 SRCS_EXEC		= $(addprefix $(DIR_EXEC),$(FILES_EXEC))
+SRCS_AUX		= $(addprefix $(DIR_AUX),$(FILES_AUX))
 SRCS_BLT		= $(addprefix $(DIR_BLT),$(FILES_BLT))
-ALL_SRCS		:= $(SRCS_MAIN) $(SRCS_LEXR) $(SRCS_PARS) $(SRCS_EXEC) $(SRCS_BLT)\
-				   $(SRCS_TEST)
+
+ALL_SRCS		:= $(SRCS_MAIN) $(SRCS_LEXR) $(SRCS_PARS) $(SRCS_EXEC)\
+				   $(SRCS_AUX) $(SRCS_BLT) $(SRCS_TEST)
 ALL_OBJS		:= $(addprefix $(DIR_OBJ_DEPS),$(ALL_SRCS:.c=.o))
 ALL_DEPS		:= $(ALL_OBJS:.o=.d)
 ALL_SRCS		:= $(addprefix $(DIR_SRC),$(ALL_SRCS))
@@ -84,7 +88,7 @@ header:
 	@echo " |_|  |_|_|_| |_|_|___/_| |_|\___|_|_|"
 	@echo
 	@printf "%b" "$(BLUE)Name:	$(RED)$(NAME)\n"
-	@printf "%b" "$(BLUE)Author:	$(RED)$(AUTHOR)\n"
+	@printf "%b" "$(BLUE)Authors:	$(RED)$(AUTHORS)\n"
 	@printf "%b" "$(BLUE)CC: 	$(RED)$(CC)\n\033[m"
 	@printf "%b" "$(BLUE)Flags: 	$(RED)$(CFLAGS)\n\033[m"
 	@echo
