@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/21 16:25:48 by wlin             ###   ########.fr       */
+/*   Updated: 2024/08/29 03:29:15 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	free_cmds_lst(t_commands **pcmds)
 	while (*pcmds)
 	{
 		next_cmds = (*pcmds)->next;
-		free_array((*pcmds)->args);
+		array_clear(&(*pcmds)->args);
 		redirect = (*pcmds)->redirect;
 		while (redirect)
 		{
@@ -68,13 +68,16 @@ void	free_cmds_lst(t_commands **pcmds)
 
 void	start_minishell(void)
 {
+	extern char	**environ;
 	t_data		dt;
 	char		*line;
-	t_commands	*cmds;
 	t_token		*token_lst;
+	t_commands	*cmds;
 
+	
+	environ = array_dup(environ);
 	dt.exit_status = ft_itoa(0);
-	while (1)
+	while (TRUE)
 	{
 		line = readline(PROMPT);
 		token_lst = tokenize(line);
@@ -84,6 +87,7 @@ void	start_minishell(void)
 		execute_all(cmds, &dt);
 		free_cmds_lst(&cmds);
 	}
+	array_clear(&environ);
 	free(dt.exit_status);
 }
 

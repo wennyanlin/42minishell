@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:12:56 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/26 14:00:31 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/29 01:19:13 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ char	*examine_path(char **path_dirs, char *cmd)
 		full_path = make_path(path_dirs[i], cmd);
 		if (access(full_path, X_OK) == 0)
 		{
-			free_array(path_dirs);
+			array_clear(&path_dirs);
 			break ;
 		}
 		free(full_path);
@@ -113,7 +113,6 @@ char	*find_cmd_path(char *cmd)
 	full_path = examine_path(path_dirs, cmd);
 	if (full_path != NULL)
 		return (full_path);
-	free_array(path_dirs);
-	path_dirs = NULL;
+	array_clear(&path_dirs);
 	return (ft_strdup(cmd));
 }

@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/27 14:37:30 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/08/29 03:16:27 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,23 +121,17 @@ pid_t		waitpid(pid_t pid, int *status, int options);
 
 int			str_size(const char *args);
 char		*str_cpy(char *src);
-int			char_index(char *args, char ref);
 char		*string_concat(char *path, char *cmd);
 char		*make_path(char *dir, char *cmd);
 char		**split_path(char *string, char separator);
 char		*find_cmd_path(char *cmd);
 char		**array_concat(char *shell_path, char **args);
-void		free_array(char **array);
-size_t		array_len(char **array);
 void		ft_error(char *input, int start);
-void		printf_list(t_token *lst);
-int			is_whitespace(char c);
-int			skip_spaces(char *str, int i);
+// void		printf_list(t_token *lst);
 int			is_delimiter(char c);
 t_token		*create_lst_node(char *word, int metachar);
 void		lst_add_back(t_token **token_lst, t_token *new_node);
 int			find_matching_quote(char *input, int i, char quote);
-int			find_end_chars_index(char *input, int i);
 t_token		*tokenize(char *input);
 void		test_lexer(void);
 void		free_token_lst(t_token **plst);
@@ -169,9 +163,8 @@ int			read_here_doc(char *limiter);
 int			directory_error(char *cmd);
 
 void		free_cmds_lst(t_commands **pcmds);
-int			is_equal(char *s1, char *s2);
 
-/*==========================BUILTIN==============================*/
+/*======================================BUILTIN===============================*/
 
 int			bt_cd(int argc, char *argv[]);
 int			bt_env(int argc, char *argv[]);
@@ -180,5 +173,17 @@ int			bt_export(int argc, char *argv[]);
 int			bt_pwd(int argc, char *argv[]);
 int			bt_unset(int argc, char *argv[]);
 int			is_builtin(t_bfunc *dst, char *cmd);
+
+/*===============================AUXILIARY FUNCTIONS==========================*/
+
+char		**array_add_front(char ***parray, char *str);
+void		array_clear(char ***parray);
+size_t		array_len(char **array);
+char		**array_dup(char **array);
+int			char_index(char *args, char ref);
+int			find_end_chars_index(char *input, int i);
+int			is_equal(char *s1, char *s2);
+int			is_whitespace(char c);
+int			skip_spaces(char *str, int i);
 
 #endif
