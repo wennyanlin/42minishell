@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:12:56 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/29 01:19:13 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/02 13:17:33 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,30 +36,6 @@ char	*string_concat(char *path, char *cmd)
 		result_path[i++] = cmd[cmd_len++];
 	result_path[i] = '\0';
 	return (result_path);
-}
-
-char	**array_concat(char *shell_path, char **args)
-{
-	char	**result_args;
-	int		len;
-	int		i;
-
-	len = 0;
-	i = 0;
-	while (args[len])
-		len++;
-	result_args = malloc(sizeof(char *) * (len + 2));
-	if (!result_args)
-		return (NULL);
-	result_args[i] = shell_path;
-	i++;
-	while (i < len + 1)
-	{
-		result_args[i] = args[i - 1];
-		i++;
-	}
-	result_args[i] = NULL;
-	return (result_args);
 }
 
 char	*make_path(char *dir, char *cmd)

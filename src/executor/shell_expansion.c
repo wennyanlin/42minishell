@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 19:12:32 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/09/02 03:38:04 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/02 14:52:48 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,10 @@ static void	quote_removal(char **args, char **parg, const char q, t_data *data)
 	*args = str1;
 }
 
-void	shell_expansion(t_data *data)
+void	shell_expansion(t_data *data, char **args)
 {
-	char	**args;
 	char	*arg;
 
-	args = data->cmds->args;
 	if (args == NULL)
 		return ;
 	while (*args)

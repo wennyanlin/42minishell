@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:59:45 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/02 04:56:53 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/02 15:01:58 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ void	lst_add_back(t_token **token_lst, t_token *new_node)
 // 	printf("null\n");
 // }
 
-void free_token_lst(t_token **lst)
+void	free_token_lst(t_token **lst)
 {
-	t_token *next;
+	t_token	*next;
 
 	while (*lst)
 	{

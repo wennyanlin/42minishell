@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/02 04:18:38 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/02 14:53:25 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	simple_command(t_data *data, t_process *process, int pipe_read_end_prev)
 {
 	int	fd_storage[2];
 
-	shell_expansion(data);
-	init_process(data, process, pipe_read_end_prev);
+	shell_expansion(data, data->cmds->args);
+	init_process(data, data->cmds, process, pipe_read_end_prev);
 	if (process->command != NULL && process->fd_out != -1)
 	{
 		fd_storage[RD] = dup(STDIN_FILENO);
@@ -64,7 +64,7 @@ void	wait_process(pid_t *pid_array, int num_cmd)
 void	execute_command(t_data *data, char *command_path, char **cmd_args)
 {
 	extern char	**environ;
-	char 		*shell_path;
+	char		*shell_path;
 
 	execve(command_path, cmd_args, environ);
 	if (errno == ENOEXEC)
@@ -78,9 +78,8 @@ void	execute_command(t_data *data, char *command_path, char **cmd_args)
 		exit_minishell(data, cmd_args[0], strerror(errno), NOTFOUND);
 }
 
-void	execute_all(t_data *data)
+void	execute_all(t_data *data, t_commands *cmds)
 {
-	t_commands	*cmds = data->cmds;
 	t_process	process;
 	pid_t		*pid;
 	int			i;
@@ -100,8 +99,8 @@ void	execute_all(t_data *data)
 			return ;
 		while (cmds)
 		{
-			shell_expansion(data);
-			init_process(data, &process, pipe_read_end_prev);
+			shell_expansion(data, cmds->args);
+			init_process(data, cmds, &process, pipe_read_end_prev);
 			if (process.command != NULL && process.fd_out != -1)
 				pid[++i] = create_process(data, &process);
 			if (!process.builtin)
