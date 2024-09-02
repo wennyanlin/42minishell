@@ -6,30 +6,29 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/27 13:22:45 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/02 04:18:38 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	simple_command(t_process *process, int pipe_read_end_prev,
-		t_commands *cmds, t_data *data)
+void	simple_command(t_data *data, t_process *process, int pipe_read_end_prev)
 {
 	int	fd_storage[2];
 
-	shell_expansion(cmds->args, data);
-	init_process(process, cmds, pipe_read_end_prev);
+	shell_expansion(data);
+	init_process(data, process, pipe_read_end_prev);
 	if (process->command != NULL && process->fd_out != -1)
 	{
 		fd_storage[RD] = dup(STDIN_FILENO);
 		fd_storage[WR] = dup(STDOUT_FILENO);
-		fd_dup2(process->fd_in, STDIN_FILENO);
-		fd_dup2(process->fd_out, STDOUT_FILENO);
+		fd_dup2(data, process->fd_in, STDIN_FILENO);
+		fd_dup2(data, process->fd_out, STDOUT_FILENO);
 		close(process->fd_in);
 		close(process->fd_out);
 		(*process->builtin)(array_len(process->command), process->command);
-		fd_dup2(fd_storage[RD], STDIN_FILENO);
-		fd_dup2(fd_storage[WR], STDOUT_FILENO);
+		fd_dup2(data, fd_storage[RD], STDIN_FILENO);
+		fd_dup2(data, fd_storage[WR], STDOUT_FILENO);
 		close(fd_storage[RD]);
 		close(fd_storage[WR]);
 	}
@@ -62,36 +61,26 @@ void	wait_process(pid_t *pid_array, int num_cmd)
 	}
 }
 
-void	execute_command(char *command_path, char **cmd_args)
+void	execute_command(t_data *data, char *command_path, char **cmd_args)
 {
 	extern char	**environ;
-	char		**result_array_concat;
+	char 		*shell_path;
 
-	result_array_concat = NULL;
 	execve(command_path, cmd_args, environ);
 	if (errno == ENOEXEC)
 	{
-		result_array_concat = array_concat("/bin/sh", cmd_args);
-		execve("/bin/sh", result_array_concat, environ);
+		shell_path = getenv("SHELL");
+		execve(shell_path, array_add_front(&cmd_args, shell_path), environ);
 	}
-	else if (errno == ENOENT)
-	{
-		if (char_index(cmd_args[0], '/') != INVALID)
-			perror(cmd_args[0]);
-		else
-		{
-			write(STDERR_FILENO, "minishell: ", 11);
-			write(STDERR_FILENO, cmd_args[0], ft_strlen(cmd_args[0]));
-			write(STDERR_FILENO, ": command not found\n", 20);
-			exit(127);
-		}
-	}
+	else if (errno == ENOENT && char_index(cmd_args[0], '/') == INVALID)
+		exit_minishell(data, cmd_args[0], "command not found\n", NOTFOUND);
 	else
-		perror_and_exit(cmd_args[0], EXIT_FAILURE);
+		exit_minishell(data, cmd_args[0], strerror(errno), NOTFOUND);
 }
 
-void	execute_all(t_commands *cmds, t_data *data)
+void	execute_all(t_data *data)
 {
+	t_commands	*cmds = data->cmds;
 	t_process	process;
 	pid_t		*pid;
 	int			i;
@@ -111,10 +100,10 @@ void	execute_all(t_commands *cmds, t_data *data)
 			return ;
 		while (cmds)
 		{
-			shell_expansion(cmds->args, data);
-			init_process(&process, cmds, pipe_read_end_prev);
+			shell_expansion(data);
+			init_process(data, &process, pipe_read_end_prev);
 			if (process.command != NULL && process.fd_out != -1)
-				pid[++i] = create_process(&process);
+				pid[++i] = create_process(data, &process);
 			if (!process.builtin)
 				free(process.cmd_path);
 			cmds = cmds->next;
@@ -124,5 +113,5 @@ void	execute_all(t_commands *cmds, t_data *data)
 		free(pid);
 	}
 	else
-		simple_command(&process, pipe_read_end_prev, cmds, data);
+		simple_command(data, &process, pipe_read_end_prev);
 }

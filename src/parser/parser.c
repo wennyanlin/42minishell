@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 14:12:10 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/26 16:42:35 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/02 03:01:47 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,30 +67,35 @@ t_commands	*build_cmd(t_token **token_lst)
 	t_commands	*cmd;
 
 	cmd = create_cmd_lstnew();
-	len = count_cmd_str(*token_lst);
-	cmd->args = malloc(sizeof(char *) * (len + 1));
-	add_command(token_lst, cmd);
-	if (cmd->args != NULL)
-		cmd->args[len] = NULL;
+	if (cmd != NULL)
+	{
+		len = count_cmd_str(*token_lst);
+		cmd->args = malloc(sizeof(char *) * (len + 1));
+		if (cmd->args != NULL)
+		{
+			add_command(token_lst, cmd);
+			cmd->args[len] = NULL;
+		}
+	}
 	return (cmd);
 }
 
-t_commands	*parse_tokens(t_token *tokens)
+int	parse_tokens(t_data *data)
 {
-	t_commands	*cmds;
+	t_token		*tokens;
 	t_commands	*new;
 
-	if (tokens == NULL)
-		return (NULL);
-	if (validate_cmd_syntax(tokens) == EXIT_FAILURE)
-		return (NULL);
-	cmds = NULL;
+	tokens = data->tokens;
+	if (tokens == NULL || validate_cmd_syntax(tokens) == EXIT_FAILURE)
+		return (FALSE);
 	while (tokens)
 	{
 		new = build_cmd(&tokens);
-		cmd_lst_addback(&cmds, new);
+		if (new == NULL || new->args == NULL)
+			return (FALSE);
+		cmd_lst_addback(&data->cmds, new);
 		if (tokens && tokens->metachar == PIPE)
 			tokens = tokens->next;
 	}
-	return (cmds);
+	return (TRUE);
 }

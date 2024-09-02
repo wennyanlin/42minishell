@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/29 12:30:59 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/02 04:57:15 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../lib/libft/libft.h"
-
-# define SP 40
 
 # define VERSION "0.1"
 # define BLUE "\033[1;34m"
@@ -51,12 +49,13 @@
 # define UNDERSCORE 95
 # define C_PIPE 124
 
-# define EXIT_FAILURE 1
-
 # define NEGATIVE 0
 # define CHILD 0
 # define WR 1
 # define RD 0
+
+# define NOTEXECUTABLE 126
+# define NOTFOUND 127
 
 typedef enum e_metachar
 {
@@ -67,11 +66,6 @@ typedef enum e_metachar
 	LESS,
 	LESS_LESS
 }	t_metachar;
-
-typedef struct s_data
-{
-	char	*exit_status;
-}	t_data;
 
 typedef struct s_redirect
 {
@@ -95,6 +89,13 @@ typedef struct s_token
 	struct s_token	*prev;
 	struct s_token	*next;
 }	t_token;
+
+typedef struct s_data
+{
+	char		*exit_status;
+	t_token		*tokens;
+	t_commands	*cmds;
+}	t_data;
 
 typedef int	(*t_bfunc)(int argc, char *argv[]);
 
@@ -133,14 +134,14 @@ int			is_delimiter(char c);
 t_token		*create_lst_node(char *word, int metachar);
 void		lst_add_back(t_token **token_lst, t_token *new_node);
 int			find_matching_quote(char *input, int i, char quote);
-t_token		*tokenize(char *input);
+int			tokenize(t_token **token_lst, char *input);
 void		test_lexer(void);
-void		free_token_lst(t_token **plst);
+void		free_token_lst(t_token **token_lst);
 
 /*====================================PARSER==================================*/
 
 int			validate_cmd_syntax(t_token *token_lst);
-t_commands	*parse_tokens(t_token *tokens);
+int			parse_tokens(t_data *data);
 void		print_parser_cmds(t_commands *cmds);
 int			is_redirection(t_metachar type);
 int			count_cmd_str(t_token *tokens);
@@ -149,15 +150,15 @@ void		cmd_lst_addback(t_commands **cmds, t_commands *new);
 
 /*====================================EXECUTOR================================*/
 
-void		shell_expansion(char **args, t_data *data);
-void		init_process(t_process *process, t_commands *cmds,
+void		shell_expansion(t_data *data);
+void		init_process(t_data *data, t_process *process,
 				int pipe_read_end_prev);
-void		child_process(t_process *process);
-pid_t		create_process(t_process *process);
-void		fd_dup2(int oldfd, int newfd);
-void		execute_command(char *command_path, char **cmd_args);
-void		perror_and_exit(char *file, int code);
-void		execute_all(t_commands *cmds, t_data *data);
+void		child_process(t_data *data, t_process *process);
+pid_t		create_process(t_data *data, t_process *process);
+void		fd_dup2(t_data *data, int oldfd, int newfd);
+void		execute_command(t_data *data, char *command_path, char **cmd_args);
+void		exit_minishell(t_data *data, char *str, char *error_str, int code);
+void		execute_all(t_data *data);
 int			lst_size(t_commands *cmds);
 
 int			read_here_doc(char *limiter);

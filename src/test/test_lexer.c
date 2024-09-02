@@ -45,7 +45,7 @@ void test_lexer_should_return_empty_when_input_is_empty(void)
     t_token *result;
     t_token expected;
 
-    result = tokenize(input);
+    tokenize(&result, input);
 
     expected.word = NULL;
     expected.metachar = -1;
@@ -63,7 +63,7 @@ void test_lexer_should_return_single_word(void)
     t_token expected;
 
     input =  "echo";
-    result = tokenize(input);
+    tokenize(&result, input);
 
     expected.word = "echo";
     expected.metachar = 0;
@@ -81,7 +81,7 @@ void test_lexer_should_return_chars_with_double_quotes(void)
     t_token expected;
 
     input =  "\"echo\"";
-    result = tokenize(input);
+    tokenize(&result, input);
 
     expected.word = "\"echo\"";
     expected.metachar = 0;
@@ -99,7 +99,7 @@ void test_lexer_should_return_chars_with_single_quotes(void)
     t_token expected;
 
     input =  "\'echo\'";
-    result = tokenize(input);
+    tokenize(&result, input);
 
     expected.word = "\'echo\'";
     expected.metachar = 0;
@@ -117,7 +117,7 @@ void test_lexer_should_return_word_with_single_quotes_in_mid_word(void)
     t_token expected;
 
     input =  "echo\'hello\'";
-    result = tokenize(input);
+    tokenize(&result, input);
 
     expected.word = "echo\'hello\'";
     expected.metachar = 0;
@@ -135,7 +135,7 @@ void test_lexer_should_return_chars_with_double_quotes_in_mid_word(void)
     t_token expected;
 
     input =  "echo\"hello\"";
-    result = tokenize(input);
+    tokenize(&result, input);
 
     expected.word = "echo\"hello\"";
     expected.metachar = 0;
@@ -154,7 +154,7 @@ void test_lexer_should_return_chars_and_multi_closed_quotes(void)
     t_token expected_second;
 
     input =  "\"\"\"echo\" hi";
-    result = tokenize(input);
+    tokenize(&result, input);
 
     expected.word = "\"\"\"echo\"";
     expected.metachar = 0;
@@ -177,7 +177,7 @@ void test_lexer_should_return_multiple_types_of_chars(void)
     t_token expected_second;
 
     input =  "echo \" |$USER|\"";
-    result = tokenize(input);
+    tokenize(&result, input);
 
     expected.word = "echo";
     expected.metachar = 0;
@@ -198,7 +198,7 @@ void test_lexer_should_return_metachars(void)
     t_token *result;
     t_token expected;
 
-    result = tokenize(input);
+    tokenize(&result, input);
 
     expected.word = NULL;
     expected.metachar = 1;
@@ -217,7 +217,7 @@ void test_lexer_should_return_unclose_single_quote(void)
     t_token expected;
     t_token expected_second;
 
-    result = tokenize(input);
+    tokenize(&result, input);
 
     expected.word = "echo";
     expected.metachar = 0;
@@ -240,7 +240,7 @@ void test_lexer_should_return_word_and_metachars(void)
     t_token two;
     t_token three;
 
-    result = tokenize(input);
+    tokenize(&result, input);
 
     expected.word = "ls";
     expected.metachar = 0;
