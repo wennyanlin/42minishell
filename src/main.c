@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/02 15:00:59 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/03 13:35:55 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	exit_minishell(t_data *data, char *str, char *error_str, int code)
 
 	if (str)
 	{
-		ft_putstr_fd("minisell: ", STDERR_FILENO);
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
 		ft_putstr_fd(str, STDERR_FILENO);
 		ft_putstr_fd(": ", STDERR_FILENO);
 		ft_putstr_fd(error_str, STDERR_FILENO);

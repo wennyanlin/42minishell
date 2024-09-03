@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 18:16:01 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/02 13:12:52 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/03 14:40:14 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ void	child_process(t_data *data, t_process *process)
 	char *const		cmd_path = process->cmd_path;
 	char **const	command = process->command;
 
-	if (access(cmd_path, F_OK) == -1 && access(cmd_path, X_OK) == 0)
-		exit_minishell(data, command[0], "Permission denied\n", NOTEXECUTABLE);
+	if (access(cmd_path, F_OK) == 0 && access(cmd_path, X_OK) == -1)
+		exit_minishell(data, command[0], "Permission denied", NOTEXECUTABLE);
 	fd_dup2(data, process->fd_in, STDIN_FILENO);
 	close(process->fd_in);
 	fd_dup2(data, process->fd_out, STDOUT_FILENO);
