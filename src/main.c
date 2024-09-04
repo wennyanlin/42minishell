@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/04 12:28:50 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/04 13:50:07 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,14 @@ int	main(int argc, char **argv)
 {
 	extern char	**environ;
 
-	environ = array_dup(environ);
 	if (argc == 2 && ft_strncmp(argv[1], "test", 5) == 0)
 		test_lexer();
 	else if (argc == 2 && ft_strncmp(argv[1], "-v", 3) == 0)
 		return (printf("%s, version %s\n", NAME, VERSION), 0);
 	else
+	{
+		environ = array_dup(environ);
 		start_minishell();
+	}
 	return (0);
 }
