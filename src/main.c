@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/03 13:35:55 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/04 11:04:14 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	clear_data(t_data *data)
 	t_commands	*next_cmds;
 	t_redirect	*next_redirect;
 
+	free(data->line);
 	while (data->tokens)
 	{
 		next_token = data->tokens->next;
@@ -39,6 +40,8 @@ void	clear_data(t_data *data)
 		free(data->cmds);
 		data->cmds = next_cmds;
 	}
+	free(data->pid);
+	free(data->cmd_path);
 }
 
 void	exit_minishell(t_data *data, char *str, char *error_str, int code)
@@ -65,18 +68,17 @@ void	start_minishell(void)
 {
 	extern char	**environ;
 	t_data		dt;
-	char		*line;
 
 	environ = array_dup(environ);
 	dt.exit_status = ft_itoa(0);
 	dt.tokens = NULL;
 	dt.cmds = NULL;
+	dt.cmd_path = NULL;
 	while (TRUE)
 	{
-		line = readline(PROMPT);
-		if (tokenize(&dt.tokens, line) && parse_tokens(&dt))
+		dt.line = readline(PROMPT);
+		if (tokenize(&dt.tokens, dt.line) && parse_tokens(&dt))
 			execute_all(&dt, dt.cmds);
-		free(line);
 		clear_data(&dt);
 	}
 }

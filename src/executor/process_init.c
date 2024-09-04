@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:46:09 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/02 14:27:08 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/04 10:54:59 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,10 @@ void	init_process(t_data *data, t_commands *cmds, t_process *process,
 	process->command = cmds->args;
 	if (process->command != NULL
 		&& !is_builtin(&process->builtin, process->command[0]))
+	{
 		process->cmd_path = find_cmd_path(process->command[0]);
+		data->cmd_path = process->cmd_path;
+	}
 	process->fd_in = pipe_read_end_prev;
 	if (cmds->next)
 	{

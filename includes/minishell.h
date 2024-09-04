@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/02 14:52:17 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/04 10:50:53 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,11 @@ typedef struct s_token
 typedef struct s_data
 {
 	char		*exit_status;
+	char		*line;
 	t_token		*tokens;
 	t_commands	*cmds;
+	char		*cmd_path;
+	pid_t		*pid;
 }	t_data;
 
 typedef int	(*t_bfunc)(int argc, char *argv[]);
@@ -162,7 +165,6 @@ void		execute_all(t_data *data, t_commands *cmds);
 int			lst_size(t_commands *cmds);
 
 int			read_here_doc(char *limiter);
-int			directory_error(char *cmd);
 
 /*======================================BUILTIN===============================*/
 

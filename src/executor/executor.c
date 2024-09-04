@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/03 15:26:31 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/04 10:59:08 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ void	execute_command(t_data *data, char *command_path, char **cmd_args)
 void	execute_all(t_data *data, t_commands *cmds)
 {
 	t_process	process;
-	pid_t		*pid;
 	int			i;
 	const int	num_cmd = lst_size(cmds);
 	int			pipe_read_end_prev;
@@ -92,24 +91,24 @@ void	execute_all(t_data *data, t_commands *cmds)
 	pipe_read_end_prev = dup(STDIN_FILENO);
 	if (pipe_read_end_prev == -1)
 		return ;
+	data->pid = malloc(sizeof(pid_t) * num_cmd);
+	if (data->pid == NULL)
+		return ;
 	if (!is_builtin(NULL, cmds->args[0]) || num_cmd > 1)
 	{
-		pid = malloc(sizeof(pid_t) * num_cmd);
-		if (pid == NULL)
-			return ;
 		while (cmds)
 		{
 			shell_expansion(data, cmds->args);
 			init_process(data, cmds, &process, pipe_read_end_prev);
 			if (process.command != NULL && process.fd_out != -1)
-				pid[++i] = create_process(data, &process);
+				data->pid[++i] = create_process(data, &process);
 			if (!process.builtin)
 				free(process.cmd_path);
-			cmds = cmds->next;
 			pipe_read_end_prev = process.pipe_fd[RD];
+			data->cmd_path = NULL;
+			cmds = cmds->next;
 		}
-		wait_process(pid, num_cmd);
-		free(pid);
+		wait_process(data->pid, num_cmd);
 	}
 	else
 		simple_command(data, &process, pipe_read_end_prev);

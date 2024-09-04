@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 18:27:19 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/28 21:06:32 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/03 19:38:58 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,4 @@ int	lst_size(t_commands *cmds)
 		tmp = tmp->next;
 	}
 	return (i);
-}
-
-int	directory_error(char *cmd)
-{
-	if (is_equal(".", cmd) == EXIT_SUCCESS)
-		return (127);
-	if (is_equal("/", cmd) == EXIT_SUCCESS)
-		return (126);
-	return (0);
 }
