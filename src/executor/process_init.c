@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:46:09 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/26 13:58:50 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/04 10:54:59 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ int	redirect_outfile(t_process *process, t_redirect *redirect)
 	close(process->fd_out);
 	if (redirect->type == GREAT)
 		process->fd_out = open(redirect->filename, O_CREAT | O_TRUNC
-				| O_RDWR, 00400 | 00200 | 00040 | 00004);
+				| O_RDWR, 0400 | 0200 | 0040 | 0004);
 	else if (redirect->type == GREAT_GREAT)
 		process->fd_out = open(redirect->filename, O_CREAT | O_APPEND
-				| O_RDWR, 00400 | 00200 | 00040 | 00004);
+				| O_RDWR, 0400 | 0200 | 0040 | 0004);
 	if (redirection_error_handling(redirect->filename, process->fd_out))
 		return (INVALID);
 	else
@@ -63,7 +63,7 @@ int	handle_redirection(t_process *process, t_redirect *redirect)
 	return (TRUE);
 }
 
-void	init_process(t_process *process, t_commands *cmds,
+void	init_process(t_data *data, t_commands *cmds, t_process *process,
 		int pipe_read_end_prev)
 {
 	t_redirect	*tmp_redirect;
@@ -72,12 +72,15 @@ void	init_process(t_process *process, t_commands *cmds,
 	process->command = cmds->args;
 	if (process->command != NULL
 		&& !is_builtin(&process->builtin, process->command[0]))
+	{
 		process->cmd_path = find_cmd_path(process->command[0]);
+		data->cmd_path = process->cmd_path;
+	}
 	process->fd_in = pipe_read_end_prev;
 	if (cmds->next)
 	{
 		if (pipe(process->pipe_fd) == INVALID)
-			perror_and_exit("pipe", EXIT_FAILURE);
+			exit_minishell(data, "pipe", strerror(errno), errno);
 		process->fd_out = process->pipe_fd[WR];
 	}
 	else

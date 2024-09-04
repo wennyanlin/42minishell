@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:12:56 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/29 01:19:13 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/03 20:05:56 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,30 +38,6 @@ char	*string_concat(char *path, char *cmd)
 	return (result_path);
 }
 
-char	**array_concat(char *shell_path, char **args)
-{
-	char	**result_args;
-	int		len;
-	int		i;
-
-	len = 0;
-	i = 0;
-	while (args[len])
-		len++;
-	result_args = malloc(sizeof(char *) * (len + 2));
-	if (!result_args)
-		return (NULL);
-	result_args[i] = shell_path;
-	i++;
-	while (i < len + 1)
-	{
-		result_args[i] = args[i - 1];
-		i++;
-	}
-	result_args[i] = NULL;
-	return (result_args);
-}
-
 char	*make_path(char *dir, char *cmd)
 {
 	char	*full_dir;
@@ -84,11 +60,8 @@ char	*examine_path(char **path_dirs, char *cmd)
 	while (path_dirs[++i])
 	{
 		full_path = make_path(path_dirs[i], cmd);
-		if (access(full_path, X_OK) == 0)
-		{
-			array_clear(&path_dirs);
+		if (access(full_path, F_OK) == 0)
 			break ;
-		}
 		free(full_path);
 		full_path = NULL;
 	}
@@ -98,7 +71,6 @@ char	*examine_path(char **path_dirs, char *cmd)
 char	*find_cmd_path(char *cmd)
 {
 	char *const	env = getenv("PATH");
-	int			exit_code;
 	char		*full_path;
 	char		**path_dirs;
 
@@ -106,13 +78,10 @@ char	*find_cmd_path(char *cmd)
 		return (ft_strdup(cmd));
 	if (char_index(cmd, '/') != NOT_FOUND)
 		return (ft_strdup(cmd));
-	exit_code = directory_error(cmd);
-	if (exit_code != 0)
-		return (ft_strdup(cmd));
 	path_dirs = split_path(env, ':');
 	full_path = examine_path(path_dirs, cmd);
+	array_clear(&path_dirs);
 	if (full_path != NULL)
 		return (full_path);
-	array_clear(&path_dirs);
 	return (ft_strdup(cmd));
 }

@@ -6,98 +6,93 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/29 03:29:15 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/04 13:50:07 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	perror_and_exit(char *file, int code)
+void	clear_data(t_data *data)
 {
-	int	fd;
-
-	fd = open(file, O_RDWR);
-	if (fd == -1 && errno == EISDIR)
-	{
-		ft_putstr_fd("minisell: ", 2);
-		ft_putstr_fd(file, 2);
-		ft_putstr_fd(": ", 2);
-		ft_putstr_fd(strerror(errno), 2);
-		ft_putstr_fd("\n", 2);
-	}
-	else
-		perror(file);
-	exit(code);
-}
-
-void	free_token_lst(t_token **plst)
-{
-	t_token	*next;
-
-	while (*plst)
-	{
-		next = (*plst)->next;
-		free((*plst)->word);
-		free(*plst);
-		*plst = next;
-	}
-}
-
-void	free_cmds_lst(t_commands **pcmds)
-{
+	t_token		*next_token;
 	t_commands	*next_cmds;
-	t_redirect	*redirect;
 	t_redirect	*next_redirect;
 
-	while (*pcmds)
+	free(data->line);
+	while (data->tokens)
 	{
-		next_cmds = (*pcmds)->next;
-		array_clear(&(*pcmds)->args);
-		redirect = (*pcmds)->redirect;
-		while (redirect)
-		{
-			next_redirect = redirect->next;
-			free(redirect->filename);
-			free(redirect);
-			redirect = next_redirect;
-		}
-		free(*pcmds);
-		*pcmds = next_cmds;
+		next_token = data->tokens->next;
+		free(data->tokens->word);
+		free(data->tokens);
+		data->tokens = next_token;
 	}
+	free(data->pid);
+	while (data->cmds)
+	{
+		next_cmds = data->cmds->next;
+		array_clear(&data->cmds->args);
+		while (data->cmds->redirect)
+		{
+			next_redirect = data->cmds->redirect->next;
+			free(data->cmds->redirect->filename);
+			free(data->cmds->redirect);
+			data->cmds->redirect = next_redirect;
+		}
+		free(data->cmds);
+		data->cmds = next_cmds;
+	}
+	free(data->cmd_path);
+}
+
+void	exit_minishell(t_data *data, char *str, char *error_str, int code)
+{
+	extern char	**environ;
+
+	if (str)
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(str, STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+		ft_putstr_fd(error_str, STDERR_FILENO);
+		ft_putchar_fd('\n', STDERR_FILENO);
+	}
+	clear_data(data);
+	array_clear(&environ);
+	free(data->exit_status);
+	if (str)
+		exit(code);
+	exit(EXIT_SUCCESS);
 }
 
 void	start_minishell(void)
 {
-	extern char	**environ;
-	t_data		dt;
-	char		*line;
-	t_token		*token_lst;
-	t_commands	*cmds;
+	t_data	dt;
 
-	
-	environ = array_dup(environ);
 	dt.exit_status = ft_itoa(0);
+	dt.tokens = NULL;
+	dt.cmds = NULL;
+	dt.cmd_path = NULL;
 	while (TRUE)
 	{
-		line = readline(PROMPT);
-		token_lst = tokenize(line);
-		free(line);
-		cmds = parse_tokens(token_lst);
-		free_token_lst(&token_lst);
-		execute_all(cmds, &dt);
-		free_cmds_lst(&cmds);
+		dt.line = readline(PROMPT);
+		if (tokenize(&dt.tokens, dt.line) && parse_tokens(&dt))
+			execute_all(&dt, dt.cmds);
+		clear_data(&dt);
 	}
-	array_clear(&environ);
-	free(dt.exit_status);
 }
 
 int	main(int argc, char **argv)
 {
+	extern char	**environ;
+
 	if (argc == 2 && ft_strncmp(argv[1], "test", 5) == 0)
 		test_lexer();
 	else if (argc == 2 && ft_strncmp(argv[1], "-v", 3) == 0)
 		return (printf("%s, version %s\n", NAME, VERSION), 0);
 	else
+	{
+		environ = array_dup(environ);
 		start_minishell();
+	}
 	return (0);
 }
