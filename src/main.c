@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/04 11:04:14 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/04 12:28:50 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	clear_data(t_data *data)
 		free(data->tokens);
 		data->tokens = next_token;
 	}
+	free(data->pid);
 	while (data->cmds)
 	{
 		next_cmds = data->cmds->next;
@@ -40,7 +41,6 @@ void	clear_data(t_data *data)
 		free(data->cmds);
 		data->cmds = next_cmds;
 	}
-	free(data->pid);
 	free(data->cmd_path);
 }
 
@@ -66,10 +66,8 @@ void	exit_minishell(t_data *data, char *str, char *error_str, int code)
 
 void	start_minishell(void)
 {
-	extern char	**environ;
-	t_data		dt;
+	t_data	dt;
 
-	environ = array_dup(environ);
 	dt.exit_status = ft_itoa(0);
 	dt.tokens = NULL;
 	dt.cmds = NULL;
@@ -85,6 +83,9 @@ void	start_minishell(void)
 
 int	main(int argc, char **argv)
 {
+	extern char	**environ;
+
+	environ = array_dup(environ);
 	if (argc == 2 && ft_strncmp(argv[1], "test", 5) == 0)
 		test_lexer();
 	else if (argc == 2 && ft_strncmp(argv[1], "-v", 3) == 0)
