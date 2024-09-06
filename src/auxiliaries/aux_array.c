@@ -6,7 +6,7 @@
 /*   By: rtorrent <rtorrent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 21:08:04 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/08/29 03:12:04 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/06 19:45:45 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	array_clear(char ***parray)
 	char	**a;
 
 	a = *parray;
-	if (!*a)
+	if (!a)
 		return ;
 	while (*a)
 		free(*a++);
@@ -46,12 +46,11 @@ char	**array_dup(char **array)
 		while (*array)
 		{
 			*a = ft_strdup(*array++);
-			if (!*a)
+			if (!*a++)
 			{
 				array_clear(&a0);
 				break ;
 			}
-			a++;
 		}
 		*a = NULL;
 	}
