@@ -6,12 +6,14 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/04 10:50:53 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/07 18:53:22 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+# define _GNU_SOURCE
 
 # include <errno.h>
 # include <fcntl.h>
@@ -93,6 +95,7 @@ typedef struct s_token
 
 typedef struct s_data
 {
+	char		**envp;
 	char		*exit_status;
 	char		*line;
 	t_token		*tokens;

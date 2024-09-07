@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/04 10:59:08 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/07 18:52:08 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,7 @@ void	wait_process(pid_t *pid_array, int num_cmd)
 
 void	execute_command(t_data *data, char *command_path, char **cmd_args)
 {
-	extern char	**environ;
-	char		*shell_path;
+	char	*shell_path;
 
 	execve(command_path, cmd_args, environ);
 	if (errno == ENOEXEC)

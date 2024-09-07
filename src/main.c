@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/04 13:50:07 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/07 18:56:22 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	exit_minishell(t_data *data, char *str, char *error_str, int code)
 		ft_putchar_fd('\n', STDERR_FILENO);
 	}
 	clear_data(data);
-	array_clear(&environ);
+	array_clear(&data->envp);
 	free(data->exit_status);
 	if (str)
 		exit(code);
@@ -68,6 +68,8 @@ void	start_minishell(void)
 {
 	t_data	dt;
 
+	dt.envp = array_dup(environ);
+	environ = dt.envp;
 	dt.exit_status = ft_itoa(0);
 	dt.tokens = NULL;
 	dt.cmds = NULL;
@@ -83,16 +85,11 @@ void	start_minishell(void)
 
 int	main(int argc, char **argv)
 {
-	extern char	**environ;
-
 	if (argc == 2 && ft_strncmp(argv[1], "test", 5) == 0)
 		test_lexer();
 	else if (argc == 2 && ft_strncmp(argv[1], "-v", 3) == 0)
 		return (printf("%s, version %s\n", NAME, VERSION), 0);
 	else
-	{
-		environ = array_dup(environ);
 		start_minishell();
-	}
 	return (0);
 }

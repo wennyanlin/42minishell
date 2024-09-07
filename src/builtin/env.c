@@ -6,7 +6,7 @@
 /*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 12:41:57 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/08/26 15:04:01 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/07 18:50:46 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 int	bt_env(int argc, char *argv[])
 {
-	extern char	**environ;
-	char		**ep;
+	char	**ep;
 
 	(void)argc;
 	(void)argv;

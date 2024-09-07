@@ -6,7 +6,7 @@
 /*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 12:06:59 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/08/29 12:31:33 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/07 18:51:20 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,9 @@ static void	remove_name(char **ep)
 
 int	bt_unset(int argc, char *argv[])
 {
-	extern char	**environ;
-	char		**ep;
-	size_t		n;
-	int			ret;
+	char	**ep;
+	size_t	n;
+	int		ret;
 
 	if (!environ)
 		return (-1);
