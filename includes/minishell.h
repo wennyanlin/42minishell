@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/07 18:53:22 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/07 20:04:03 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,16 @@
 # define INVALID -1
 # define NONE 0
 
-# define QUOTE_S 39
 # define QUOTE_D 34
 # define DOLLAR 36
+# define QUOTE_S 39
 # define C_LESS 60
 # define EQUALS 61
 # define C_GREAT 62
 # define QUESTION 63
 # define UNDERSCORE 95
 # define C_PIPE 124
+# define TILDE 126
 
 # define NEGATIVE 0
 # define CHILD 0
@@ -95,8 +96,8 @@ typedef struct s_token
 
 typedef struct s_data
 {
+	int			exit_status;
 	char		**envp;
-	char		*exit_status;
 	char		*line;
 	t_token		*tokens;
 	t_commands	*cmds;

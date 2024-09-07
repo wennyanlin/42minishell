@@ -6,7 +6,7 @@
 #    By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 13:11:23 by wlin              #+#    #+#              #
-#    Updated: 2024/09/04 11:04:33 by rtorrent         ###   ########.fr        #
+#    Updated: 2024/09/07 19:10:10 by rtorrent         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ AUTHORS			= wlin rtorrent
 NAME			= minishell
 
 CC				= gcc
-CFLAGS			= -Wall -Wextra -Werror -g -Iincludes -I${LIBFT_DIR} -fsanitize=address -MMD
+CFLAGS			= -Wall -Wextra -Werror -g -Iincludes -I${LIBFT_DIR} -MMD
 RM				= rm -fr
 
 #<--------------------------------->FILES<------------------------------------>#
@@ -87,10 +87,10 @@ header:
 	@echo " | |  | | | | | | \__ \ | | |  __/ | |"
 	@echo " |_|  |_|_|_| |_|_|___/_| |_|\___|_|_|"
 	@echo
-	@printf "%b" "$(BLUE)Name:	$(RED)$(NAME)\n"
-	@printf "%b" "$(BLUE)Authors:	$(RED)$(AUTHORS)\n"
-	@printf "%b" "$(BLUE)CC: 	$(RED)$(CC)\n\033[m"
-	@printf "%b" "$(BLUE)Flags: 	$(RED)$(CFLAGS)\n\033[m"
+	@printf "%b" "$(BLUE)Name:	  $(RED)$(NAME)\n"
+	@printf "%b" "$(BLUE)Authors:  $(RED)$(AUTHORS)\n"
+	@printf "%b" "$(BLUE)CC: 	  $(RED)$(CC)\n"
+	@printf "%b" "$(BLUE)Flags:   $(RED)$(CFLAGS)$(RESET)\n"
 	@echo
 
 libft:

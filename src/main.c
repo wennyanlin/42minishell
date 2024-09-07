@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/07 18:56:22 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/07 19:01:52 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ void	exit_minishell(t_data *data, char *str, char *error_str, int code)
 	}
 	clear_data(data);
 	array_clear(&data->envp);
-	free(data->exit_status);
 	if (str)
 		exit(code);
 	exit(EXIT_SUCCESS);
@@ -70,7 +69,7 @@ void	start_minishell(void)
 
 	dt.envp = array_dup(environ);
 	environ = dt.envp;
-	dt.exit_status = ft_itoa(0);
+	dt.exit_status = 0;
 	dt.tokens = NULL;
 	dt.cmds = NULL;
 	dt.cmd_path = NULL;
