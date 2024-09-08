@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/08 15:27:07 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/08 18:35:46 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,7 @@ int	error_message(char *source, char *err_str, int code)
 {
 	ft_putstr_fd(source, STDERR_FILENO);
 	ft_putstr_fd(": ", STDERR_FILENO);
-	ft_putstr_fd(err_str, STDERR_FILENO);
-	ft_putchar_fd('\n', STDERR_FILENO);
+	ft_putendl_fd(err_str, STDERR_FILENO);
 	return (code);
 }
 
@@ -62,7 +61,7 @@ void	exit_minishell(t_data *data, char *source, char *err_str, int code)
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
 		exit(error_message(source, err_str, code));
 	}
-	exit(EXIT_SUCCESS);
+	exit(code);
 }
 
 void	start_minishell(void)
