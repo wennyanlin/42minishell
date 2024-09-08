@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/07 18:52:08 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/08 02:42:52 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ void	simple_command(t_data *data, t_process *process, int pipe_read_end_prev)
 		fd_dup2(data, process->fd_out, STDOUT_FILENO);
 		close(process->fd_in);
 		close(process->fd_out);
-		(*process->builtin)(array_len(process->command), process->command);
+		data->exit_status = (*process->builtin)(array_len(process->command),
+				process->command);
 		fd_dup2(data, fd_storage[RD], STDIN_FILENO);
 		fd_dup2(data, fd_storage[WR], STDOUT_FILENO);
 		close(fd_storage[RD]);
@@ -38,27 +39,25 @@ int	get_wait_status(int status)
 {
 	int	stat_code;
 
-	stat_code = 0;
+	stat_code = EXIT_FAILURE;
 	if (WIFEXITED(status))
 		stat_code = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
-		stat_code = WTERMSIG(status);
+		stat_code = FATALSIGNAL + WTERMSIG(status);
 	else if (WIFSTOPPED(status))
-		stat_code = WSTOPSIG(status);
+		stat_code = FATALSIGNAL + WSTOPSIG(status);
 	return (stat_code);
 }
 
-void	wait_process(pid_t *pid_array, int num_cmd)
+int	wait_process(pid_t *pid_array, int num_cmd)
 {
 	int	i;
 	int	status;
 
 	i = -1;
 	while (++i < num_cmd)
-	{
 		waitpid(pid_array[i], &status, 0);
-		get_wait_status(status);
-	}
+	return (get_wait_status(status));
 }
 
 void	execute_command(t_data *data, char *command_path, char **cmd_args)
@@ -107,7 +106,7 @@ void	execute_all(t_data *data, t_commands *cmds)
 			data->cmd_path = NULL;
 			cmds = cmds->next;
 		}
-		wait_process(data->pid, num_cmd);
+		data->exit_status = wait_process(data->pid, num_cmd);
 	}
 	else
 		simple_command(data, &process, pipe_read_end_prev);

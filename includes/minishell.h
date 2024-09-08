@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/07 20:04:03 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/08 02:29:59 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@
 
 # define NOTEXECUTABLE 126
 # define NOTFOUND 127
+# define FATALSIGNAL 128
 
 typedef enum e_metachar
 {
