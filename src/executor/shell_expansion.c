@@ -6,52 +6,46 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 19:12:32 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/09/07 21:02:17 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/08 01:55:14 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	parameter_expansion(char **args, char **parg, t_data *data, int t)
+static char	*parameter_expansion(char **args, char **parg, t_data *data, int t)
 {
-	char	*arg_param;
 	char	*str1;
 	char	*str2;
 
+	str1 = NULL;
 	if (t == TILDE)
-	{
-		str1 = NULL;
-		arg_param = getenv("HOME");
-	}
-	else
-		arg_param = (*parg)++;
-	if (t == DOLLAR)
-	{
-		while (ft_isalnum(**parg) || **parg == UNDERSCORE)
-			++*parg;
-		str1 = ft_substr(arg_param, 0, *parg - arg_param);
-		arg_param = getenv(str1);
-	}
+		str2 = getenv("HOME");
 	else if (t == QUESTION)
 	{
+		(*parg)++;
 		str1 = ft_itoa(data->exit_status);
-		arg_param = str1;
+		str2 = str1;
 	}
-	if (!arg_param)
-		arg_param = "";
-	str2 = ft_strjoin(*args, arg_param);
+	else
+	{
+		str2 = (*parg)++;
+		while (ft_isalnum(**parg) || **parg == UNDERSCORE)
+			++*parg;
+		str1 = ft_substr(str2, 0, *parg - str2);
+		str2 = getenv(str1);
+	}
+	if (!str2)
+		str2 = "";
+	str2 = ft_strjoin(*args, str2);
 	free(str1);
-	str1 = ft_strjoin(str2, *parg);
-	if (str1 && str2)
-		*parg = str1 + ft_strlen(str2);
-	free(str2);
-	free(*args);
-	*args = str1;
+	return (str2);
 }
 
 static void	check_parameter(char **args, char **parg, t_data *data)
 {
-	int	type;
+	int		type;
+	char	*str1;
+	char	*str2;
 
 	if ((*parg)[0] == TILDE && (!(*parg)[1] || is_whitespace((*parg)[1])))
 		type = TILDE;
@@ -66,7 +60,13 @@ static void	check_parameter(char **args, char **parg, t_data *data)
 		return ;
 	}
 	*(*parg)++ = '\0';
-	parameter_expansion(args, parg, data, type);
+	str2 = parameter_expansion(args, parg, data, type);
+	str1 = ft_strjoin(str2, *parg);
+	if (str1 && str2)
+		*parg = str1 + ft_strlen(str2);
+	free(str2);
+	free(*args);
+	*args = str1;
 }
 
 static void	quote_removal(char **args, char **parg, const char q, t_data *data)
