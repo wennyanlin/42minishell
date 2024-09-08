@@ -6,7 +6,7 @@
 #    By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 13:11:23 by wlin              #+#    #+#              #
-#    Updated: 2024/09/07 19:10:10 by rtorrent         ###   ########.fr        #
+#    Updated: 2024/09/08 02:01:22 by rtorrent         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -87,9 +87,9 @@ header:
 	@echo " | |  | | | | | | \__ \ | | |  __/ | |"
 	@echo " |_|  |_|_|_| |_|_|___/_| |_|\___|_|_|"
 	@echo
-	@printf "%b" "$(BLUE)Name:	  $(RED)$(NAME)\n"
-	@printf "%b" "$(BLUE)Authors:  $(RED)$(AUTHORS)\n"
-	@printf "%b" "$(BLUE)CC: 	  $(RED)$(CC)\n"
+	@printf "%b" "$(BLUE)Name:    $(RED)$(NAME)\n"
+	@printf "%b" "$(BLUE)Authors: $(RED)$(AUTHORS)\n"
+	@printf "%b" "$(BLUE)CC:      $(RED)$(CC)\n"
 	@printf "%b" "$(BLUE)Flags:   $(RED)$(CFLAGS)$(RESET)\n"
 	@echo
 
