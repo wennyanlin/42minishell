@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/07 19:01:52 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/08 15:27:07 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,22 +44,24 @@ void	clear_data(t_data *data)
 	free(data->cmd_path);
 }
 
-void	exit_minishell(t_data *data, char *str, char *error_str, int code)
+int	error_message(char *source, char *err_str, int code)
 {
-	extern char	**environ;
+	ft_putstr_fd(source, STDERR_FILENO);
+	ft_putstr_fd(": ", STDERR_FILENO);
+	ft_putstr_fd(err_str, STDERR_FILENO);
+	ft_putchar_fd('\n', STDERR_FILENO);
+	return (code);
+}
 
-	if (str)
-	{
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		ft_putstr_fd(str, STDERR_FILENO);
-		ft_putstr_fd(": ", STDERR_FILENO);
-		ft_putstr_fd(error_str, STDERR_FILENO);
-		ft_putchar_fd('\n', STDERR_FILENO);
-	}
+void	exit_minishell(t_data *data, char *source, char *err_str, int code)
+{
 	clear_data(data);
 	array_clear(&data->envp);
-	if (str)
-		exit(code);
+	if (source)
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		exit(error_message(source, err_str, code));
+	}
 	exit(EXIT_SUCCESS);
 }
 

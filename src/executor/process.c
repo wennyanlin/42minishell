@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 18:16:01 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/03 20:33:47 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/08 13:57:44 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	child_process(t_data *data, t_process *process)
 	if (access(cmd_path, F_OK) == 0 && access(cmd_path, X_OK) == -1)
 		exit_minishell(data, command[0], "Permission denied", NOTEXECUTABLE);
 	if (process->builtin)
-		exit((*process->builtin)(array_len(command), command));
+		exit((*process->builtin)(array_len(command), command, data));
 	execute_command(data, cmd_path, command);
 }
 

@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/08 02:42:52 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/08 14:02:26 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	simple_command(t_data *data, t_process *process, int pipe_read_end_prev)
 		close(process->fd_in);
 		close(process->fd_out);
 		data->exit_status = (*process->builtin)(array_len(process->command),
-				process->command);
+				process->command, data) & 0xff;
 		fd_dup2(data, fd_storage[RD], STDIN_FILENO);
 		fd_dup2(data, fd_storage[WR], STDOUT_FILENO);
 		close(fd_storage[RD]);

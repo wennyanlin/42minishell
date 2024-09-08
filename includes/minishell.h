@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/08 02:29:59 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/08 14:27:17 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ typedef struct s_data
 	pid_t		*pid;
 }	t_data;
 
-typedef int	(*t_bfunc)(int argc, char *argv[]);
+typedef int	(*t_bfunc)(int argc, char *argv[], t_data *data);
 
 typedef struct s_process
 {
@@ -128,7 +128,8 @@ typedef struct s_str
 
 /*===================================MINISHELL================================*/
 
-void		exit_minishell(t_data *data, char *str, char *error_str, int code);
+int			error_message(char *source, char *err_str, int code);
+void		exit_minishell(t_data *data, char *source, char *err_str, int code);
 
 /*======================================LEXER=================================*/
 
@@ -173,12 +174,12 @@ int			read_here_doc(char *limiter);
 
 /*======================================BUILTIN===============================*/
 
-int			bt_cd(int argc, char *argv[]);
-int			bt_env(int argc, char *argv[]);
-int			bt_exit(int argc, char *argv[]);
-int			bt_export(int argc, char *argv[]);
-int			bt_pwd(int argc, char *argv[]);
-int			bt_unset(int argc, char *argv[]);
+int			bt_cd(int argc, char *argv[], t_data *data);
+int			bt_env(int argc, char *argv[], t_data *data);
+int			bt_exit(int argc, char *argv[], t_data *data);
+int			bt_export(int argc, char *argv[], t_data *data);
+int			bt_pwd(int argc, char *argv[], t_data *data);
+int			bt_unset(int argc, char *argv[], t_data *data);
 int			is_builtin(t_bfunc *dst, char *cmd);
 
 /*===============================AUXILIARY FUNCTIONS==========================*/
