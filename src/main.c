@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/04 13:50:07 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/08 18:35:46 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,31 +44,33 @@ void	clear_data(t_data *data)
 	free(data->cmd_path);
 }
 
-void	exit_minishell(t_data *data, char *str, char *error_str, int code)
+int	error_message(char *source, char *err_str, int code)
 {
-	extern char	**environ;
+	ft_putstr_fd(source, STDERR_FILENO);
+	ft_putstr_fd(": ", STDERR_FILENO);
+	ft_putendl_fd(err_str, STDERR_FILENO);
+	return (code);
+}
 
-	if (str)
+void	exit_minishell(t_data *data, char *source, char *err_str, int code)
+{
+	clear_data(data);
+	array_clear(&data->envp);
+	if (source)
 	{
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		ft_putstr_fd(str, STDERR_FILENO);
-		ft_putstr_fd(": ", STDERR_FILENO);
-		ft_putstr_fd(error_str, STDERR_FILENO);
-		ft_putchar_fd('\n', STDERR_FILENO);
+		exit(error_message(source, err_str, code));
 	}
-	clear_data(data);
-	array_clear(&environ);
-	free(data->exit_status);
-	if (str)
-		exit(code);
-	exit(EXIT_SUCCESS);
+	exit(code);
 }
 
 void	start_minishell(void)
 {
 	t_data	dt;
 
-	dt.exit_status = ft_itoa(0);
+	dt.envp = array_dup(environ);
+	environ = dt.envp;
+	dt.exit_status = 0;
 	dt.tokens = NULL;
 	dt.cmds = NULL;
 	dt.cmd_path = NULL;
@@ -83,16 +85,11 @@ void	start_minishell(void)
 
 int	main(int argc, char **argv)
 {
-	extern char	**environ;
-
 	if (argc == 2 && ft_strncmp(argv[1], "test", 5) == 0)
 		test_lexer();
 	else if (argc == 2 && ft_strncmp(argv[1], "-v", 3) == 0)
 		return (printf("%s, version %s\n", NAME, VERSION), 0);
 	else
-	{
-		environ = array_dup(environ);
 		start_minishell();
-	}
 	return (0);
 }

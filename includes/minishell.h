@@ -6,12 +6,14 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/04 10:50:53 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/08 14:27:17 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+# define _GNU_SOURCE
 
 # include <errno.h>
 # include <fcntl.h>
@@ -40,15 +42,16 @@
 # define INVALID -1
 # define NONE 0
 
-# define QUOTE_S 39
 # define QUOTE_D 34
 # define DOLLAR 36
+# define QUOTE_S 39
 # define C_LESS 60
 # define EQUALS 61
 # define C_GREAT 62
 # define QUESTION 63
 # define UNDERSCORE 95
 # define C_PIPE 124
+# define TILDE 126
 
 # define NEGATIVE 0
 # define CHILD 0
@@ -57,6 +60,7 @@
 
 # define NOTEXECUTABLE 126
 # define NOTFOUND 127
+# define FATALSIGNAL 128
 
 typedef enum e_metachar
 {
@@ -93,7 +97,8 @@ typedef struct s_token
 
 typedef struct s_data
 {
-	char		*exit_status;
+	int			exit_status;
+	char		**envp;
 	char		*line;
 	t_token		*tokens;
 	t_commands	*cmds;
@@ -101,7 +106,7 @@ typedef struct s_data
 	pid_t		*pid;
 }	t_data;
 
-typedef int	(*t_bfunc)(int argc, char *argv[]);
+typedef int	(*t_bfunc)(int argc, char *argv[], t_data *data);
 
 typedef struct s_process
 {
@@ -123,7 +128,8 @@ typedef struct s_str
 
 /*===================================MINISHELL================================*/
 
-void		exit_minishell(t_data *data, char *str, char *error_str, int code);
+int			error_message(char *source, char *err_str, int code);
+void		exit_minishell(t_data *data, char *source, char *err_str, int code);
 
 /*======================================LEXER=================================*/
 
@@ -168,12 +174,12 @@ int			read_here_doc(char *limiter);
 
 /*======================================BUILTIN===============================*/
 
-int			bt_cd(int argc, char *argv[]);
-int			bt_env(int argc, char *argv[]);
-int			bt_exit(int argc, char *argv[]);
-int			bt_export(int argc, char *argv[]);
-int			bt_pwd(int argc, char *argv[]);
-int			bt_unset(int argc, char *argv[]);
+int			bt_cd(int argc, char *argv[], t_data *data);
+int			bt_env(int argc, char *argv[], t_data *data);
+int			bt_exit(int argc, char *argv[], t_data *data);
+int			bt_export(int argc, char *argv[], t_data *data);
+int			bt_pwd(int argc, char *argv[], t_data *data);
+int			bt_unset(int argc, char *argv[], t_data *data);
 int			is_builtin(t_bfunc *dst, char *cmd);
 
 /*===============================AUXILIARY FUNCTIONS==========================*/
