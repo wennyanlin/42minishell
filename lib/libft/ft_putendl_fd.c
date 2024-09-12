@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wlin <wlin@student.42barcelona.>           +#+  +:+       +#+        */
+/*   By: rtorrent <rtorrent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/24 17:36:17 by wlin              #+#    #+#             */
-/*   Updated: 2023/09/24 18:03:36 by wlin             ###   ########.fr       */
+/*   Created: 2023/05/09 08:00:44 by rtorrent          #+#    #+#             */
+/*   Updated: 2023/05/09 08:02:24 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,6 @@
 
 void	ft_putendl_fd(char *s, int fd)
 {
-	if (s == NULL)
-		return ;
-	while (*s)
-	{
-		write(fd, s, 1);
-		s++;
-	}
-	write(fd, "\n", 1);
+	ft_putstr_fd(s, fd);
+	ft_putchar_fd('\n', fd);
 }
-/*
-#include <fcntl.h>
-int	main()
-{
-	char *s = "Hello Wen, you are amazing!";
-	char *path = "/Users/wlin/Desktop/wen.txt";
-	int	fd = open(path, O_RDWR|O_CREAT, 0777);
-	if (fd == -1)
-	{
-		perror("error:");
-		return (1);
-	}
-	ft_putendl_fd(s, fd);
-	return (0);
-}*/

@@ -6,7 +6,7 @@
 /*   By: rtorrent <rtorrent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 17:36:35 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/09/08 20:04:47 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/10 13:57:30 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,6 @@ int	bt_exit(int argc, char *argv[], t_data *data)
 	n = atoi_version(&err, *argv);
 	if (err)
 		exit_minishell(data, "exit", non_numeric, EXIT_ERROR);
-	exit_minishell(data, NULL, NULL, n & 0377);
+	exit_minishell(data, NULL, NULL, n);
 	return (EXIT_SUCCESS);
 }

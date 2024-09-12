@@ -6,7 +6,7 @@
 #    By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 13:11:23 by wlin              #+#    #+#              #
-#    Updated: 2024/09/08 17:36:00 by rtorrent         ###   ########.fr        #
+#    Updated: 2024/09/10 12:55:11 by rtorrent         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ NAME			= minishell
 CC				= gcc
 CFLAGS			= -Wall -Wextra -Werror -g -Iincludes -I${LIBFT_DIR} -MMD
 RM				= rm -fr
+MAKE			= make
 
 #<--------------------------------->FILES<------------------------------------>#
 
@@ -60,6 +61,7 @@ ALL_SRCS		:= $(SRCS_MAIN) $(SRCS_LEXR) $(SRCS_PARS) $(SRCS_EXEC)\
 ALL_OBJS		:= $(addprefix $(DIR_OBJ_DEPS),$(ALL_SRCS:.c=.o))
 ALL_DEPS		:= $(ALL_OBJS:.o=.d)
 ALL_SRCS		:= $(addprefix $(DIR_SRC),$(ALL_SRCS))
+
 #<-------------------------------->COLORS<------------------------------------>#
 
 RED				=	\033[0;31m
@@ -72,7 +74,6 @@ RESET			=	\033[0m
 GREEN_BOLD		=	\033[1;32m
 BLUE_BOLD		=	\033[1;34m
 CYAN_BOLD		=	\033[1;36m
-MAKE			=	make
 
 #<--------------------------------->RULES<------------------------------------>#
 

@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/08 18:35:46 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/10 14:03:18 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,12 @@ void	start_minishell(void)
 
 	dt.envp = array_dup(environ);
 	environ = dt.envp;
+// TODO **** Increse SHLVL variable by one
 	dt.exit_status = 0;
 	dt.tokens = NULL;
 	dt.cmds = NULL;
 	dt.cmd_path = NULL;
+	dt.pid = NULL;
 	while (TRUE)
 	{
 		dt.line = readline(PROMPT);
