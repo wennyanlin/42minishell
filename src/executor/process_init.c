@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:46:09 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/04 10:54:59 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/14 19:27:27 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 int	redirection_error_handling(char *filename, int fd_in)
 {
-	if ((errno == ENOENT || errno == EACCES) && fd_in == INVALID)
+	if ((errno == ENOENT || errno == EACCES || errno == EPERM)
+		&& fd_in == INVALID)
 	{
 		ft_putstr_fd(filename, 2);
 		ft_putstr_fd(": ", 2);
