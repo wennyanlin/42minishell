@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/08 14:27:17 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/18 18:53:34 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,10 +133,6 @@ void		exit_minishell(t_data *data, char *source, char *err_str, int code);
 
 /*======================================LEXER=================================*/
 
-char		*string_concat(char *path, char *cmd);
-char		*make_path(char *dir, char *cmd);
-char		**split_path(char *string, char separator);
-char		*find_cmd_path(char *cmd);
 void		ft_error(char *input, int start);
 // void		printf_list(t_token *lst);
 int			is_delimiter(char c);
@@ -160,15 +156,17 @@ void		cmd_lst_addback(t_commands **cmds, t_commands *new);
 
 /*====================================EXECUTOR================================*/
 
-void		shell_expansion(t_data *data, char **args);
-void		init_process(t_data *data, t_commands *cmds, t_process *process,
+pid_t		create_process(t_data *data, t_commands *cmds, t_process *process,
 				int pipe_read_end_prev);
-void		child_process(t_data *data, t_process *process);
-pid_t		create_process(t_data *data, t_process *process);
-void		fd_dup2(t_data *data, int oldfd, int newfd);
 void		execute_command(t_data *data, char *command_path, char **cmd_args);
 void		execute_all(t_data *data, t_commands *cmds);
+char		*find_cmd_path(t_data *data, char *cmd);
+void		fd_dup2(t_data *data, int oldfd, int newfd);
+void		init_process(t_data *data, t_commands *cmds, t_process *process,
+				int pipe_read_end_prev);
 int			lst_size(t_commands *cmds);
+void		shell_expansion(t_data *data, char **args);
+char		**split_path(char *string, char separator);
 
 int			read_here_doc(char *limiter);
 

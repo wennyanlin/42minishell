@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/10 14:03:18 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/18 18:54:51 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,13 @@ int	error_message(char *source, char *err_str, int code)
 
 void	exit_minishell(t_data *data, char *source, char *err_str, int code)
 {
-	clear_data(data);
-	array_clear(&data->envp);
 	if (source)
 	{
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		exit(error_message(source, err_str, code));
+		(void)error_message(source, err_str, code);
 	}
+	clear_data(data);
+	array_clear(&data->envp);
 	exit(code);
 }
 

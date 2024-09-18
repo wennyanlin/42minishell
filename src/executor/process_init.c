@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:46:09 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/14 19:27:27 by wlin             ###   ########.fr       */
+/*   Updated: 2024/09/18 17:27:58 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,13 @@ int	handle_redirection(t_process *process, t_redirect *redirect)
 void	init_process(t_data *data, t_commands *cmds, t_process *process,
 		int pipe_read_end_prev)
 {
-	t_redirect	*tmp_redirect;
+	t_redirect	*redirect;
 
-	tmp_redirect = cmds->redirect;
 	process->command = cmds->args;
 	if (process->command != NULL
 		&& !is_builtin(&process->builtin, process->command[0]))
 	{
-		process->cmd_path = find_cmd_path(process->command[0]);
+		process->cmd_path = find_cmd_path(data, process->command[0]);
 		data->cmd_path = process->cmd_path;
 	}
 	process->fd_in = pipe_read_end_prev;
@@ -85,11 +84,12 @@ void	init_process(t_data *data, t_commands *cmds, t_process *process,
 		process->fd_out = process->pipe_fd[WR];
 	}
 	else
-		process->fd_out = dup(STDOUT_FILENO);
-	while (tmp_redirect)
 	{
-		if (handle_redirection(process, tmp_redirect) == INVALID)
-			break ;
-		tmp_redirect = tmp_redirect->next;
+		process->fd_out = dup(STDOUT_FILENO);
+		if (process->fd_out == INVALID)
+			exit_minishell(data, "dup", strerror(errno), errno);
 	}
+	redirect = cmds->redirect;
+	while (redirect && handle_redirection(process, redirect) != INVALID)
+		redirect = redirect->next;
 }

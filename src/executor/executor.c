@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/14 19:28:12 by wlin             ###   ########.fr       */
+/*   Updated: 2024/09/18 19:26:06 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,17 @@ void	simple_command(t_data *data, t_process *process, int pipe_read_end_prev)
 	if (process->command != NULL && process->fd_out != -1)
 	{
 		fd_storage[RD] = dup(STDIN_FILENO);
+		if (fd_storage[RD] == INVALID)
+			exit_minishell(data, "dup", strerror(errno), errno);
 		fd_storage[WR] = dup(STDOUT_FILENO);
+		if (fd_storage[WR] == INVALID)
+			exit_minishell(data, "dup", strerror(errno), errno);
 		fd_dup2(data, process->fd_in, STDIN_FILENO);
 		fd_dup2(data, process->fd_out, STDOUT_FILENO);
-		close(process->fd_in);
-		close(process->fd_out);
 		data->exit_status = (*process->builtin)(array_len(process->command),
 				process->command, data) & 0377;
 		fd_dup2(data, fd_storage[RD], STDIN_FILENO);
 		fd_dup2(data, fd_storage[WR], STDOUT_FILENO);
-		close(fd_storage[RD]);
-		close(fd_storage[WR]);
 	}
 }
 
@@ -80,27 +80,25 @@ void	execute_all(t_data *data, t_commands *cmds)
 {
 	t_process	process;
 	int			i;
-	const int	num_cmd = lst_size(cmds);
+	int			num_cmd;
 	int			pipe_read_end_prev;
 
 	i = -1;
 	if (cmds == NULL)
 		return ;
 	pipe_read_end_prev = dup(STDIN_FILENO);
-	if (pipe_read_end_prev == -1)
-		return ;
+	if (pipe_read_end_prev == INVALID)
+		exit_minishell(data, "dup", strerror(errno), errno);
+	num_cmd = lst_size(cmds);
 	data->pid = malloc(sizeof(pid_t) * num_cmd);
 	if (data->pid == NULL)
-		return ;
+		exit_minishell(data, "malloc", strerror(errno), errno);
 	if (!is_builtin(NULL, cmds->args[0]) || num_cmd > 1)
 	{
 		while (cmds)
 		{
-			shell_expansion(data, cmds->args);
-			init_process(data, cmds, &process, pipe_read_end_prev);
-			if (process.command != NULL && process.fd_out != -1
-				&& process.fd_in != -1)
-				data->pid[++i] = create_process(data, &process);
+			data->pid[++i] = create_process(data, cmds, &process,
+					pipe_read_end_prev);
 			if (!process.builtin)
 				free(process.cmd_path);
 			pipe_read_end_prev = process.pipe_fd[RD];
