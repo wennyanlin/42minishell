@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/08 17:39:41 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/14 19:28:12 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,8 @@ void	execute_all(t_data *data, t_commands *cmds)
 		{
 			shell_expansion(data, cmds->args);
 			init_process(data, cmds, &process, pipe_read_end_prev);
-			if (process.command != NULL && process.fd_out != -1)
+			if (process.command != NULL && process.fd_out != -1
+				&& process.fd_in != -1)
 				data->pid[++i] = create_process(data, &process);
 			if (!process.builtin)
 				free(process.cmd_path);
