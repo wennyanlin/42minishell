@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 18:16:01 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/20 01:58:29 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/20 02:12:08 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ void	child_process(t_data *data, t_process *process)
 
 	fd_dup2(data, process->fd_in, STDIN_FILENO);
 	fd_dup2(data, process->fd_out, STDOUT_FILENO);
-	if (close(process->pipe_fd[RD]) == INVALID)
-		exit_minishell(data, "close", strerror(errno), errno);
 	if (process->builtin)
 		exit((*process->builtin)(array_len(command), command, data));
 	if (cmd_path == NULL)

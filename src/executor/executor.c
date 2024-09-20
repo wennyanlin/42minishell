@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/20 01:57:31 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/20 02:18:45 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,6 @@ void	execute_all(t_data *data, t_commands *cmds)
 			data->cmd_path = NULL;
 			cmds = cmds->next;
 		}
-		if (close(pipe_read_end_prev) == INVALID)
-			exit_minishell(data, "close", strerror(errno), errno);
 		data->exit_status = wait_process(data->pid, num_cmd);
 	}
 	else
