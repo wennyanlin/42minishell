@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:46:09 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/20 01:59:47 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/20 13:25:47 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ void	redirect_outfile(t_data *data, t_process *process, t_redirect *redirect)
 		exit_minishell(data, redirect->filename, strerror(errno), errno);
 }
 
-void	handle_redirection(t_data *data, t_process *process, t_redirect *redirect)
+void	handle_redirection(t_data *data, t_process *process,
+	t_redirect *redirect)
 {
 	char	*args[2];
 
@@ -63,7 +64,10 @@ void	init_process(t_data *data, t_process *process)
 	shell_expansion(data, process->command->args);
 	if (process->command->args != NULL
 		&& !is_builtin(&process->builtin, process->command->args[0]))
+	{
 		process->cmd_path = find_cmd_path(data, process->command->args[0]);
+		data->cmd_path = process->cmd_path;
+	}
 	redirect = process->command->redirect;
 	while (redirect)
 	{
