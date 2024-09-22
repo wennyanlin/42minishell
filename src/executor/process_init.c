@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:46:09 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/20 13:25:47 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/22 16:23:04 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ void	init_process(t_data *data, t_process *process)
 {
 	t_redirect	*redirect;
 
-	shell_expansion(data, process->command->args);
 	if (process->command->args != NULL
 		&& !is_builtin(&process->builtin, process->command->args[0]))
 	{
