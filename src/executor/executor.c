@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/20 13:28:41 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/22 04:26:20 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,18 @@
 void	simple_command(t_data *data, t_commands *cmd)
 {
 	t_process	process;
+	const int	dup_fd[2] = {dup(STDIN_FILENO), dup(STDOUT_FILENO)};
 
+	if (dup_fd[RD] == INVALID || dup_fd[WR] == INVALID)
+		exit_minishell(data, "dup", strerror(errno), errno);
 	process.command = cmd;
-	process.fd_in = dup(STDIN_FILENO);
-	if (process.fd_in == INVALID)
-		exit_minishell(data, "dup", strerror(errno), errno);
-	process.fd_out = dup(STDOUT_FILENO);
-	if (process.fd_out == INVALID)
-		exit_minishell(data, "dup", strerror(errno), errno);
+	process.fd_in = STDIN_FILENO;
+	process.fd_out = STDOUT_FILENO;
 	init_process(data, &process);
 	data->exit_status = (*process.builtin)(array_len(process.command->args),
 			process.command->args, data) & 0377;
-	if (close(process.fd_in) == INVALID)
-		exit_minishell(data, "close", strerror(errno), errno);
-	if (close(process.fd_out) == INVALID)
-		exit_minishell(data, "close", strerror(errno), errno);
+	fd_dup2(data, dup_fd[RD], STDIN_FILENO);
+	fd_dup2(data, dup_fd[WR], STDOUT_FILENO);
 }
 
 int	wait_process(pid_t *pid_array, int num_cmd)
