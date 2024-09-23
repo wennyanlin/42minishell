@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/10 14:03:18 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/20 13:44:56 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void	clear_data(t_data *data)
 		free(data->tokens);
 		data->tokens = next_token;
 	}
-	free(data->pid);
 	while (data->cmds)
 	{
 		next_cmds = data->cmds->next;
@@ -41,7 +40,10 @@ void	clear_data(t_data *data)
 		free(data->cmds);
 		data->cmds = next_cmds;
 	}
+	free(data->pid);
+	data->pid = NULL;
 	free(data->cmd_path);
+	data->cmd_path = NULL;
 }
 
 int	error_message(char *source, char *err_str, int code)
@@ -54,13 +56,13 @@ int	error_message(char *source, char *err_str, int code)
 
 void	exit_minishell(t_data *data, char *source, char *err_str, int code)
 {
-	clear_data(data);
-	array_clear(&data->envp);
 	if (source)
 	{
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		exit(error_message(source, err_str, code));
+		(void)error_message(source, err_str, code);
 	}
+	clear_data(data);
+	array_clear(&data->envp);
 	exit(code);
 }
 
@@ -74,8 +76,8 @@ void	start_minishell(void)
 	dt.exit_status = 0;
 	dt.tokens = NULL;
 	dt.cmds = NULL;
-	dt.cmd_path = NULL;
 	dt.pid = NULL;
+	dt.cmd_path = NULL;
 	while (TRUE)
 	{
 		dt.line = readline(PROMPT);

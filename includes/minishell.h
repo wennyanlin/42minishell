@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/08 14:27:17 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/20 01:40:32 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,21 @@ typedef enum e_metachar
 	LESS_LESS
 }	t_metachar;
 
+typedef struct s_str
+{
+	char	*value;
+	char	**empty;
+	int		continue_from_index;
+}	t_str;
+
+typedef struct s_token
+{
+	char			*word;
+	t_metachar		metachar;
+	struct s_token	*prev;
+	struct s_token	*next;
+}	t_token;
+
 typedef struct s_redirect
 {
 	t_metachar			type;
@@ -87,14 +102,6 @@ typedef struct s_commands
 	struct s_commands	*next;
 }	t_commands;
 
-typedef struct s_token
-{
-	char			*word;
-	t_metachar		metachar;
-	struct s_token	*prev;
-	struct s_token	*next;
-}	t_token;
-
 typedef struct s_data
 {
 	int			exit_status;
@@ -102,29 +109,22 @@ typedef struct s_data
 	char		*line;
 	t_token		*tokens;
 	t_commands	*cmds;
-	char		*cmd_path;
 	pid_t		*pid;
+	char		*cmd_path;
 }	t_data;
 
 typedef int	(*t_bfunc)(int argc, char *argv[], t_data *data);
 
 typedef struct s_process
 {
-	pid_t	pid;
-	int		fd_in;
-	int		fd_out;
-	int		pipe_fd[2];
-	char	*cmd_path;
-	t_bfunc	builtin;
-	char	**command;
+	pid_t		pid;
+	int			fd_in;
+	int			fd_out;
+	int			pipe_fd[2];
+	char		*cmd_path;
+	t_bfunc		builtin;
+	t_commands	*command;
 }	t_process;
-
-typedef struct s_str
-{
-	char	*value;
-	char	**empty;
-	int		continue_from_index;
-}	t_str;
 
 /*===================================MINISHELL================================*/
 
@@ -133,10 +133,6 @@ void		exit_minishell(t_data *data, char *source, char *err_str, int code);
 
 /*======================================LEXER=================================*/
 
-char		*string_concat(char *path, char *cmd);
-char		*make_path(char *dir, char *cmd);
-char		**split_path(char *string, char separator);
-char		*find_cmd_path(char *cmd);
 void		ft_error(char *input, int start);
 // void		printf_list(t_token *lst);
 int			is_delimiter(char c);
@@ -160,15 +156,14 @@ void		cmd_lst_addback(t_commands **cmds, t_commands *new);
 
 /*====================================EXECUTOR================================*/
 
-void		shell_expansion(t_data *data, char **args);
-void		init_process(t_data *data, t_commands *cmds, t_process *process,
-				int pipe_read_end_prev);
-void		child_process(t_data *data, t_process *process);
 pid_t		create_process(t_data *data, t_process *process);
-void		fd_dup2(t_data *data, int oldfd, int newfd);
-void		execute_command(t_data *data, char *command_path, char **cmd_args);
 void		execute_all(t_data *data, t_commands *cmds);
+char		*find_cmd_path(t_data *data, char *cmd);
+void		fd_dup2(t_data *data, int oldfd, int newfd);
+void		init_process(t_data *data, t_process *process);
 int			lst_size(t_commands *cmds);
+void		shell_expansion(t_data *data, char **args);
+char		**split_path(char *string, char separator);
 
 int			read_here_doc(char *limiter);
 

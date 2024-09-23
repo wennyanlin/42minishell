@@ -6,39 +6,38 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/14 19:28:12 by wlin             ###   ########.fr       */
+/*   Updated: 2024/09/22 16:27:08 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	simple_command(t_data *data, t_process *process, int pipe_read_end_prev)
+void	simple_command(t_data *data, t_commands *cmd)
 {
-	int	fd_storage[2];
+	t_process	process;
+	const int	dup_fd[2] = {dup(STDIN_FILENO), dup(STDOUT_FILENO)};
 
-	shell_expansion(data, data->cmds->args);
-	init_process(data, data->cmds, process, pipe_read_end_prev);
-	if (process->command != NULL && process->fd_out != -1)
-	{
-		fd_storage[RD] = dup(STDIN_FILENO);
-		fd_storage[WR] = dup(STDOUT_FILENO);
-		fd_dup2(data, process->fd_in, STDIN_FILENO);
-		fd_dup2(data, process->fd_out, STDOUT_FILENO);
-		close(process->fd_in);
-		close(process->fd_out);
-		data->exit_status = (*process->builtin)(array_len(process->command),
-				process->command, data) & 0377;
-		fd_dup2(data, fd_storage[RD], STDIN_FILENO);
-		fd_dup2(data, fd_storage[WR], STDOUT_FILENO);
-		close(fd_storage[RD]);
-		close(fd_storage[WR]);
-	}
+	if (dup_fd[RD] == INVALID || dup_fd[WR] == INVALID)
+		exit_minishell(data, "dup", strerror(errno), errno);
+	process.command = cmd;
+	process.fd_in = STDIN_FILENO;
+	process.fd_out = STDOUT_FILENO;
+	init_process(data, &process);
+	data->exit_status = (*process.builtin)(array_len(process.command->args),
+			process.command->args, data) & 0377;
+	fd_dup2(data, dup_fd[RD], STDIN_FILENO);
+	fd_dup2(data, dup_fd[WR], STDOUT_FILENO);
 }
 
-int	get_wait_status(int status)
+int	wait_process(pid_t *pid_array, int num_cmd)
 {
+	int	i;
+	int	status;
 	int	stat_code;
 
+	i = -1;
+	while (++i < num_cmd)
+		waitpid(pid_array[i], &status, 0);
 	stat_code = EXIT_FAILURE;
 	if (WIFEXITED(status))
 		stat_code = WEXITSTATUS(status);
@@ -49,66 +48,56 @@ int	get_wait_status(int status)
 	return (stat_code);
 }
 
-int	wait_process(pid_t *pid_array, int num_cmd)
+void	link_command(t_data *data, t_commands *cmds, pid_t *pid,
+		int pipe_read_end_prev)
 {
-	int	i;
-	int	status;
+	t_process	process;
 
-	i = -1;
-	while (++i < num_cmd)
-		waitpid(pid_array[i], &status, 0);
-	return (get_wait_status(status));
-}
-
-void	execute_command(t_data *data, char *command_path, char **cmd_args)
-{
-	char	*shell_path;
-
-	execve(command_path, cmd_args, environ);
-	if (errno == ENOEXEC)
+	if (!cmds)
+		return ;
+	if (cmds->prev)
+		shell_expansion(data, cmds->args);
+	process.command = cmds;
+	process.fd_in = pipe_read_end_prev;
+	if (cmds->next)
 	{
-		shell_path = getenv("SHELL");
-		execve(shell_path, array_add_front(&cmd_args, shell_path), environ);
+		if (pipe(process.pipe_fd) == INVALID)
+			exit_minishell(data, "pipe", strerror(errno), errno);
+		process.fd_out = process.pipe_fd[WR];
 	}
-	else if (errno == ENOENT && char_index(cmd_args[0], '/') == INVALID)
-		exit_minishell(data, cmd_args[0], "command not found", NOTFOUND);
 	else
-		exit_minishell(data, cmd_args[0], strerror(errno), NOTFOUND);
+	{
+		process.fd_out = dup(STDOUT_FILENO);
+		if (process.fd_out == INVALID)
+			exit_minishell(data, "dup", strerror(errno), errno);
+	}
+	*pid = create_process(data, &process);
+	pipe_read_end_prev = process.pipe_fd[RD];
+	free(data->cmd_path);
+	data->cmd_path = NULL;
+	link_command(data, cmds->next, ++pid, pipe_read_end_prev);
 }
 
 void	execute_all(t_data *data, t_commands *cmds)
 {
-	t_process	process;
-	int			i;
-	const int	num_cmd = lst_size(cmds);
-	int			pipe_read_end_prev;
+	int	num_cmd;
+	int	pipe_read_end_prev;
 
-	i = -1;
 	if (cmds == NULL)
 		return ;
-	pipe_read_end_prev = dup(STDIN_FILENO);
-	if (pipe_read_end_prev == -1)
-		return ;
+	num_cmd = lst_size(cmds);
 	data->pid = malloc(sizeof(pid_t) * num_cmd);
 	if (data->pid == NULL)
-		return ;
+		exit_minishell(data, "malloc", strerror(errno), errno);
+	shell_expansion(data, cmds->args);
 	if (!is_builtin(NULL, cmds->args[0]) || num_cmd > 1)
 	{
-		while (cmds)
-		{
-			shell_expansion(data, cmds->args);
-			init_process(data, cmds, &process, pipe_read_end_prev);
-			if (process.command != NULL && process.fd_out != -1
-				&& process.fd_in != -1)
-				data->pid[++i] = create_process(data, &process);
-			if (!process.builtin)
-				free(process.cmd_path);
-			pipe_read_end_prev = process.pipe_fd[RD];
-			data->cmd_path = NULL;
-			cmds = cmds->next;
-		}
+		pipe_read_end_prev = dup(STDIN_FILENO);
+		if (pipe_read_end_prev == INVALID)
+			exit_minishell(data, "dup", strerror(errno), errno);
+		link_command(data, cmds, data->pid, pipe_read_end_prev);
 		data->exit_status = wait_process(data->pid, num_cmd);
 	}
 	else
-		simple_command(data, &process, pipe_read_end_prev);
+		simple_command(data, cmds);
 }
