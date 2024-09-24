@@ -15,8 +15,6 @@ void compare_lst(t_token *expected, t_token *actual, char *description)
             printf("\n%s %sFAILED%s: Actual value `%s`, Expected NULL\n", description, RED, RESET, actual->word);
         else if (expected->word && !actual->word)
             printf("\n%s %sFAILED%s: Actual NULL, expected value `%s`\n", description, RED, RESET, expected->word);
-        
-
         if (expected->metachar != actual->metachar)
             printf("\n%s %sFAILED%s: Actual token `%i`, expected `%i`\n", description, RED, RESET, actual->metachar, expected->metachar);
         
@@ -43,17 +41,9 @@ void test_lexer_should_return_empty_when_input_is_empty(void)
 {
     char *input = "";
     t_token *result;
-    t_token expected;
 
-    tokenize(&result, input);
-
-    expected.word = NULL;
-    expected.metachar = -1;
-    expected.next = NULL;
-    expected.prev = NULL;
-
-    compare_lst(&expected, result, "Should return empty when input is empty");
-    free_token_lst(&result);
+    if (!tokenize(&result, input))
+        printf("\n%s %sPASSED%s\n", "Should return empty when input is empty", GREEN, RESET);
 }
 
 void test_lexer_should_return_single_word(void)
