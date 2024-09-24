@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:07:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/02 04:49:18 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/24 12:42:17 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,5 +95,7 @@ int	tokenize(t_token **token_lst, char *input)
 		if (i < 0)
 			return (FALSE);
 	}
+	if ((*token_lst)->next == NULL)
+		return (FALSE);
 	return (TRUE);
 }
