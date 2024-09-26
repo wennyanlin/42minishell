@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 18:07:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/24 12:42:17 by wlin             ###   ########.fr       */
+/*   Updated: 2024/09/26 12:31:32 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ int	tokenize(t_token **token_lst, char *input)
 	int		i;
 
 	i = 0;
+	*token_lst = NULL;
 	if (!input || *input == '\0')
 		return (FALSE);
 	*token_lst = create_lst_node(NULL, -1);
@@ -95,7 +96,5 @@ int	tokenize(t_token **token_lst, char *input)
 		if (i < 0)
 			return (FALSE);
 	}
-	if ((*token_lst)->next == NULL)
-		return (FALSE);
-	return (TRUE);
+	return ((*token_lst)->metachar != UNSET);
 }
