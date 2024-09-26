@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/20 01:40:32 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/26 12:39:45 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ char		*find_cmd_path(t_data *data, char *cmd);
 void		fd_dup2(t_data *data, int oldfd, int newfd);
 void		init_process(t_data *data, t_process *process);
 int			lst_size(t_commands *cmds);
-void		shell_expansion(t_data *data, char **args);
+void		shell_expansion(t_data *data, char ***pargs);
 char		**split_path(char *string, char separator);
 
 int			read_here_doc(char *limiter);
