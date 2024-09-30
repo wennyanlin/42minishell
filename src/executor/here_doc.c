@@ -6,11 +6,16 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 19:15:28 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/19 16:31:30 by wlin             ###   ########.fr       */
+/*   Updated: 2024/09/30 17:15:32 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	*create_heredoc_filename()
+{
+	return ("/tmp/tmp_heredoc");
+}
 
 int	check_limiter(char *next_line, char *limiter)
 {
@@ -27,21 +32,25 @@ int	check_limiter(char *next_line, char *limiter)
 	return (0);
 }
 
-int	read_here_doc(char *limiter)
+char	*read_here_doc(t_data *data, char *limiter)
 {
-	int		pipe_fd[2];
 	char	*next_line;
+	char	*filename;
+	int		hd_fd;
 
-	pipe(pipe_fd);
+	filename = create_heredoc_filename();
+	hd_fd = open(filename, O_CREAT | O_WRONLY, 0666);
+	if (hd_fd == INVALID)
+		exit_minishell(data, filename, strerror(errno), errno);
 	next_line = readline(HEREDOC_PROMPT);
 	while (check_limiter(next_line, limiter) == 0)
 	{
-		write(pipe_fd[WR], next_line, ft_strlen(next_line));
-		write(pipe_fd[WR], "\n", 1);
+		write(hd_fd, next_line, ft_strlen(next_line));
+		write(hd_fd, "\n", 1);
 		free(next_line);
 		next_line = readline(HEREDOC_PROMPT);
 	}
-	close(pipe_fd[WR]);
+	close(hd_fd);
 	free(next_line);
-	return (pipe_fd[RD]);
+	return (filename);
 }

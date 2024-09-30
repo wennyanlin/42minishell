@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:46:09 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/22 16:23:04 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/30 17:15:03 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,11 @@ void	redirect_infile(t_data *data, t_process *process, t_redirect *redirect)
 {
 	if (close(process->fd_in) == INVALID)
 		exit_minishell(data, "close", strerror(errno), errno);
+	if (redirect->type == LESS_LESS)
+		redirect->filename = read_here_doc(data, redirect->filename);
 	process->fd_in = open(redirect->filename, O_RDONLY);
+	if (redirect->type == LESS_LESS)
+		unlink(redirect->filename);
 	if (process->fd_in == INVALID)
 		exit_minishell(data, redirect->filename, strerror(errno), errno);
 }
