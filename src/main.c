@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/20 13:44:56 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/30 16:09:28 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ void	start_minishell(void)
 	while (TRUE)
 	{
 		dt.line = readline(PROMPT);
+		add_history(dt.line);
 		if (tokenize(&dt.tokens, dt.line) && parse_tokens(&dt))
 			execute_all(&dt, dt.cmds);
 		clear_data(&dt);
