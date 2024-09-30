@@ -6,33 +6,49 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 19:15:28 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/30 17:15:32 by wlin             ###   ########.fr       */
+/*   Updated: 2024/09/30 18:04:08 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*create_heredoc_filename()
+char	*create_heredoc_filename(void)
 {
-	return ("/tmp/tmp_heredoc");
+	char	*filename_prefix;
+	char	*filename_suffix;
+	char	*filename;
+	int		i;
+
+	filename_prefix = "/tmp/tmp_heredoc";
+	filename = ft_strdup(filename_prefix);
+	i = 0;
+	while (access(filename, F_OK) == 0)
+	{
+		free(filename);
+		filename_suffix = ft_itoa(i);
+		filename = ft_strjoin(filename_prefix, filename_suffix);
+		free(filename_suffix);
+		i++;
+	}
+	return (filename);
 }
 
-int	check_limiter(char *next_line, char *limiter)
+int	check_delimiter(char *next_line, char *delimiter)
 {
 	int	i;
 
-	if ((ft_strlen(next_line)) == ft_strlen(limiter))
+	if ((ft_strlen(next_line)) == ft_strlen(delimiter))
 	{
 		i = -1;
-		while (limiter[++i])
-			if (next_line[i] != limiter[i])
+		while (delimiter[++i])
+			if (next_line[i] != delimiter[i])
 				return (0);
 		return (1);
 	}
 	return (0);
 }
 
-char	*read_here_doc(t_data *data, char *limiter)
+char	*read_here_doc(t_data *data, char *delimiter)
 {
 	char	*next_line;
 	char	*filename;
@@ -43,7 +59,7 @@ char	*read_here_doc(t_data *data, char *limiter)
 	if (hd_fd == INVALID)
 		exit_minishell(data, filename, strerror(errno), errno);
 	next_line = readline(HEREDOC_PROMPT);
-	while (check_limiter(next_line, limiter) == 0)
+	while (check_delimiter(next_line, delimiter) == 0)
 	{
 		write(hd_fd, next_line, ft_strlen(next_line));
 		write(hd_fd, "\n", 1);
