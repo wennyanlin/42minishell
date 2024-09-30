@@ -6,7 +6,7 @@
 /*   By: rtorrent <rtorrent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 21:08:04 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/09/06 19:45:45 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/30 21:58:15 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,4 +78,9 @@ char	**array_add_front(char ***parray, char *str)
 		*parray = a0;
 	}
 	return (a0);
+}
+
+char	**array_join(char **array1, char **array2)
+{
+	//TODO
 }

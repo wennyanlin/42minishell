@@ -6,20 +6,25 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 19:12:32 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/09/29 21:29:27 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/30 21:50:26 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*word_splitting(char **pstr, int in_quote)
+static void	word_splitting(char **pstr, int in_quote)
 {
 	char	*value;
 
-	value = *getenv(*pstr);
-	if (in_quote)
-		return (value);
-
+	value = getenv(*pstr);
+	if (value)
+	{
+		value = ft_strdup(value);
+		if (value && !in_quote)
+			ft_striteri(value, mark_spaces);
+	}
+	free(*pstr);
+	*pstr = value;
 }
 
 static char	*parameter_expansion(t_data *data, char **args, char **parg,
@@ -28,26 +33,26 @@ static char	*parameter_expansion(t_data *data, char **args, char **parg,
 	char	*str1;
 	char	*str2;
 
-	str1 = NULL;
 	if (type == TILDE)
-		str2 = getenv("HOME");
+		str1 = ft_strdup(getenv("HOME"));
 	else if (type == QUESTION)
 	{
 		(*parg)++;
 		str1 = ft_itoa(data->exit_status);
-		str2 = str1;
 	}
 	else
 	{
-		str2 = (*parg)++;
+		str1 = (*parg)++;
 		while (ft_isalnum(**parg) || **parg == UNDERSCORE)
 			++*parg;
-		str1 = ft_substr(str2, 0, *parg - str2);
-		str2 = word_splitting(&str1, type);
+		str1 = ft_substr(str1, 0, *parg - str1);
+		word_splitting(&str1, type);
 	}
-	if (!str2)
-		str2 = "";
-	str2 = ft_strjoin(*args, str2);
+	if (!str1)
+		str1 = ft_calloc(1, 1);
+	str2 = NULL;
+	if (str1)
+		str2 = ft_strjoin(*args, str1);
 	free(str1);
 	return (str2);
 }
@@ -104,6 +109,7 @@ static void	quote_removal(t_data *data, char **args, char **parg,
 void	shell_expansion(t_data *data, char ***pargs)
 {
 	char	**args;
+	char	**split_arg;
 	char	*arg;
 
 	if (*pargs == NULL)
@@ -118,6 +124,11 @@ void	shell_expansion(t_data *data, char ***pargs)
 				quote_removal(data, args, &arg, *arg);
 			else
 				check_parameter(data, args, &arg, FALSE);
+		}
+		if (ft_strchr(*args, DC1))
+		{
+			split_arg = ft_split(*args, DC1);
+			//TODO join arrays
 		}
 		++args;
 	}

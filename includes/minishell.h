@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/26 12:39:45 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/09/30 21:58:44 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@
 # define INVALID -1
 # define NONE 0
 
+# define DC1 17
 # define QUOTE_D 34
 # define DOLLAR 36
 # define QUOTE_S 39
@@ -165,7 +166,7 @@ int			lst_size(t_commands *cmds);
 void		shell_expansion(t_data *data, char ***pargs);
 char		**split_path(char *string, char separator);
 
-int			read_here_doc(char *limiter);
+char		*read_here_doc(t_data *data, char *limiter);
 
 /*======================================BUILTIN===============================*/
 
@@ -181,12 +182,14 @@ int			is_builtin(t_bfunc *dst, char *cmd);
 
 char		**array_add_front(char ***parray, char *str);
 void		array_clear(char ***parray);
+char		**array_join(char **array1, char **array2);
 size_t		array_len(char **array);
 char		**array_dup(char **array);
 int			char_index(char *args, char ref);
 int			find_end_chars_index(char *input, int i);
 int			is_equal(char *s1, char *s2);
 int			is_whitespace(char c);
+void		mark_spaces(unsigned int i, char *c);
 int			skip_spaces(char *str, int i);
 
 #endif
