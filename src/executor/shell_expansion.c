@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 19:12:32 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/01 14:22:15 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/01 15:40:17 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ void	shell_expansion(t_data *data, char ***pargs)
 	char	**args;
 	char	**split_arg;
 	char	*arg;
+	size_t	n;
 
 	if (*pargs == NULL)
 		return ;
@@ -126,7 +127,12 @@ void	shell_expansion(t_data *data, char ***pargs)
 		if (ft_strchr(*args, UNIT_SEPARATOR))
 		{
 			split_arg = ft_split(*args, UNIT_SEPARATOR);
-			//TODO join arrays
+			free(*args);
+			*args++ = NULL;
+			n = array_len(*pargs) + array_len(split_arg);
+			array_merge(pargs, array_merge(&split_arg, args));
+			array_clear(&split_arg);
+			args = *pargs + n - 1;
 		}
 		++args;
 	}

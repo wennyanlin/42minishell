@@ -6,7 +6,7 @@
 /*   By: rtorrent <rtorrent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 21:08:04 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/01 14:39:30 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/01 15:12:02 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,22 +76,25 @@ char	**array_add_front(char ***parray, char *str)
 	return (a0);
 }
 
-char	**array_join(char **array1, char **array2)
+char	**array_merge_back(char ***parray1, char **array2)
 {
-	char **const	a0 = malloc(array_len(array1) + array_len(array2) + 1);
+	char **const	a0 = malloc((array_len(*parray1) + array_len(array2) + 1)
+			* sizeof(char *));
 	char			**a;
 	char			**array;
 
 	if (a0)
 	{
 		a = a0;
-		array = array1;
+		array = *parray1;
 		while (*array)
 			*a++ = *array++;
 		array = array2;
 		while (*array)
 			*a++ = *array++;
 		*a = NULL;
-		return (a0);
+		free(*parray);
+		*parray = a0;
 	}
+	return (a0);
 }
