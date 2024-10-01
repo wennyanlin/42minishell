@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 19:12:32 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/09/30 21:50:26 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/01 14:22:15 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,9 @@ static char	*parameter_expansion(t_data *data, char **args, char **parg,
 		str1 = ft_substr(str1, 0, *parg - str1);
 		word_splitting(&str1, type);
 	}
-	if (!str1)
-		str1 = ft_calloc(1, 1);
-	str2 = NULL;
+	str2 = *args;
 	if (str1)
-		str2 = ft_strjoin(*args, str1);
+		str2 = ft_strjoin(str2, str1);
 	free(str1);
 	return (str2);
 }
@@ -125,9 +123,9 @@ void	shell_expansion(t_data *data, char ***pargs)
 			else
 				check_parameter(data, args, &arg, FALSE);
 		}
-		if (ft_strchr(*args, DC1))
+		if (ft_strchr(*args, UNIT_SEPARATOR))
 		{
-			split_arg = ft_split(*args, DC1);
+			split_arg = ft_split(*args, UNIT_SEPARATOR);
 			//TODO join arrays
 		}
 		++args;

@@ -6,7 +6,7 @@
 /*   By: rtorrent <rtorrent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 21:08:04 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/09/30 21:58:15 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/01 14:39:30 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,9 @@ size_t	array_len(char **array)
 
 char	**array_dup(char **array)
 {
-	char	**a0;
-	char	**a;
+	char **const	a0 = malloc((array_len(array) + 1) * sizeof(char *));
+	char			**a;
 
-	a0 = malloc((array_len(array) + 1) * sizeof(char *));
 	if (a0)
 	{
 		a = a0;
@@ -69,10 +68,7 @@ char	**array_add_front(char ***parray, char *str)
 		*a++ = str;
 		array = *parray;
 		while (*array)
-		{
-			*a = *array++;
-			a++;
-		}
+			*a++ = *array++;
 		*a = NULL;
 		free(*parray);
 		*parray = a0;
@@ -82,5 +78,20 @@ char	**array_add_front(char ***parray, char *str)
 
 char	**array_join(char **array1, char **array2)
 {
-	//TODO
+	char **const	a0 = malloc(array_len(array1) + array_len(array2) + 1);
+	char			**a;
+	char			**array;
+
+	if (a0)
+	{
+		a = a0;
+		array = array1;
+		while (*array)
+			*a++ = *array++;
+		array = array2;
+		while (*array)
+			*a++ = *array++;
+		*a = NULL;
+		return (a0);
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 20:17:10 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/09/30 20:37:47 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/01 14:15:44 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,5 +15,5 @@
 static void	mark_spaces(unsigned int i, char *c)
 {
 	if (*c && is_whitespace(*c))
-		*c = DC1;
+		*c = UNIT_SEPARATOR;
 }

@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/30 21:58:44 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/01 14:14:18 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@
 # define INVALID -1
 # define NONE 0
 
-# define DC1 17
+# define UNIT_SEPARATOR 31
 # define QUOTE_D 34
 # define DOLLAR 36
 # define QUOTE_S 39
@@ -166,7 +166,7 @@ int			lst_size(t_commands *cmds);
 void		shell_expansion(t_data *data, char ***pargs);
 char		**split_path(char *string, char separator);
 
-char		*read_here_doc(t_data *data, char *limiter);
+char		*read_here_doc(t_data *data, char *delimiter);
 
 /*======================================BUILTIN===============================*/
 
