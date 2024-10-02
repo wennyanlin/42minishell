@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:46:09 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/30 18:03:36 by wlin             ###   ########.fr       */
+/*   Updated: 2024/10/02 05:07:47 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,21 @@ void	redirect_outfile(t_data *data, t_process *process, t_redirect *redirect)
 void	handle_redirection(t_data *data, t_process *process,
 	t_redirect *redirect)
 {
-	char	*args[2];
+	char	**redirection_split;
 
-	args[0] = redirect->filename;
-	args[1] = NULL;
-	shell_expansion(data, args);
-	redirect->filename = args[0];
+	redirection_split = array_dup((char *[2]){redirect->filename, NULL});
+	if (redirection_split == NULL)
+		exit_minishell(data, redirect->filename, strerror(errno), errno);
+	shell_expansion(data, &redirection_split);
+	if (array_len(redirection_split) != 1)
+	{
+		error_message(TRUE, redirect->filename, "ambiguous redirect",
+			EXIT_FAILURE);
+		array_clear(&redirection_split);
+		exit_minishell(data, NULL, NULL, EXIT_FAILURE);
+	}
+	redirect->filename = redirection_split[0];
+	array_clear(&redirection_split);
 	if (redirect->type == LESS)
 		redirect_infile(data, process, redirect);
 	else if (redirect->type == LESS_LESS)
