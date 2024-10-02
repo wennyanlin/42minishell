@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 19:12:32 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/02 15:20:50 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/02 22:49:19 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ static void	word_split(char ***pargs, char ***pparg)
 
 	split_arg = ft_split(**pparg, UNIT_SEPARATOR);
 	free(**pparg);
-	**pparg++ = NULL;
+	*(*pparg)++ = NULL;
 	n = array_len(*pargs) + array_len(split_arg);
 	array_merge_back(pargs, array_merge_back(&split_arg, *pparg));
-	array_clear(&split_arg);
+	free(split_arg);
 	*pparg = *pargs + n - 1;
 }
 
