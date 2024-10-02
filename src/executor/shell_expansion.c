@@ -6,25 +6,24 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 19:12:32 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/01 15:40:17 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/02 05:58:08 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	word_splitting(char **pstr, int in_quote)
+static void	word_split(char ***pargs, char ***pparg)
 {
-	char	*value;
+	char	**split_arg;
+	size_t	n;
 
-	value = getenv(*pstr);
-	if (value)
-	{
-		value = ft_strdup(value);
-		if (value && !in_quote)
-			ft_striteri(value, mark_spaces);
-	}
-	free(*pstr);
-	*pstr = value;
+	split_arg = ft_split(**pparg, UNIT_SEPARATOR);
+	free(**pparg);
+	**pparg++ = NULL;
+	n = array_len(*pargs) + array_len(split_arg);
+	array_merge(pargs, array_merge(&split_arg, *pparg));
+	array_clear(&split_arg);
+	*pparg = *pargs + n - 1;
 }
 
 static char	*parameter_expansion(t_data *data, char **args, char **parg,
@@ -46,7 +45,7 @@ static char	*parameter_expansion(t_data *data, char **args, char **parg,
 		while (ft_isalnum(**parg) || **parg == UNDERSCORE)
 			++*parg;
 		str1 = ft_substr(str1, 0, *parg - str1);
-		word_splitting(&str1, type);
+		get_value(&str1, type);
 	}
 	str2 = *args;
 	if (str1)
@@ -55,8 +54,7 @@ static char	*parameter_expansion(t_data *data, char **args, char **parg,
 	return (str2);
 }
 
-static void	check_parameter(t_data *data, char **args, char **parg,
-	int type)
+static void	check_parameter(t_data *data, char **args, char **parg, int type)
 {
 	char	*str1;
 	char	*str2;
@@ -107,9 +105,7 @@ static void	quote_removal(t_data *data, char **args, char **parg,
 void	shell_expansion(t_data *data, char ***pargs)
 {
 	char	**args;
-	char	**split_arg;
 	char	*arg;
-	size_t	n;
 
 	if (*pargs == NULL)
 		return ;
@@ -125,15 +121,7 @@ void	shell_expansion(t_data *data, char ***pargs)
 				check_parameter(data, args, &arg, FALSE);
 		}
 		if (ft_strchr(*args, UNIT_SEPARATOR))
-		{
-			split_arg = ft_split(*args, UNIT_SEPARATOR);
-			free(*args);
-			*args++ = NULL;
-			n = array_len(*pargs) + array_len(split_arg);
-			array_merge(pargs, array_merge(&split_arg, args));
-			array_clear(&split_arg);
-			args = *pargs + n - 1;
-		}
+			word_split(pargs, &args);
 		++args;
 	}
 }
