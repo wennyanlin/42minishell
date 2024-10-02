@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/30 16:09:28 by wlin             ###   ########.fr       */
+/*   Updated: 2024/10/02 05:02:57 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,10 @@ void	clear_data(t_data *data)
 	data->cmd_path = NULL;
 }
 
-int	error_message(char *source, char *err_str, int code)
+int	error_message(int print_shl, char *source, char *err_str, int code)
 {
+	if (print_shl)
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
 	ft_putstr_fd(source, STDERR_FILENO);
 	ft_putstr_fd(": ", STDERR_FILENO);
 	ft_putendl_fd(err_str, STDERR_FILENO);
@@ -57,10 +59,7 @@ int	error_message(char *source, char *err_str, int code)
 void	exit_minishell(t_data *data, char *source, char *err_str, int code)
 {
 	if (source)
-	{
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		(void)error_message(source, err_str, code);
-	}
+		error_message(TRUE, source, err_str, code);
 	clear_data(data);
 	array_clear(&data->envp);
 	exit(code);

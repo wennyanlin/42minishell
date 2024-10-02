@@ -6,7 +6,7 @@
 /*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 14:06:28 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/09/08 15:05:24 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/02 04:46:26 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	bt_pwd(int argc, char *argv[], t_data *data)
 	(void)argv;
 	(void)data;
 	if (argc > 1)
-		return (error_message("pwd", "invalid option", PWD_ERROR));
+		return (error_message(FALSE, "pwd", "invalid option", PWD_ERROR));
 	if (getcwd(buffer, PATH_MAX))
 		pwd = buffer;
 	else

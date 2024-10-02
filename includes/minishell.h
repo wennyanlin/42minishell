@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/01 14:14:18 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/02 05:01:55 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ typedef struct s_process
 
 /*===================================MINISHELL================================*/
 
-int			error_message(char *source, char *err_str, int code);
+int			error_message(int print_shl, char *source, char *err_str, int code);
 void		exit_minishell(t_data *data, char *source, char *err_str, int code);
 
 /*======================================LEXER=================================*/
