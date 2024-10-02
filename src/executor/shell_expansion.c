@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 19:12:32 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/02 05:58:08 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/02 15:20:50 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	word_split(char ***pargs, char ***pparg)
 	free(**pparg);
 	**pparg++ = NULL;
 	n = array_len(*pargs) + array_len(split_arg);
-	array_merge(pargs, array_merge(&split_arg, *pparg));
+	array_merge_back(pargs, array_merge_back(&split_arg, *pparg));
 	array_clear(&split_arg);
 	*pparg = *pargs + n - 1;
 }
@@ -87,7 +87,7 @@ static void	quote_removal(t_data *data, char **args, char **parg,
 	char	*str2;
 
 	*(*parg)++ = '\0';
-	arg_close = ft_strchr(*parg, q);
+	arg_close = ft_strchr(*parg, quote);
 	str1 = ft_substr(*parg, 0, arg_close - *parg);
 	str2 = str1;
 	while (quote == QUOTE_D && str1 && str2 && *str2)

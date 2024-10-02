@@ -6,7 +6,7 @@
 /*   By: rtorrent <rtorrent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 21:08:04 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/01 15:12:02 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/02 15:28:10 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,10 @@ size_t	array_len(char **array)
 
 char	**array_dup(char **array)
 {
-	char **const	a0 = malloc((array_len(array) + 1) * sizeof(char *));
-	char			**a;
+	char	**a0;
+	char	**a;
 
+	a0 = malloc((array_len(array) + 1) * sizeof(char *));
 	if (a0)
 	{
 		a = a0;
@@ -93,8 +94,8 @@ char	**array_merge_back(char ***parray1, char **array2)
 		while (*array)
 			*a++ = *array++;
 		*a = NULL;
-		free(*parray);
-		*parray = a0;
+		free(*parray1);
+		*parray1 = a0;
 	}
 	return (a0);
 }

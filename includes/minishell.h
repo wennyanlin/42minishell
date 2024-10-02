@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/02 05:34:02 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/02 15:09:34 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,9 +182,10 @@ int			is_builtin(t_bfunc *dst, char *cmd);
 
 char		**array_add_front(char ***parray, char *str);
 void		array_clear(char ***parray);
+char		**array_dup(char **array);
 char		**array_join(char **array1, char **array2);
 size_t		array_len(char **array);
-char		**array_dup(char **array);
+char		**array_merge_back(char ***parray1, char **array2);
 int			char_index(char *args, char ref);
 int			find_end_chars_index(char *input, int i);
 int			is_equal(char *s1, char *s2);
