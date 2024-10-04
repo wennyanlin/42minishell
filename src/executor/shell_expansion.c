@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 19:12:32 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/02 22:49:19 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/04 22:49:15 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ static void	word_split(char ***pargs, char ***pparg)
 }
 
 static char	*parameter_expansion(t_data *data, char **args, char **parg,
-	const int type)
+	int flags)
 {
 	char	*str1;
 	char	*str2;
 
-	if (type == TILDE)
+	if (flags & ITL)
 		str1 = ft_strdup(getenv("HOME"));
-	else if (type == QUESTION)
+	else if (flags & IQU)
 	{
 		(*parg)++;
 		str1 = ft_itoa(data->exit_status);
@@ -45,7 +45,7 @@ static char	*parameter_expansion(t_data *data, char **args, char **parg,
 		while (ft_isalnum(**parg) || **parg == UNDERSCORE)
 			++*parg;
 		str1 = ft_substr(str1, 0, *parg - str1);
-		get_value(&str1, type);
+		get_value(&str1, flags);
 	}
 	str2 = *args;
 	if (str1)
@@ -54,23 +54,25 @@ static char	*parameter_expansion(t_data *data, char **args, char **parg,
 	return (str2);
 }
 
-static void	check_parameter(t_data *data, char **args, char **parg, int type)
+static void	check_parameter(t_data *data, char **args, char **parg, int flags)
 {
 	char	*str1;
 	char	*str2;
 
-	if ((*parg)[0] == TILDE && (!(*parg)[1] || is_whitespace((*parg)[1])))
-		type = TILDE;
-	else if ((*parg)[0] == DOLLAR && (*parg)[1] == QUESTION)
-		type = QUESTION;
-	else if ((*parg)[0] != DOLLAR
+	if (flags & EXP && (*parg)[0] == TILDE
+		&& (!(*parg)[1] || is_whitespace((*parg)[1])))
+		flags |= ITL;
+	else if (flags & EXP && (*parg)[0] == DOLLAR && (*parg)[1] == QUESTION)
+		flags |= IQU;
+	else if (!(flags & EXP) || (*parg)[0] != DOLLAR
 		|| !(ft_isalpha((*parg)[1]) || (*parg)[1] == UNDERSCORE))
 	{
 		(*parg)++;
 		return ;
 	}
 	*(*parg)++ = '\0';
-	str2 = parameter_expansion(data, args, parg, type);
+	str2 = parameter_expansion(data, args, parg, flags);
+	flags &= ~(ITL | IQU);
 	str1 = ft_strjoin(str2, *parg);
 	if (str1 && str2)
 		*parg = str1 + ft_strlen(str2);
@@ -79,19 +81,20 @@ static void	check_parameter(t_data *data, char **args, char **parg, int type)
 	*args = str1;
 }
 
-static void	quote_removal(t_data *data, char **args, char **parg,
-	const char quote)
+static void	quote_removal(t_data *data, char **args, char **parg, int flags)
 {
-	char	*arg_close;
-	char	*str1;
-	char	*str2;
+	const char	quote = **parg;
+	char		*arg_close;
+	char		*str1;
+	char		*str2;
 
 	*(*parg)++ = '\0';
 	arg_close = ft_strchr(*parg, quote);
 	str1 = ft_substr(*parg, 0, arg_close - *parg);
 	str2 = str1;
-	while (quote == QUOTE_D && str1 && str2 && *str2)
-		check_parameter(data, &str1, &str2, TRUE);
+	if (flags & IDQ)
+		while (str2 && *str2)
+			check_parameter(data, &str1, &str2, flags);
 	str2 = ft_strjoin(*args, str1);
 	free(str1);
 	str1 = ft_strjoin(str2, ++arg_close);
@@ -102,7 +105,7 @@ static void	quote_removal(t_data *data, char **args, char **parg,
 	*args = str1;
 }
 
-void	shell_expansion(t_data *data, char ***pargs)
+void	shell_expansion(t_data *data, char ***pargs, int flags)
 {
 	char	**args;
 	char	*arg;
@@ -115,12 +118,17 @@ void	shell_expansion(t_data *data, char ***pargs)
 		arg = *args;
 		while (arg && *arg)
 		{
-			if (*arg == QUOTE_S || *arg == QUOTE_D)
-				quote_removal(data, args, &arg, *arg);
+			if (*arg == QUOTE_S)
+				flags |= ISQ;
+			else if (*arg == QUOTE_D)
+				flags |= IDQ;
+			if (flags & QRM && flags & (ISQ | IDQ))
+				quote_removal(data, args, &arg, flags);
 			else
-				check_parameter(data, args, &arg, FALSE);
+				check_parameter(data, args, &arg, flags);
+			flags &= ~(ISQ | IDQ);
 		}
-		if (ft_strchr(*args, UNIT_SEPARATOR))
+		if (flags & WSP && ft_strchr(*args, UNIT_SEPARATOR))
 			word_split(pargs, &args);
 		++args;
 	}

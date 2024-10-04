@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/02 03:56:07 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/04 21:09:24 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	link_command(t_data *data, t_commands *cmds, pid_t *pid,
 	if (!cmds)
 		return ;
 	if (cmds->prev)
-		shell_expansion(data, &cmds->args);
+		shell_expansion(data, &cmds->args, QRM | EXP | WSP);
 	process.command = cmds;
 	process.fd_in = pipe_read_end_prev;
 	if (cmds->next)
@@ -89,7 +89,7 @@ void	execute_all(t_data *data, t_commands *cmds)
 	data->pid = malloc(sizeof(pid_t) * num_cmd);
 	if (data->pid == NULL)
 		exit_minishell(data, "malloc", strerror(errno), errno);
-	shell_expansion(data, &cmds->args);
+	shell_expansion(data, &cmds->args, QRM | EXP | WSP);
 	if (!is_builtin(NULL, cmds->args[0]) || num_cmd > 1)
 	{
 		pipe_read_end_prev = dup(STDIN_FILENO);

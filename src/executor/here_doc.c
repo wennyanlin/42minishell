@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 19:15:28 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/30 18:12:11 by wlin             ###   ########.fr       */
+/*   Updated: 2024/10/04 22:46:31 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,27 +50,30 @@ int	check_delimiter(char *next_line, char *delimiter)
 	return (0);
 }
 
-char	*read_here_doc(t_data *data, char *delimiter)
+char	*read_here_doc(t_data *data, char **word)
 {
-	char	*next_line;
-	char	*filename;
-	int		hd_fd;
+	const int	quoted = ft_strchr(*word, QUOTE_S) || ft_strchr(*word, QUOTE_D);
+	char		**next_line;
+	char		*filename;
+	int			hd_fd;
 
 	filename = create_heredoc_filename();
 	if (filename == NULL)
-		exit_minishell(data, "heredoc", strerror(errno), errno);
-	hd_fd = open(filename, O_CREAT | O_WRONLY, 0666);
+		exit_minishell(data, "here-document", strerror(errno), errno);
+	hd_fd = open(filename, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
 	if (hd_fd == INVALID)
 		exit_minishell(data, filename, strerror(errno), errno);
-	next_line = readline(HEREDOC_PROMPT);
-	while (check_delimiter(next_line, delimiter) == 0)
+	shell_expansion(data, &word, QRM);
+	next_line = (char *[2]){readline(HEREDOC_PROMPT), NULL};
+	while (check_delimiter(next_line[0], word[0]) == 0)
 	{
-		write(hd_fd, next_line, ft_strlen(next_line));
-		write(hd_fd, "\n", 1);
-		free(next_line);
-		next_line = readline(HEREDOC_PROMPT);
+		if (!quoted)
+			shell_expansion(data, &next_line, EXP);
+		ft_putendl_fd(next_line[0], hd_fd);
+		free(next_line[0]);
+		next_line[0] = readline(HEREDOC_PROMPT);
 	}
 	close(hd_fd);
-	free(next_line);
+	free(next_line[0]);
 	return (filename);
 }

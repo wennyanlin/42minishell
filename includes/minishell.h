@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/02 15:09:34 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/04 22:13:44 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,25 @@
 # define UNDERSCORE 95
 # define C_PIPE 124
 # define TILDE 126
+
+/*
+  expansor flags:
+    QRM: quote removal
+	ISQ: inside single quotes
+	IDQ: inside double quotes
+    EXP: expand parameters
+	ITL: is tilde
+	IQU: is question
+    WSP: word split
+*/
+
+# define QRM 0001
+# define ISQ 0002
+# define IDQ 0004
+# define EXP 0010
+# define ITL 0020
+# define IQU 0040
+# define WSP 0100
 
 # define NEGATIVE 0
 # define CHILD 0
@@ -161,11 +180,11 @@ pid_t		create_process(t_data *data, t_process *process);
 void		execute_all(t_data *data, t_commands *cmds);
 void		fd_dup2(t_data *data, int oldfd, int newfd);
 char		*find_cmd_path(t_data *data, char *cmd);
-void		get_value(char **pstr, int in_quote);
+void		get_value(char **pstr, int flags);
 void		init_process(t_data *data, t_process *process);
 int			lst_size(t_commands *cmds);
-char		*read_here_doc(t_data *data, char *delimiter);
-void		shell_expansion(t_data *data, char ***pargs);
+char		*read_here_doc(t_data *data, char **delimiter);
+void		shell_expansion(t_data *data, char ***pargs, int flags);
 char		**split_path(char *string, char separator);
 
 /*==================================BUILTINS==================================*/
