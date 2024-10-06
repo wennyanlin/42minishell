@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/06 23:21:27 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/06 23:41:55 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,15 @@
 # include "../lib/libft/libft.h"
 
 # define VERSION "0.1"
+# define NAME "minishell"
+# define HEREDOC_PREFIX "/tmp/tmp_heredoc"
+
 # define BLUE "\033[1;34m"
 # define RED "\033[0;31m"
 # define GREEN "\033[0;32m"
 # define RESET "\033[0m"
-# define NAME "minishell"
-# define PROMPT "\033[1;34mminishell% \033[0m"
+
+# define PROMPT "\033[1;34mminishell%\033[0m"
 # define HEREDOC_PROMPT "> "
 
 # define TRUE 1

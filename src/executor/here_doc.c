@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 19:15:28 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/06 20:43:03 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/06 23:44:52 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,20 @@
 
 char	*create_heredoc_filename(void)
 {
-	char	*filename_prefix;
 	char	*filename_suffix;
 	char	*filename;
 	int		i;
 
-	filename_prefix = "/tmp/tmp_heredoc";
-	filename = ft_strdup(filename_prefix);
 	i = 0;
+	filename = ft_strjoin(HEREDOC_PREFIX, "0");
 	while (filename != NULL && access(filename, F_OK) == 0)
 	{
 		free(filename);
-		filename_suffix = ft_itoa(i);
+		filename_suffix = ft_itoa(++i);
 		if (filename_suffix == NULL)
 			return (NULL);
-		filename = ft_strjoin(filename_prefix, filename_suffix);
+		filename = ft_strjoin(HEREDOC_PREFIX, filename_suffix);
 		free(filename_suffix);
-		i++;
 	}
 	return (filename);
 }
