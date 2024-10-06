@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:46:09 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/04 22:16:21 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/06 19:25:50 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,8 @@
 static void	redirect_infile(t_data *data, t_process *process,
 	t_redirect *redirect)
 {
-	char	*filename;
-
 	if (close(process->fd_in) == INVALID)
 		exit_minishell(data, "close", strerror(errno), errno);
-	if (redirect->type == LESS_LESS)
-	{
-		filename = read_here_doc(data, (char *[2]){redirect->filename, NULL});
-		free(redirect->filename);
-		redirect->filename = filename;
-	}
 	process->fd_in = open(redirect->filename, O_RDONLY);
 	if (redirect->type == LESS_LESS)
 		unlink(redirect->filename);
@@ -60,6 +52,8 @@ static void	handle_redirection(t_data *data, t_process *process,
 		exit_minishell(data, redirect->filename, strerror(errno), errno);
 	if (redirect->type != LESS_LESS)
 		shell_expansion(data, &redirection_split, QRM | EXP | WSP);
+	else
+		read_here_doc(data, redirection_split);
 	if (array_len(redirection_split) != 1)
 	{
 		error_message(TRUE, redirect->filename, "ambiguous redirect",
