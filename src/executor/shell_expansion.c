@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 19:12:32 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/04 22:49:15 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/06 23:20:03 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,7 @@ static char	*parameter_expansion(t_data *data, char **args, char **parg,
 	char	*str1;
 	char	*str2;
 
-	if (flags & ITL)
-		str1 = ft_strdup(getenv("HOME"));
-	else if (flags & IQU)
+	if (flags & IQU)
 	{
 		(*parg)++;
 		str1 = ft_itoa(data->exit_status);
@@ -59,10 +57,7 @@ static void	check_parameter(t_data *data, char **args, char **parg, int flags)
 	char	*str1;
 	char	*str2;
 
-	if (flags & EXP && (*parg)[0] == TILDE
-		&& (!(*parg)[1] || is_whitespace((*parg)[1])))
-		flags |= ITL;
-	else if (flags & EXP && (*parg)[0] == DOLLAR && (*parg)[1] == QUESTION)
+	if (flags & EXP && (*parg)[0] == DOLLAR && (*parg)[1] == QUESTION)
 		flags |= IQU;
 	else if (!(flags & EXP) || (*parg)[0] != DOLLAR
 		|| !(ft_isalpha((*parg)[1]) || (*parg)[1] == UNDERSCORE))
@@ -72,7 +67,7 @@ static void	check_parameter(t_data *data, char **args, char **parg, int flags)
 	}
 	*(*parg)++ = '\0';
 	str2 = parameter_expansion(data, args, parg, flags);
-	flags &= ~(ITL | IQU);
+	flags &= ~IQU;
 	str1 = ft_strjoin(str2, *parg);
 	if (str1 && str2)
 		*parg = str1 + ft_strlen(str2);

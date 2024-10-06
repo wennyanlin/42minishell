@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/06 19:21:13 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/06 23:21:27 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,18 +60,16 @@
 	ISQ: inside single quotes
 	IDQ: inside double quotes
     EXP: expand parameters
-	ITL: is tilde
 	IQU: is question
     WSP: word split
 */
 
-# define QRM 0001
-# define ISQ 0002
-# define IDQ 0004
-# define EXP 0010
-# define ITL 0020
-# define IQU 0040
-# define WSP 0100
+# define QRM 001
+# define ISQ 002
+# define IDQ 004
+# define EXP 010
+# define IQU 020
+# define WSP 040
 
 # define NEGATIVE 0
 # define CHILD 0
