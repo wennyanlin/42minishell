@@ -6,7 +6,7 @@
 /*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 17:38:36 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/07 20:00:55 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/07 20:51:36 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ int	error_message(int code, int n, ...)
 	va_list	ap;
 
 	va_start(ap, n);
-	verror_message(n, &ap);
+	if (n)
+		verror_message(n, &ap);
 	va_end(ap);
 	return (code);
 }
