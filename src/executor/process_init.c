@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:46:09 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/06 19:25:50 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/07 19:22:26 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,13 @@ static void	redirect_infile(t_data *data, t_process *process,
 	t_redirect *redirect)
 {
 	if (close(process->fd_in) == INVALID)
-		exit_minishell(data, "close", strerror(errno), errno);
+		exit_minishell(data, errno, 3, SHNAME, "close", strerror(errno));
 	process->fd_in = open(redirect->filename, O_RDONLY);
+	if (process->fd_in == INVALID)
+		exit_minishell(data, errno, 3, SHNAME, redirect->filename,
+			strerror(errno));
 	if (redirect->type == LESS_LESS)
 		unlink(redirect->filename);
-	if (process->fd_in == INVALID)
-		exit_minishell(data, redirect->filename, strerror(errno), errno);
 }
 
 static void	redirect_outfile(t_data *data, t_process *process,
@@ -31,7 +32,7 @@ static void	redirect_outfile(t_data *data, t_process *process,
 	const mode_t	mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
 
 	if (close(process->fd_out) == INVALID)
-		exit_minishell(data, "close", strerror(errno), errno);
+		exit_minishell(data, errno, 3, SHNAME, "close", strerror(errno));
 	flags = O_CREAT | O_WRONLY;
 	if (redirect->type == GREAT)
 		flags |= O_TRUNC;
@@ -39,7 +40,8 @@ static void	redirect_outfile(t_data *data, t_process *process,
 		flags |= O_APPEND;
 	process->fd_out = open(redirect->filename, flags, mode);
 	if (process->fd_out == INVALID)
-		exit_minishell(data, redirect->filename, strerror(errno), errno);
+		exit_minishell(data, errno, 3, SHNAME, redirect->filename,
+			strerror(errno));
 }
 
 static void	handle_redirection(t_data *data, t_process *process,
@@ -49,17 +51,18 @@ static void	handle_redirection(t_data *data, t_process *process,
 
 	redirection_split = array_dup((char *[2]){redirect->filename, NULL});
 	if (redirection_split == NULL)
-		exit_minishell(data, redirect->filename, strerror(errno), errno);
+		exit_minishell(data, errno, 4, SHNAME, "word splitting",
+			redirect->filename, strerror(errno));
 	if (redirect->type != LESS_LESS)
 		shell_expansion(data, &redirection_split, QRM | EXP | WSP);
 	else
 		read_here_doc(data, redirection_split);
 	if (array_len(redirection_split) != 1)
 	{
-		error_message(TRUE, redirect->filename, "ambiguous redirect",
-			EXIT_FAILURE);
+		error_message(EXIT_FAILURE, 3, SHNAME, redirect->filename,
+			"ambiguous redirect");
 		array_clear(&redirection_split);
-		exit_minishell(data, NULL, NULL, EXIT_FAILURE);
+		exit_minishell(data, EXIT_FAILURE, 0);
 	}
 	redirect->filename = redirection_split[0];
 	free(redirection_split[1]);

@@ -6,13 +6,11 @@
 /*   By: rtorrent <rtorrent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 17:36:35 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/02 04:58:54 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/07 20:13:36 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-#define BUFFER_ERROR 128
 
 static int	atoi_version(int *err, char *str)
 {
@@ -41,19 +39,17 @@ int	bt_exit(int argc, char *argv[], t_data *data)
 {
 	int		n;
 	int		err;
-	char	non_numeric[BUFFER_ERROR];
 
 	ft_putendl_fd("exit", STDOUT_FILENO);
 	if (argc == 1)
-		exit_minishell(data, NULL, NULL, data->exit_status);
-	if (argc > 2)
-		return (error_message(TRUE, "exit", "too many arguments",
-				EXIT_FAILURE));
-	ft_strlcpy(non_numeric, *++argv, BUFFER_ERROR);
-	ft_strlcat(non_numeric, ": numeric argument required", BUFFER_ERROR);
-	n = atoi_version(&err, *argv);
+		exit_minishell(data, data->exit_status, 0);
+	n = atoi_version(&err, *++argv);
 	if (err)
-		exit_minishell(data, "exit", non_numeric, EXIT_FAILURE);
-	exit_minishell(data, NULL, NULL, n);
+		exit_minishell(data, EXIT_FAILURE, 4, SHNAME, "exit", *argv,
+			"numeric argument required");
+	if (argc > 2)
+		return (error_message(EXIT_FAILURE, 3, SHNAME, "exit",
+				"too many arguments"));
+	exit_minishell(data, n, 0);
 	return (EXIT_SUCCESS);
 }

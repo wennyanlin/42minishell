@@ -6,19 +6,18 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/02 05:02:57 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/07 20:20:40 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	clear_data(t_data *data)
+static void	clear_lists(t_data *data)
 {
 	t_token		*next_token;
 	t_commands	*next_cmds;
 	t_redirect	*next_redirect;
 
-	free(data->line);
 	while (data->tokens)
 	{
 		next_token = data->tokens->next;
@@ -40,50 +39,45 @@ void	clear_data(t_data *data)
 		free(data->cmds);
 		data->cmds = next_cmds;
 	}
+}
+
+void	clear_data(t_data *data)
+{
+	free(data->line);
 	free(data->pid);
-	data->pid = NULL;
 	free(data->cmd_path);
+	clear_lists(data);
+// TODO **** 'unlink' all the here-documents
+}
+
+static void	reset_data(t_data *data)
+{
+	data->tokens = NULL;
+	data->cmds = NULL;
+	data->pid = NULL;
 	data->cmd_path = NULL;
 }
 
-int	error_message(int print_shl, char *source, char *err_str, int code)
-{
-	if (print_shl)
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
-	ft_putstr_fd(source, STDERR_FILENO);
-	ft_putstr_fd(": ", STDERR_FILENO);
-	ft_putendl_fd(err_str, STDERR_FILENO);
-	return (code);
-}
-
-void	exit_minishell(t_data *data, char *source, char *err_str, int code)
-{
-	if (source)
-		error_message(TRUE, source, err_str, code);
-	clear_data(data);
-	array_clear(&data->envp);
-	exit(code);
-}
-
-void	start_minishell(void)
+static void	start_minishell(void)
 {
 	t_data	dt;
 
+	reset_data(&dt);
 	dt.envp = array_dup(environ);
 	environ = dt.envp;
 // TODO **** Increse SHLVL variable by one
 	dt.exit_status = 0;
-	dt.tokens = NULL;
-	dt.cmds = NULL;
-	dt.pid = NULL;
-	dt.cmd_path = NULL;
 	while (TRUE)
 	{
 		dt.line = readline(PROMPT);
 		add_history(dt.line);
 		if (tokenize(&dt.tokens, dt.line) && parse_tokens(&dt))
+		{
+// TODO **** Create all the here-documents
 			execute_all(&dt, dt.cmds);
+		}
 		clear_data(&dt);
+		reset_data(&dt);
 	}
 }
 
@@ -92,7 +86,7 @@ int	main(int argc, char **argv)
 	if (argc == 2 && ft_strncmp(argv[1], "test", 5) == 0)
 		test_lexer();
 	else if (argc == 2 && ft_strncmp(argv[1], "-v", 3) == 0)
-		return (printf("%s, version %s\n", NAME, VERSION), 0);
+		return (printf("%s, version %s\n", SHNAME, VERSION), 0);
 	else
 		start_minishell();
 	return (0);

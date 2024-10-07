@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:12:56 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/20 00:44:45 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/07 19:15:36 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,6 @@ char	*find_cmd_path(t_data *data, char *cmd)
 	data->cmd_path = full_path;
 	array_clear(&path_dirs);
 	if (full_path == NULL)
-		exit_minishell(data, cmd, "command not found", NOTFOUND);
+		exit_minishell(data, NOTFOUND, 2, cmd, "command not found");
 	return (full_path);
 }
