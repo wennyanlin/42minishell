@@ -6,7 +6,7 @@
 /*   By: rtorrent <rtorrent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 17:36:35 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/07 20:13:36 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/08 00:17:03 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,8 @@ int	bt_exit(int argc, char *argv[], t_data *data)
 	if (err)
 		exit_minishell(data, EXIT_FAILURE, 4, SHNAME, "exit", *argv,
 			"numeric argument required");
-	if (argc > 2)
-		return (error_message(EXIT_FAILURE, 3, SHNAME, "exit",
-				"too many arguments"));
-	exit_minishell(data, n, 0);
-	return (EXIT_SUCCESS);
+	if (argc == 2)
+		exit_minishell(data, n, 0);
+	return (error_message(EXIT_FAILURE, 3, SHNAME, "exit",
+			"too many arguments"));
 }
