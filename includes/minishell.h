@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/30 17:53:03 by wlin             ###   ########.fr       */
+/*   Updated: 2024/10/06 23:41:55 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,15 @@
 # include "../lib/libft/libft.h"
 
 # define VERSION "0.1"
+# define NAME "minishell"
+# define HEREDOC_PREFIX "/tmp/tmp_heredoc"
+
 # define BLUE "\033[1;34m"
 # define RED "\033[0;31m"
 # define GREEN "\033[0;32m"
 # define RESET "\033[0m"
-# define NAME "minishell"
-# define PROMPT "\033[1;34mminishell% \033[0m"
+
+# define PROMPT "\033[1;34mminishell%\033[0m"
 # define HEREDOC_PROMPT "> "
 
 # define TRUE 1
@@ -42,6 +45,7 @@
 # define INVALID -1
 # define NONE 0
 
+# define UNIT_SEPARATOR 31
 # define QUOTE_D 34
 # define DOLLAR 36
 # define QUOTE_S 39
@@ -52,6 +56,23 @@
 # define UNDERSCORE 95
 # define C_PIPE 124
 # define TILDE 126
+
+/*
+  expansor flags:
+    QRM: quote removal
+	ISQ: inside single quotes
+	IDQ: inside double quotes
+    EXP: expand parameters
+	IQU: is question
+    WSP: word split
+*/
+
+# define QRM 001
+# define ISQ 002
+# define IDQ 004
+# define EXP 010
+# define IQU 020
+# define WSP 040
 
 # define NEGATIVE 0
 # define CHILD 0
@@ -128,7 +149,7 @@ typedef struct s_process
 
 /*===================================MINISHELL================================*/
 
-int			error_message(char *source, char *err_str, int code);
+int			error_message(int print_shl, char *source, char *err_str, int code);
 void		exit_minishell(t_data *data, char *source, char *err_str, int code);
 
 /*======================================LEXER=================================*/
@@ -158,16 +179,16 @@ void		cmd_lst_addback(t_commands **cmds, t_commands *new);
 
 pid_t		create_process(t_data *data, t_process *process);
 void		execute_all(t_data *data, t_commands *cmds);
-char		*find_cmd_path(t_data *data, char *cmd);
 void		fd_dup2(t_data *data, int oldfd, int newfd);
+char		*find_cmd_path(t_data *data, char *cmd);
+void		get_value(char **pstr, int flags);
 void		init_process(t_data *data, t_process *process);
 int			lst_size(t_commands *cmds);
-void		shell_expansion(t_data *data, char **args);
+void		read_here_doc(t_data *data, char **word);
+void		shell_expansion(t_data *data, char ***pargs, int flags);
 char		**split_path(char *string, char separator);
 
-char		*read_here_doc(t_data *data, char *delimiter);
-
-/*======================================BUILTIN===============================*/
+/*==================================BUILTINS==================================*/
 
 int			bt_cd(int argc, char *argv[], t_data *data);
 int			bt_env(int argc, char *argv[], t_data *data);
@@ -181,8 +202,10 @@ int			is_builtin(t_bfunc *dst, char *cmd);
 
 char		**array_add_front(char ***parray, char *str);
 void		array_clear(char ***parray);
-size_t		array_len(char **array);
 char		**array_dup(char **array);
+char		**array_join(char **array1, char **array2);
+size_t		array_len(char **array);
+char		**array_merge_back(char ***parray1, char **array2);
 int			char_index(char *args, char ref);
 int			find_end_chars_index(char *input, int i);
 int			is_equal(char *s1, char *s2);

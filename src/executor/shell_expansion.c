@@ -6,61 +6,68 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 19:12:32 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/09/08 01:55:14 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/06 23:20:03 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*parameter_expansion(char **args, char **parg, t_data *data, int t)
+static void	word_split(char ***pargs, char ***pparg)
+{
+	char	**split_arg;
+	size_t	n;
+
+	split_arg = ft_split(**pparg, UNIT_SEPARATOR);
+	free(**pparg);
+	*(*pparg)++ = NULL;
+	n = array_len(*pargs) + array_len(split_arg);
+	array_merge_back(pargs, array_merge_back(&split_arg, *pparg));
+	free(split_arg);
+	*pparg = *pargs + n - 1;
+}
+
+static char	*parameter_expansion(t_data *data, char **args, char **parg,
+	int flags)
 {
 	char	*str1;
 	char	*str2;
 
-	str1 = NULL;
-	if (t == TILDE)
-		str2 = getenv("HOME");
-	else if (t == QUESTION)
+	if (flags & IQU)
 	{
 		(*parg)++;
 		str1 = ft_itoa(data->exit_status);
-		str2 = str1;
 	}
 	else
 	{
-		str2 = (*parg)++;
+		str1 = (*parg)++;
 		while (ft_isalnum(**parg) || **parg == UNDERSCORE)
 			++*parg;
-		str1 = ft_substr(str2, 0, *parg - str2);
-		str2 = getenv(str1);
+		str1 = ft_substr(str1, 0, *parg - str1);
+		get_value(&str1, flags);
 	}
-	if (!str2)
-		str2 = "";
-	str2 = ft_strjoin(*args, str2);
+	str2 = *args;
+	if (str1)
+		str2 = ft_strjoin(str2, str1);
 	free(str1);
 	return (str2);
 }
 
-static void	check_parameter(char **args, char **parg, t_data *data)
+static void	check_parameter(t_data *data, char **args, char **parg, int flags)
 {
-	int		type;
 	char	*str1;
 	char	*str2;
 
-	if ((*parg)[0] == TILDE && (!(*parg)[1] || is_whitespace((*parg)[1])))
-		type = TILDE;
-	else if ((*parg)[0] == DOLLAR && (*parg)[1] == QUESTION)
-		type = QUESTION;
-	else if ((*parg)[0] == DOLLAR
-		&& (ft_isalpha((*parg)[1]) || (*parg)[1] == UNDERSCORE))
-		type = DOLLAR;
-	else
+	if (flags & EXP && (*parg)[0] == DOLLAR && (*parg)[1] == QUESTION)
+		flags |= IQU;
+	else if (!(flags & EXP) || (*parg)[0] != DOLLAR
+		|| !(ft_isalpha((*parg)[1]) || (*parg)[1] == UNDERSCORE))
 	{
 		(*parg)++;
 		return ;
 	}
 	*(*parg)++ = '\0';
-	str2 = parameter_expansion(args, parg, data, type);
+	str2 = parameter_expansion(data, args, parg, flags);
+	flags &= ~IQU;
 	str1 = ft_strjoin(str2, *parg);
 	if (str1 && str2)
 		*parg = str1 + ft_strlen(str2);
@@ -69,18 +76,20 @@ static void	check_parameter(char **args, char **parg, t_data *data)
 	*args = str1;
 }
 
-static void	quote_removal(char **args, char **parg, const char q, t_data *data)
+static void	quote_removal(t_data *data, char **args, char **parg, int flags)
 {
-	char	*arg_close;
-	char	*str1;
-	char	*str2;
+	const char	quote = **parg;
+	char		*arg_close;
+	char		*str1;
+	char		*str2;
 
 	*(*parg)++ = '\0';
-	arg_close = ft_strchr(*parg, q);
+	arg_close = ft_strchr(*parg, quote);
 	str1 = ft_substr(*parg, 0, arg_close - *parg);
 	str2 = str1;
-	while (q == QUOTE_D && str1 && str2 && *str2)
-		check_parameter(&str1, &str2, data);
+	if (flags & IDQ)
+		while (str2 && *str2)
+			check_parameter(data, &str1, &str2, flags);
 	str2 = ft_strjoin(*args, str1);
 	free(str1);
 	str1 = ft_strjoin(str2, ++arg_close);
@@ -91,22 +100,31 @@ static void	quote_removal(char **args, char **parg, const char q, t_data *data)
 	*args = str1;
 }
 
-void	shell_expansion(t_data *data, char **args)
+void	shell_expansion(t_data *data, char ***pargs, int flags)
 {
+	char	**args;
 	char	*arg;
 
-	if (args == NULL)
+	if (*pargs == NULL)
 		return ;
+	args = *pargs;
 	while (*args)
 	{
 		arg = *args;
 		while (arg && *arg)
 		{
-			if (*arg == QUOTE_S || *arg == QUOTE_D)
-				quote_removal(args, &arg, *arg, data);
+			if (*arg == QUOTE_S)
+				flags |= ISQ;
+			else if (*arg == QUOTE_D)
+				flags |= IDQ;
+			if (flags & QRM && flags & (ISQ | IDQ))
+				quote_removal(data, args, &arg, flags);
 			else
-				check_parameter(args, &arg, data);
+				check_parameter(data, args, &arg, flags);
+			flags &= ~(ISQ | IDQ);
 		}
+		if (flags & WSP && ft_strchr(*args, UNIT_SEPARATOR))
+			word_split(pargs, &args);
 		++args;
 	}
 }

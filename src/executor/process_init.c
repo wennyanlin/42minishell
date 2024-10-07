@@ -6,24 +6,17 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:46:09 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/30 18:03:36 by wlin             ###   ########.fr       */
+/*   Updated: 2024/10/06 19:25:50 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	redirect_infile(t_data *data, t_process *process, t_redirect *redirect)
+static void	redirect_infile(t_data *data, t_process *process,
+	t_redirect *redirect)
 {
-	char	*filename;
-
 	if (close(process->fd_in) == INVALID)
 		exit_minishell(data, "close", strerror(errno), errno);
-	if (redirect->type == LESS_LESS)
-	{
-		filename = read_here_doc(data, redirect->filename);
-		free(redirect->filename);
-		redirect->filename = filename;
-	}
 	process->fd_in = open(redirect->filename, O_RDONLY);
 	if (redirect->type == LESS_LESS)
 		unlink(redirect->filename);
@@ -31,7 +24,8 @@ void	redirect_infile(t_data *data, t_process *process, t_redirect *redirect)
 		exit_minishell(data, redirect->filename, strerror(errno), errno);
 }
 
-void	redirect_outfile(t_data *data, t_process *process, t_redirect *redirect)
+static void	redirect_outfile(t_data *data, t_process *process,
+	t_redirect *redirect)
 {
 	int				flags;
 	const mode_t	mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
@@ -48,22 +42,31 @@ void	redirect_outfile(t_data *data, t_process *process, t_redirect *redirect)
 		exit_minishell(data, redirect->filename, strerror(errno), errno);
 }
 
-void	handle_redirection(t_data *data, t_process *process,
+static void	handle_redirection(t_data *data, t_process *process,
 	t_redirect *redirect)
 {
-	char	*args[2];
+	char	**redirection_split;
 
-	args[0] = redirect->filename;
-	args[1] = NULL;
-	shell_expansion(data, args);
-	redirect->filename = args[0];
-	if (redirect->type == LESS)
+	redirection_split = array_dup((char *[2]){redirect->filename, NULL});
+	if (redirection_split == NULL)
+		exit_minishell(data, redirect->filename, strerror(errno), errno);
+	if (redirect->type != LESS_LESS)
+		shell_expansion(data, &redirection_split, QRM | EXP | WSP);
+	else
+		read_here_doc(data, redirection_split);
+	if (array_len(redirection_split) != 1)
+	{
+		error_message(TRUE, redirect->filename, "ambiguous redirect",
+			EXIT_FAILURE);
+		array_clear(&redirection_split);
+		exit_minishell(data, NULL, NULL, EXIT_FAILURE);
+	}
+	redirect->filename = redirection_split[0];
+	free(redirection_split[1]);
+	free(redirection_split);
+	if (redirect->type == LESS || redirect->type == LESS_LESS)
 		redirect_infile(data, process, redirect);
-	else if (redirect->type == LESS_LESS)
-		redirect_infile(data, process, redirect);
-	else if (redirect->type == GREAT)
-		redirect_outfile(data, process, redirect);
-	else if (redirect->type == GREAT_GREAT)
+	else if (redirect->type == GREAT || redirect->type == GREAT_GREAT)
 		redirect_outfile(data, process, redirect);
 }
 
