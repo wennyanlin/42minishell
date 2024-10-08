@@ -6,7 +6,7 @@
 #    By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 13:11:23 by wlin              #+#    #+#              #
-#    Updated: 2024/10/02 15:32:09 by rtorrent         ###   ########.fr        #
+#    Updated: 2024/10/07 17:16:12 by rtorrent         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,7 @@ DIR_OBJ_DEPS	= obj_deps/
 
 INCLUDES		= include/
 
+DIR_MAIN		= main/
 DIR_LEXR_TEST	= test/
 DIR_LEXR		= lexer/
 DIR_PARS		= parser/
@@ -49,7 +50,7 @@ DIR_EXEC		= executor/
 DIR_AUX			= auxiliaries/
 DIR_BLT			= builtin/
 
-SRCS_MAIN		= $(FILES_MAIN)
+SRCS_MAIN		= $(addprefix $(DIR_MAIN), $(FILES_MAIN))
 SRCS_TEST		= $(addprefix $(DIR_LEXR_TEST),$(FILES_TEST))
 SRCS_LEXR		= $(addprefix $(DIR_LEXR),$(FILES_LEXR))
 SRCS_PARS		= $(addprefix $(DIR_PARS),$(FILES_PARS))
