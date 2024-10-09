@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 18:27:19 by wlin              #+#    #+#             */
-/*   Updated: 2024/09/18 19:25:46 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/07 18:46:02 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ void	fd_dup2(t_data *data, int oldfd, int newfd)
 		e = errno;
 	c = close(oldfd);
 	if (d == INVALID)
-		exit_minishell(data, "dup2", strerror(e), e);
+		exit_minishell(data, e, 3, SHNAME, "dup2", strerror(e));
 	if (c == INVALID)
-		exit_minishell(data, "close", strerror(errno), errno);
+		exit_minishell(data, errno, 3, SHNAME, "close", strerror(errno));
 }
 
 int	lst_size(t_commands *cmds)

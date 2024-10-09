@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/04 21:09:24 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/07 18:23:32 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	simple_command(t_data *data, t_commands *cmd)
 	const int	dup_fd[2] = {dup(STDIN_FILENO), dup(STDOUT_FILENO)};
 
 	if (dup_fd[RD] == INVALID || dup_fd[WR] == INVALID)
-		exit_minishell(data, "dup", strerror(errno), errno);
+		exit_minishell(data, errno, 3, SHNAME, "dup", strerror(errno));
 	process.command = cmd;
 	process.fd_in = STDIN_FILENO;
 	process.fd_out = STDOUT_FILENO;
@@ -62,14 +62,14 @@ void	link_command(t_data *data, t_commands *cmds, pid_t *pid,
 	if (cmds->next)
 	{
 		if (pipe(process.pipe_fd) == INVALID)
-			exit_minishell(data, "pipe", strerror(errno), errno);
+			exit_minishell(data, errno, 3, SHNAME, "pipe", strerror(errno));
 		process.fd_out = process.pipe_fd[WR];
 	}
 	else
 	{
 		process.fd_out = dup(STDOUT_FILENO);
 		if (process.fd_out == INVALID)
-			exit_minishell(data, "dup", strerror(errno), errno);
+			exit_minishell(data, errno, 3, SHNAME, "dup", strerror(errno));
 	}
 	*pid = create_process(data, &process);
 	pipe_read_end_prev = process.pipe_fd[RD];
@@ -88,13 +88,13 @@ void	execute_all(t_data *data, t_commands *cmds)
 	num_cmd = lst_size(cmds);
 	data->pid = malloc(sizeof(pid_t) * num_cmd);
 	if (data->pid == NULL)
-		exit_minishell(data, "malloc", strerror(errno), errno);
+		exit_minishell(data, errno, 3, SHNAME, "malloc", strerror(errno));
 	shell_expansion(data, &cmds->args, QRM | EXP | WSP);
 	if (!is_builtin(NULL, cmds->args[0]) || num_cmd > 1)
 	{
 		pipe_read_end_prev = dup(STDIN_FILENO);
 		if (pipe_read_end_prev == INVALID)
-			exit_minishell(data, "dup", strerror(errno), errno);
+			exit_minishell(data, errno, 3, SHNAME, "dup", strerror(errno));
 		link_command(data, cmds, data->pid, pipe_read_end_prev);
 		data->exit_status = wait_process(data->pid, num_cmd);
 	}

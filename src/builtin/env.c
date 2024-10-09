@@ -6,7 +6,7 @@
 /*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 12:41:57 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/02 04:42:40 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/07 20:13:52 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ int	bt_env(int argc, char *argv[], t_data *data)
 	(void)data;
 	ep = environ;
 	if (argc > 1)
-		return (error_message(FALSE, "env", "invalid option/argument",
-				ENV_ERROR));
+		return (error_message(ENV_ERROR, 3, "env", *++argv,
+				"invalid option/argument"));
 	if (ep)
 		while (*ep)
 			printf("%s\n", *ep++);

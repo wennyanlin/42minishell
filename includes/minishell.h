@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/06 23:41:55 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/07 20:15:35 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <errno.h>
 # include <fcntl.h>
 # include <linux/limits.h>
+# include <stdarg.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/wait.h>
@@ -27,7 +28,7 @@
 # include "../lib/libft/libft.h"
 
 # define VERSION "0.1"
-# define NAME "minishell"
+# define SHNAME "minishell"
 # define HEREDOC_PREFIX "/tmp/tmp_heredoc"
 
 # define BLUE "\033[1;34m"
@@ -60,10 +61,10 @@
 /*
   expansor flags:
     QRM: quote removal
-	ISQ: inside single quotes
-	IDQ: inside double quotes
+    ISQ: inside single quotes
+    IDQ: inside double quotes
     EXP: expand parameters
-	IQU: is question
+    IQU: is question
     WSP: word split
 */
 
@@ -149,8 +150,9 @@ typedef struct s_process
 
 /*===================================MINISHELL================================*/
 
-int			error_message(int print_shl, char *source, char *err_str, int code);
-void		exit_minishell(t_data *data, char *source, char *err_str, int code);
+void		clear_data(t_data *data);
+int			error_message(int code, int n, ...);
+void		exit_minishell(t_data *data, int code, int n, ...);
 
 /*======================================LEXER=================================*/
 
