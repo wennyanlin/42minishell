@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:46:09 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/07 19:22:26 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/09 15:34:00 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ static void	redirect_infile(t_data *data, t_process *process,
 	if (process->fd_in == INVALID)
 		exit_minishell(data, errno, 3, SHNAME, redirect->filename,
 			strerror(errno));
-	if (redirect->type == LESS_LESS)
-		unlink(redirect->filename);
 }
 
 static void	redirect_outfile(t_data *data, t_process *process,
@@ -49,14 +47,13 @@ static void	handle_redirection(t_data *data, t_process *process,
 {
 	char	**redirection_split;
 
+	if (redirect->type == LESS_LESS)
+		return (redirect_infile(data, process, redirect));
 	redirection_split = array_dup((char *[2]){redirect->filename, NULL});
 	if (redirection_split == NULL)
 		exit_minishell(data, errno, 4, SHNAME, "word splitting",
 			redirect->filename, strerror(errno));
-	if (redirect->type != LESS_LESS)
-		shell_expansion(data, &redirection_split, QRM | EXP | WSP);
-	else
-		read_here_doc(data, redirection_split);
+	shell_expansion(data, &redirection_split, QRM | EXP | WSP);
 	if (array_len(redirection_split) != 1)
 	{
 		error_message(EXIT_FAILURE, 3, SHNAME, redirect->filename,
@@ -67,7 +64,7 @@ static void	handle_redirection(t_data *data, t_process *process,
 	redirect->filename = redirection_split[0];
 	free(redirection_split[1]);
 	free(redirection_split);
-	if (redirect->type == LESS || redirect->type == LESS_LESS)
+	if (redirect->type == LESS)
 		redirect_infile(data, process, redirect);
 	else if (redirect->type == GREAT || redirect->type == GREAT_GREAT)
 		redirect_outfile(data, process, redirect);

@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/07 20:20:40 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/09 16:43:30 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ void	clear_data(t_data *data)
 	free(data->line);
 	free(data->pid);
 	free(data->cmd_path);
+	heredoc_iter(data, data->cmds, heredoc_unlink);
 	clear_lists(data);
-// TODO **** 'unlink' all the here-documents
 }
 
 static void	reset_data(t_data *data)
@@ -73,7 +73,7 @@ static void	start_minishell(void)
 		add_history(dt.line);
 		if (tokenize(&dt.tokens, dt.line) && parse_tokens(&dt))
 		{
-// TODO **** Create all the here-documents
+			heredoc_iter(&dt, dt.cmds, heredoc_read);
 			execute_all(&dt, dt.cmds);
 		}
 		clear_data(&dt);
