@@ -6,13 +6,29 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 19:15:28 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/07 20:19:55 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/09 16:49:51 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*create_heredoc_filename(void)
+void	heredoc_unlink(t_data *data, char **pfilename)
+{
+	const size_t	n = ft_strlen(HEREDOC_PREFIX);
+
+	(void)data;
+	if (ft_strncmp(*pfilename, HEREDOC_PREFIX, n) == 0
+		&& access(*pfilename, F_OK) == 0)
+	{
+		if (unlink(*pfilename) == INVALID)
+			error_message(errno, 4, SHNAME, "here-document", *pfilename,
+				strerror(errno));
+		free(*pfilename);
+		*pfilename = NULL;
+	}
+}
+
+static char	*heredoc_create_filename(void)
 {
 	char	*filename_suffix;
 	char	*filename;
@@ -32,25 +48,10 @@ char	*create_heredoc_filename(void)
 	return (filename);
 }
 
-int	check_delimiter(char *next_line, char *delimiter)
+void	heredoc_read(t_data *dt, char **pwrd)
 {
-	int	i;
-
-	if ((ft_strlen(next_line)) == ft_strlen(delimiter))
-	{
-		i = -1;
-		while (delimiter[++i])
-			if (next_line[i] != delimiter[i])
-				return (0);
-		return (1);
-	}
-	return (0);
-}
-
-void	read_here_doc(t_data *dt, char **word)
-{
-	const int	quoted = ft_strchr(*word, QUOTE_S) || ft_strchr(*word, QUOTE_D);
-	char *const	filename = create_heredoc_filename();
+	const int	quoted = ft_strchr(*pwrd, QUOTE_S) || ft_strchr(*pwrd, QUOTE_D);
+	char *const	filename = heredoc_create_filename();
 	int			hd_fd;
 	char		**next_line;
 
@@ -59,9 +60,9 @@ void	read_here_doc(t_data *dt, char **word)
 	hd_fd = open(filename, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
 	if (hd_fd == INVALID)
 		exit_minishell(dt, errno, 3, SHNAME, filename, strerror(errno));
-	shell_expansion(dt, &word, QRM);
+	shell_expansion(dt, &pwrd, QRM);
 	next_line = (char *[2]){readline(HEREDOC_PROMPT), NULL};
-	while (next_line[0] && check_delimiter(next_line[0], word[0]) == 0)
+	while (next_line[0] && ft_strncmp(next_line[0], *pwrd, -1))
 	{
 		if (!quoted)
 			shell_expansion(dt, &next_line, EXP);
@@ -70,8 +71,30 @@ void	read_here_doc(t_data *dt, char **word)
 		next_line[0] = readline(HEREDOC_PROMPT);
 	}
 	free(next_line[0]);
-	free(word[0]);
-	word[0] = filename;
+	free(*pwrd);
+	*pwrd = filename;
 	if (close(hd_fd) == INVALID)
 		exit_minishell(dt, errno, 3, SHNAME, "close", strerror(errno));
+}
+
+void	heredoc_iter(t_data *data, t_commands *cmd,
+	void (*f)(t_data *, char **))
+{
+	t_redirect	*redirect;
+	char		**tmp_array;
+
+	if (!cmd)
+		return ;
+	redirect = cmd->redirect;
+	while (redirect)
+	{
+		if (redirect->type == LESS_LESS)
+		{
+			tmp_array = (char *[2]){redirect->filename, NULL};
+			f(data, tmp_array);
+			redirect->filename = tmp_array[0];
+		}
+		redirect = redirect->next;
+	}
+	heredoc_iter(data, cmd->next, f);
 }
