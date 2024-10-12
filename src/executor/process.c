@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 18:16:01 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/07 19:25:36 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/12 19:48:24 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,17 @@
 void	execute_command(t_data *data, char *command_path, char **cmd_args)
 {
 	char	*shell_path;
+	int		e;
 
 	execve(command_path, cmd_args, environ);
-	if (errno == ENOEXEC)
+	shell_path = getenv("SHELL");
+	if (shell_path)
 	{
-		shell_path = getenv("SHELL");
+		e = errno;
 		execve(shell_path, array_add_front(&cmd_args, shell_path), environ);
+		exit_minishell(data, e, 3, SHNAME, cmd_args[1], strerror(e));
 	}
-	else if (errno == ENOENT && char_index(cmd_args[0], '/') == INVALID)
-		exit_minishell(data, NOTFOUND, 3, SHNAME, cmd_args[0],
-			"command not found");
-	else
-		exit_minishell(data, NOTFOUND, 3, SHNAME, cmd_args[0], strerror(errno));
+	exit_minishell(data, errno, 3, SHNAME, cmd_args[0], strerror(errno));
 }
 
 void	child_process(t_data *data, t_process *process)
@@ -40,6 +39,9 @@ void	child_process(t_data *data, t_process *process)
 		exit((*process->builtin)(array_len(command), command, data));
 	if (cmd_path == NULL)
 		exit_minishell(data, EXIT_SUCCESS, 0);
+	if (access(cmd_path, F_OK) == INVALID)
+		exit_minishell(data, NOTFOUND, 3, SHNAME, command[0],
+			"No such file or directory");
 	if (access(cmd_path, X_OK) == INVALID)
 		exit_minishell(data, NOTEXECUTABLE, 3, SHNAME, command[0],
 			"Permission denied");
