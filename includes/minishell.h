@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/12 20:50:51 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/13 20:13:32 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@
 # define QUESTION 63
 # define UNDERSCORE 95
 # define C_PIPE 124
-# define TILDE 126
 
 /*
   expansor flags:
@@ -197,6 +196,7 @@ char		**split_path(char *string, char separator);
 /*==================================BUILTINS==================================*/
 
 int			bt_cd(int argc, char *argv[], t_data *data);
+int			bt_echo(int argc, char *argv[], t_data *data);
 int			bt_env(int argc, char *argv[], t_data *data);
 int			bt_exit(int argc, char *argv[], t_data *data);
 int			bt_export(int argc, char *argv[], t_data *data);
