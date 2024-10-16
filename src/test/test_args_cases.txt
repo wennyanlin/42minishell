@@ -1,0 +1,16 @@
+Varied set of tests to verify the correct shell shell expansion of the command arguments in 'minishell'. Compare the results of the 'test_args' program under 'bash' with the 'minishell'.
+
+-----------------
+
+export a='  this  is a   test  '
+export b='welcome to  Barcelona  '
+
+-----------------
+
+'' "" "''" '""'
+"trying out   'new  stuff ' "
+$a"sweet summmer   child"$b
+"$a""'$a'"   E=mc2$b
+"$a what shall we do"'$b'  with' the drunken'   sailor
+$a$b $$ "$$'" $? '$?' "$?"
+"$a$b   "in  the Navy!
