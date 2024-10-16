@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 19:12:32 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/15 17:15:00 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/16 20:56:15 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	word_split(char ***pargs, char ***pparg)
 	*pparg = *pargs + n - 1;
 }
 
-static void	parameter_expansion(t_data *data, char **args, char **parg,
+static char	*parameter_expansion(t_data *data, char **args, char **parg,
 	int flags)
 {
 	char	*str1;
@@ -45,20 +45,18 @@ static void	parameter_expansion(t_data *data, char **args, char **parg,
 		str1 = ft_substr(str1, 0, *parg - str1);
 		get_value(&str1, flags);
 	}
-	if (!str1)
-		return ;
-	str2 = ft_strjoin(*args, str1);
+	if (str1)
+		str2 = ft_strjoin(*args, str1);
+	if (!str1 || !str2)
+		str2 = *args;
 	free(str1);
-	if (str2)
-	{
-		free(*args);
-		*args = str2;
-	}
+	return (str2);
 }
 
 static void	check_parameter(t_data *data, char **args, char **parg, int flags)
 {
-	char	*str;
+	char	*str1;
+	char	*str2;
 
 	if (flags & EXP && (*parg)[0] == DOLLAR && (*parg)[1] == QUESTION)
 		flags |= IQU;
@@ -69,17 +67,19 @@ static void	check_parameter(t_data *data, char **args, char **parg, int flags)
 		return ;
 	}
 	*(*parg)++ = '\0';
-	parameter_expansion(data, args, parg, flags);
+	str2 = parameter_expansion(data, args, parg, flags);
 	flags &= ~IQU;
-	str = ft_strjoin(*args, *parg);
-	if (!str)
-	{
-		*parg = *args + ft_strlen(*args);
+	str1 = ft_strjoin(str2, *parg);
+	if (str1)
+		*parg = str1 + ft_strlen(str2);
+	else
+		*parg = str2 + ft_strlen(str2);
+	if (str2 != *args)
+		free(str2);
+	if (!str1)
 		return ;
-	}
-	*parg = str + ft_strlen(*args);
 	free(*args);
-	*args = str;
+	*args = str1;
 }
 
 static void	quote_removal(t_data *data, char **args, char **parg, int flags)
