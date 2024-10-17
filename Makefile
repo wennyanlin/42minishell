@@ -6,7 +6,7 @@
 #    By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 13:11:23 by wlin              #+#    #+#              #
-#    Updated: 2024/10/17 00:26:13 by wlin             ###   ########.fr        #
+#    Updated: 2024/10/17 17:04:48 by rtorrent         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ AUTHORS			= wlin rtorrent
 NAME			= minishell
 
 CC				= gcc
-CFLAGS			= -Wall -Wextra -Werror -g -Iincludes -I${LIBFT_DIR} -fsanitize=address -MMD
+CFLAGS			= -Wall -Wextra -Werror -g -Iincludes -I${LIBFT_DIR} -MMD
 RM				= rm -fr
 MAKE			= make
 
