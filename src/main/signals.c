@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 23:52:42 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/17 09:15:05 by wlin             ###   ########.fr       */
+/*   Updated: 2024/10/17 09:28:22 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,12 @@ void    set_signal(int mode)
 {
     if (mode == CHILD)
     {
+        signal(SIGQUIT, handle_sigint_child);
         signal(SIGINT, handle_sigint_child);
     }
     else if (mode == PARENT)
     {
+        signal(SIGQUIT, SIG_IGN);
         signal(SIGINT, new_prompt_line);
     } 
 }
