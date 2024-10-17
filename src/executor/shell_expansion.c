@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 19:12:32 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/17 04:11:54 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/17 17:14:04 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ void	shell_expansion(t_data *data, char ***pargs, int flags)
 			else
 				explicit_content |= check_parameter(data, args, &arg, flags);
 		}
-		if (flags & WSP && (!explicit_content || *args))
+		if (flags & WSP && (!explicit_content || **args))
 			word_split(pargs, &args);
 		++args;
 	}

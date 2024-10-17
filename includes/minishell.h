@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/17 04:05:15 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/17 16:50:47 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <errno.h>
 # include <fcntl.h>
 # include <linux/limits.h>
+# include <signal.h>
 # include <stdarg.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -75,12 +76,16 @@
 
 # define NEGATIVE 0
 # define CHILD 0
+# define PARENT 1
 # define WR 1
 # define RD 0
 
 # define NOTEXECUTABLE 126
 # define NOTFOUND 127
 # define FATALSIGNAL 128
+
+# define SIGINT_CODE 130
+# define SIGQUIT_CODE 131
 
 typedef enum e_metachar
 {
@@ -151,6 +156,7 @@ typedef struct s_process
 void		clear_data(t_data *data);
 int			error_message(int code, int n, ...);
 void		exit_minishell(t_data *data, int code, int n, ...);
+void    	set_signal(int mode);
 
 /*======================================LEXER=================================*/
 
