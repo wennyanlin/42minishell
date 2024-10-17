@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/09 16:43:30 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/17 09:12:03 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,17 @@ static void	start_minishell(void)
 	environ = dt.envp;
 // TODO **** Increse SHLVL variable by one
 	dt.exit_status = 0;
+	set_signal(PARENT);
 	while (TRUE)
 	{
 		dt.line = readline(PROMPT);
 		add_history(dt.line);
 		if (tokenize(&dt.tokens, dt.line) && parse_tokens(&dt))
 		{
+			set_signal(CHILD);
 			heredoc_iter(&dt, dt.cmds, heredoc_read);
 			execute_all(&dt, dt.cmds);
+			set_signal(PARENT);
 		}
 		clear_data(&dt);
 		reset_data(&dt);
