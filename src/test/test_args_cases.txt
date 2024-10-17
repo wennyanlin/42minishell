@@ -2,14 +2,14 @@ Varied set of tests to verify the correct shell expansion of the command argumen
 
 -----------------
 
-export a='  this  is a   test  '; export b='welcome to  Barcelona  '; unset c
+export a='  this  is a   test  '; export b='welcome to  Barcelona  '; export c='  '; unset d
 
 -----------------
 
 '' "" "''" '""'
 "trying out   'new  stuff ' "
-Oh$a"sweet summmer   child"$b
-"$a""'$a'"   E=mc2$b '$c'"$c"
-"$a what shall we do"'$b'  with' the drunken'   sailor
-$a$b $? '$?' "$?"
-"$a$b$c  $c  "in  $c'the' $c  Navy!$c $c
+Oh$a"sweet summmer   child"$b" "E=mc2$b
+"$a""'$a'" "$c""'$c'" '$d'"$d"
+$c $c"$a what shall we do"'$b'  with' the drunken'   sailor$c
+$a$b $c $? '$?' "$?" $c
+"$a$b$d  $d  "in  $d'the' $d  Navy!$d $d

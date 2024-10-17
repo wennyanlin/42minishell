@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 19:12:32 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/16 20:56:15 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/17 04:11:54 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static char	*parameter_expansion(t_data *data, char **args, char **parg,
 	return (str2);
 }
 
-static void	check_parameter(t_data *data, char **args, char **parg, int flags)
+static int	check_parameter(t_data *data, char **args, char **parg, int flags)
 {
 	char	*str1;
 	char	*str2;
@@ -62,10 +62,7 @@ static void	check_parameter(t_data *data, char **args, char **parg, int flags)
 		flags |= IQU;
 	else if (!(flags & EXP) || (*parg)[0] != DOLLAR
 		|| !(ft_isalpha((*parg)[1]) || (*parg)[1] == UNDERSCORE))
-	{
-		(*parg)++;
-		return ;
-	}
+		return (*(*parg)++);
 	*(*parg)++ = '\0';
 	str2 = parameter_expansion(data, args, parg, flags);
 	flags &= ~IQU;
@@ -76,24 +73,27 @@ static void	check_parameter(t_data *data, char **args, char **parg, int flags)
 		*parg = str2 + ft_strlen(str2);
 	if (str2 != *args)
 		free(str2);
-	if (!str1)
-		return ;
-	free(*args);
-	*args = str1;
+	if (str1)
+	{
+		free(*args);
+		*args = str1;
+	}
+	return (FALSE);
 }
 
-static void	quote_removal(t_data *data, char **args, char **parg, int flags)
+static int	quote_removal(t_data *data, char **args, char **parg, int flags)
 {
 	const char	quote = **parg;
 	char		*arg_close;
 	char		*str1;
 	char		*str2;
 
+	flags |= INQ;
 	*(*parg)++ = '\0';
 	arg_close = ft_strchr(*parg, quote);
 	str1 = ft_substr(*parg, 0, arg_close - *parg);
 	str2 = str1;
-	if (flags & IDQ)
+	if (quote == QUOTE_D)
 		while (str2 && *str2)
 			check_parameter(data, &str1, &str2, flags);
 	str2 = ft_strjoin(*args, str1);
@@ -104,32 +104,30 @@ static void	quote_removal(t_data *data, char **args, char **parg, int flags)
 	free(str2);
 	free(*args);
 	*args = str1;
+	return (TRUE);
 }
 
 void	shell_expansion(t_data *data, char ***pargs, int flags)
 {
 	char	**args;
 	char	*arg;
+	int		explicit_content;
 
 	if (*pargs == NULL)
 		return ;
 	args = *pargs;
 	while (*args)
 	{
+		explicit_content = FALSE;
 		arg = *args;
 		while (arg && *arg)
 		{
-			if (*arg == QUOTE_S)
-				flags |= ISQ;
-			else if (*arg == QUOTE_D)
-				flags |= IDQ;
-			if (flags & QRM && flags & (ISQ | IDQ))
-				quote_removal(data, args, &arg, flags);
+			if (flags & QRM && (*arg == QUOTE_S || *arg == QUOTE_D))
+				explicit_content |= quote_removal(data, args, &arg, flags);
 			else
-				check_parameter(data, args, &arg, flags);
-			flags &= ~(ISQ | IDQ);
+				explicit_content |= check_parameter(data, args, &arg, flags);
 		}
-		if (flags & WSP && ft_strchr(*args, UNIT_SEPARATOR))
+		if (flags & WSP && (!explicit_content || *args))
 			word_split(pargs, &args);
 		++args;
 	}
