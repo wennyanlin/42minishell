@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/17 09:15:58 by wlin             ###   ########.fr       */
+/*   Updated: 2024/10/17 14:02:04 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,9 @@
 # define NOTEXECUTABLE 126
 # define NOTFOUND 127
 # define FATALSIGNAL 128
+
+# define SIGINT_CODE 130
+# define SIGQUIT_CODE 131
 
 typedef enum e_metachar
 {

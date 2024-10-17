@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/17 09:12:03 by wlin             ###   ########.fr       */
+/*   Updated: 2024/10/17 14:19:29 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ static void	reset_data(t_data *data)
 	data->cmd_path = NULL;
 }
 
+int g_sigstatus;
+
 static void	start_minishell(void)
 {
 	t_data	dt;
@@ -70,15 +72,20 @@ static void	start_minishell(void)
 	set_signal(PARENT);
 	while (TRUE)
 	{
+		g_sigstatus = 0;
 		dt.line = readline(PROMPT);
+		if (g_sigstatus != 0)
+			dt.exit_status = g_sigstatus;
 		add_history(dt.line);
 		if (tokenize(&dt.tokens, dt.line) && parse_tokens(&dt))
 		{
-			set_signal(CHILD);
 			heredoc_iter(&dt, dt.cmds, heredoc_read);
+			set_signal(CHILD);
 			execute_all(&dt, dt.cmds);
 			set_signal(PARENT);
 		}
+		if (dt.line == NULL)
+			bt_exit(1, NULL, &dt);
 		clear_data(&dt);
 		reset_data(&dt);
 	}
