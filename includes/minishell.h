@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/17 14:02:04 by wlin             ###   ########.fr       */
+/*   Updated: 2024/10/17 16:50:47 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,19 +62,17 @@
 /*
   expansor flags:
     QRM: quote removal
-    ISQ: inside single quotes
-    IDQ: inside double quotes
+    INQ: inside quotes
     EXP: expand parameters
     IQU: is question
     WSP: word split
 */
 
 # define QRM 001
-# define ISQ 002
-# define IDQ 004
-# define EXP 010
-# define IQU 020
-# define WSP 040
+# define INQ 002
+# define EXP 004
+# define IQU 010
+# define WSP 020
 
 # define NEGATIVE 0
 # define CHILD 0

@@ -6,7 +6,7 @@
 /*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 20:17:10 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/04 20:59:36 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/17 04:06:33 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	get_value(char **pstr, int flags)
 	value = getenv(*pstr);
 	if (value)
 	{
-		if (flags & (ISQ | IDQ) || !(flags & WSP))
+		if (flags & INQ || !(flags & WSP))
 			value = ft_strdup(value);
 		else
 			value = ft_strmapi(value, mark_spaces);
