@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/17 16:50:47 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/19 12:34:58 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@
 # define GREEN "\033[0;32m"
 # define RESET "\033[0m"
 
-# define PROMPT "\033[1;34mminishell%\033[0m"
+# define PROMPT "\033[1;34mminishell%\033[0m "
 # define HEREDOC_PROMPT "> "
 
 # define TRUE 1
