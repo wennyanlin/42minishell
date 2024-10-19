@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 19:12:32 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/17 17:14:04 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/19 13:41:34 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void	word_split(char ***pargs, char ***pparg)
 }
 
 static char	*parameter_expansion(t_data *data, char **args, char **parg,
-	int flags)
+	unsigned int flags)
 {
 	char	*str1;
 	char	*str2;
@@ -53,7 +53,8 @@ static char	*parameter_expansion(t_data *data, char **args, char **parg,
 	return (str2);
 }
 
-static int	check_parameter(t_data *data, char **args, char **parg, int flags)
+static int	check_parameter(t_data *data, char **args, char **parg,
+	unsigned int flags)
 {
 	char	*str1;
 	char	*str2;
@@ -81,7 +82,8 @@ static int	check_parameter(t_data *data, char **args, char **parg, int flags)
 	return (FALSE);
 }
 
-static int	quote_removal(t_data *data, char **args, char **parg, int flags)
+static int	quote_removal(t_data *data, char **args, char **parg,
+	unsigned int flags)
 {
 	const char	quote = **parg;
 	char		*arg_close;
@@ -107,7 +109,7 @@ static int	quote_removal(t_data *data, char **args, char **parg, int flags)
 	return (TRUE);
 }
 
-void	shell_expansion(t_data *data, char ***pargs, int flags)
+void	shell_expansion(t_data *data, char ***pargs, unsigned int flags)
 {
 	char	**args;
 	char	*arg;
