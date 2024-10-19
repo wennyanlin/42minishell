@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/17 14:19:29 by wlin             ###   ########.fr       */
+/*   Updated: 2024/10/19 15:14:58 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void	reset_data(t_data *data)
 	data->cmd_path = NULL;
 }
 
-int g_sigstatus;
+int	g_sigstatus;
 
 static void	start_minishell(void)
 {
@@ -66,7 +66,6 @@ static void	start_minishell(void)
 
 	reset_data(&dt);
 	dt.envp = array_dup(environ);
-	environ = dt.envp;
 // TODO **** Increse SHLVL variable by one
 	dt.exit_status = 0;
 	set_signal(PARENT);
