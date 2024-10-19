@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/19 13:44:15 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/19 14:21:35 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,7 +187,7 @@ pid_t		create_process(t_data *data, t_process *process);
 void		execute_all(t_data *data, t_commands *cmds);
 void		fd_dup2(t_data *data, int oldfd, int newfd);
 char		*find_cmd_path(t_data *data, char *cmd);
-void		get_value(char **pstr, unsigned int flags);
+void		get_value(char **envp, char **pstr, unsigned int flags);
 void		heredoc_iter(t_data *data, t_commands *cmd,
 				void (*f)(t_data *, char **));
 void		heredoc_read(t_data *data, char **pword);
