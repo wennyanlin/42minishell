@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:12:56 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/07 19:15:36 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/20 14:59:45 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ char	*examine_path(char **path_dirs, char *cmd)
 
 char	*find_cmd_path(t_data *data, char *cmd)
 {
-	char *const	env = getenv("PATH");
+	char *const	env = getenvp(data->envp, "PATH");
 	char		*full_path;
 	char		**path_dirs;
 

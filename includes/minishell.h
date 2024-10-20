@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/19 14:21:35 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/20 14:55:24 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,7 @@ typedef struct s_process
 void		clear_data(t_data *data);
 int			error_message(int code, int n, ...);
 void		exit_minishell(t_data *data, int code, int n, ...);
+char		*getenvp(char **envp, char *name);
 void		set_signal(int mode);
 
 /*======================================LEXER=================================*/
