@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 18:16:01 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/19 15:04:33 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/20 16:14:53 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	execute_command(t_data *data, char *command_path, char **cmd_args)
 	int		e;
 
 	execve(command_path, cmd_args, data->envp);
-	shell_path = getenv("SHELL");
+	shell_path = getenvp(data->envp, "SHELL");
 	if (shell_path)
 	{
 		e = errno;

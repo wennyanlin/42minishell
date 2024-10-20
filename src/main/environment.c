@@ -1,37 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_value.c                                        :+:      :+:    :+:   */
+/*   environment.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/30 20:17:10 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/20 14:53:21 by rtorrent         ###   ########.fr       */
+/*   Created: 2024/10/20 14:50:59 by rtorrent          #+#    #+#             */
+/*   Updated: 2024/10/20 14:54:08 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	mark_spaces(unsigned int i, char c)
+char	*getenvp(char **envp, char *name)
 {
-	(void)i;
-	if (!c || !is_whitespace(c))
-		return (c);
-	return (UNIT_SEPARATOR);
-}
+	size_t	n;
 
-void	get_value(char **envp, char **pstr, unsigned int flags)
-{
-	char	*value;
-
-	value = getenvp(envp, *pstr);
-	if (value)
+	if (name)
 	{
-		if (flags & INQ || !(flags & WSP))
-			value = ft_strdup(value);
-		else
-			value = ft_strmapi(value, mark_spaces);
+		n = ft_strlen(name);
+		while (*envp)
+		{
+			if (!ft_strncmp(*envp, name, n) && (*envp)[n] == EQUALS)
+				return (*envp + ++n);
+			envp++;
+		}
 	}
-	free(*pstr);
-	*pstr = value;
+	return (NULL);
 }

@@ -6,7 +6,7 @@
 #    By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 13:11:23 by wlin              #+#    #+#              #
-#    Updated: 2024/10/17 17:04:48 by rtorrent         ###   ########.fr        #
+#    Updated: 2024/10/20 14:52:02 by rtorrent         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ LIBRARY_NAMES	= -lft -lreadline
 LDFLAGS			+= $(LIBRARY_PATHS) $(LIBRARY_NAMES)
 
 HEADERS			= includes/minishell.h
-FILES_MAIN		= main.c exit_minishell.c signals.c
+FILES_MAIN		= environment.c exit_minishell.c main.c signals.c
 FILES_LEXR		= lexer.c utils_list.c utils_str.c
 FILES_PARS		= parser.c parser_syntax.c parser_utils.c
 FILES_EXEC		= executor.c exec_find_cmd.c here_doc.c process_init.c\
