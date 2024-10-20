@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/20 14:55:24 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/20 15:37:12 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,12 @@
 
 # define SIGINT_CODE 130
 # define SIGQUIT_CODE 131
+
+enum e_location
+{
+	BACK,
+	FRONT
+};
 
 typedef enum e_metachar
 {
@@ -211,12 +217,12 @@ int			is_builtin(t_bfunc *dst, char *cmd);
 
 /*===============================AUXILIARY FUNCTIONS==========================*/
 
-char		**array_add_front(char ***parray, char *str);
+char		**array_add(char ***parray, char *str, enum e_location l);
 void		array_clear(char ***parray);
 char		**array_dup(char **array);
 char		**array_join(char **array1, char **array2);
 size_t		array_len(char **array);
-char		**array_merge_back(char ***parray1, char **array2);
+char		**array_merge(char ***parray1, char **array2, enum e_location l);
 int			char_index(char *args, char ref);
 int			find_end_chars_index(char *input, int i);
 int			is_equal(char *s1, char *s2);
