@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/20 15:37:12 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/21 17:27:25 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ typedef struct s_commands
 typedef struct s_data
 {
 	int			exit_status;
-	char		**envp;
+	char		**export_vars;
 	char		*line;
 	t_token		*tokens;
 	t_commands	*cmds;
@@ -160,6 +160,7 @@ typedef struct s_process
 /*===================================MINISHELL================================*/
 
 void		clear_data(t_data *data);
+char		**env_array(char **export_vars);
 int			error_message(int code, int n, ...);
 void		exit_minishell(t_data *data, int code, int n, ...);
 char		*getenvp(char **envp, char *name);

@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/19 15:14:58 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/21 19:00:09 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,13 @@ static void	start_minishell(void)
 {
 	t_data	dt;
 
-	reset_data(&dt);
-	dt.envp = array_dup(environ);
-// TODO **** Increse SHLVL variable by one
+	dt.export_vars = array_dup(environ);
+// TODO **** Increse SHLVL variable by one + export PWD
 	dt.exit_status = 0;
 	set_signal(PARENT);
 	while (TRUE)
 	{
+		reset_data(&dt);
 		g_sigstatus = 0;
 		dt.line = readline(PROMPT);
 		if (g_sigstatus != 0)
@@ -86,7 +86,6 @@ static void	start_minishell(void)
 		if (dt.line == NULL)
 			bt_exit(1, NULL, &dt);
 		clear_data(&dt);
-		reset_data(&dt);
 	}
 }
 
