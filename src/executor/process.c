@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 18:16:01 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/20 16:17:25 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/21 17:33:08 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,16 @@
 
 void	execute_command(t_data *data, char *command_path, char **cmd_args)
 {
-	char	*shell_path;
-	int		e;
+	char			*shell_path;
+	char **const	envp = env_array(data->export_vars);
+	int				e;
 
-	execve(command_path, cmd_args, data->envp);
-	shell_path = getenvp(data->envp, "SHELL");
+	execve(command_path, cmd_args, envp);
+	shell_path = getenvp(envp, "SHELL");
 	if (shell_path)
 	{
 		e = errno;
-		execve(shell_path, array_add(&cmd_args, shell_path, FRONT), data->envp);
+		execve(shell_path, array_add(&cmd_args, shell_path, FRONT), envp);
 		exit_minishell(data, e, 3, SHNAME, cmd_args[1], strerror(e));
 	}
 	exit_minishell(data, errno, 3, SHNAME, cmd_args[0], strerror(errno));

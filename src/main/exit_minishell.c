@@ -6,7 +6,7 @@
 /*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 17:38:36 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/07 20:51:36 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/21 17:10:33 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,6 @@ void	exit_minishell(t_data *data, int code, int n, ...)
 		verror_message(n, &ap);
 	va_end(ap);
 	clear_data(data);
-	array_clear(&data->envp);
+	array_clear(&data->export_vars);
 	exit(code);
 }

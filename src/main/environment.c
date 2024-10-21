@@ -6,7 +6,7 @@
 /*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:50:59 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/20 14:54:08 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/21 17:30:18 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,19 @@ char	*getenvp(char **envp, char *name)
 		}
 	}
 	return (NULL);
+}
+
+char	**env_array(char **export_vars)
+{
+	char	**p;
+
+	p = array_dup((char *[1]){NULL});
+	while (p && *export_vars)
+	{
+		if (ft_strchr(*export_vars, EQUALS)
+			&& !array_add(&p, *export_vars, BACK))
+			array_clear(&p);
+		export_vars++;
+	}
+	return (p);
 }

@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 19:12:32 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/20 15:43:42 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/21 17:35:35 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static char	*parameter_expansion(t_data *data, char **args, char **parg,
 		while (ft_isalnum(**parg) || **parg == UNDERSCORE)
 			++*parg;
 		str1 = ft_substr(str1, 0, *parg - str1);
-		get_value(data->envp, &str1, flags);
+		get_value(data->export_vars, &str1, flags);
 	}
 	if (str1)
 		str2 = ft_strjoin(*args, str1);
