@@ -6,7 +6,7 @@
 /*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 20:09:53 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/13 20:16:07 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/19 15:08:31 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@
 
 #define FLN 01
 
-static int	read_options(char ***pargv)
+static unsigned int	read_options(char ***pargv)
 {
-	int		option_flags;
-	int		tentative_flags;
-	char	*p;
+	unsigned int	option_flags;
+	unsigned int	tentative_flags;
+	char			*p;
 
 	option_flags = 0;
 	while (*++(*pargv) && ***pargv == MINUS)
@@ -41,7 +41,7 @@ static int	read_options(char ***pargv)
 
 int	bt_echo(int argc, char *argv[], t_data *data)
 {
-	const int	flags = read_options(&argv);
+	const unsigned int	flags = read_options(&argv);
 
 	(void)argc;
 	(void)data;

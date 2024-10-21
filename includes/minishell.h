@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/13 20:13:32 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/20 15:37:12 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <errno.h>
 # include <fcntl.h>
 # include <linux/limits.h>
+# include <signal.h>
 # include <stdarg.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -36,7 +37,7 @@
 # define GREEN "\033[0;32m"
 # define RESET "\033[0m"
 
-# define PROMPT "\033[1;34mminishell%\033[0m"
+# define PROMPT "\033[1;34mminishell%\033[0m "
 # define HEREDOC_PROMPT "> "
 
 # define TRUE 1
@@ -61,28 +62,36 @@
 /*
   expansor flags:
     QRM: quote removal
-    ISQ: inside single quotes
-    IDQ: inside double quotes
+    INQ: inside quotes
     EXP: expand parameters
     IQU: is question
     WSP: word split
 */
 
 # define QRM 001
-# define ISQ 002
-# define IDQ 004
-# define EXP 010
-# define IQU 020
-# define WSP 040
+# define INQ 002
+# define EXP 004
+# define IQU 010
+# define WSP 020
 
 # define NEGATIVE 0
 # define CHILD 0
+# define PARENT 1
 # define WR 1
 # define RD 0
 
 # define NOTEXECUTABLE 126
 # define NOTFOUND 127
 # define FATALSIGNAL 128
+
+# define SIGINT_CODE 130
+# define SIGQUIT_CODE 131
+
+enum e_location
+{
+	BACK,
+	FRONT
+};
 
 typedef enum e_metachar
 {
@@ -153,6 +162,8 @@ typedef struct s_process
 void		clear_data(t_data *data);
 int			error_message(int code, int n, ...);
 void		exit_minishell(t_data *data, int code, int n, ...);
+char		*getenvp(char **envp, char *name);
+void		set_signal(int mode);
 
 /*======================================LEXER=================================*/
 
@@ -183,14 +194,14 @@ pid_t		create_process(t_data *data, t_process *process);
 void		execute_all(t_data *data, t_commands *cmds);
 void		fd_dup2(t_data *data, int oldfd, int newfd);
 char		*find_cmd_path(t_data *data, char *cmd);
-void		get_value(char **pstr, int flags);
+void		get_value(char **envp, char **pstr, unsigned int flags);
 void		heredoc_iter(t_data *data, t_commands *cmd,
 				void (*f)(t_data *, char **));
 void		heredoc_read(t_data *data, char **pword);
 void		heredoc_unlink(t_data *data, char **pfilename);
 void		init_process(t_data *data, t_process *process);
 int			lst_size(t_commands *cmds);
-void		shell_expansion(t_data *data, char ***pargs, int flags);
+void		shell_expansion(t_data *data, char ***pargs, unsigned int flags);
 char		**split_path(char *string, char separator);
 
 /*==================================BUILTINS==================================*/
@@ -206,12 +217,12 @@ int			is_builtin(t_bfunc *dst, char *cmd);
 
 /*===============================AUXILIARY FUNCTIONS==========================*/
 
-char		**array_add_front(char ***parray, char *str);
+char		**array_add(char ***parray, char *str, enum e_location l);
 void		array_clear(char ***parray);
 char		**array_dup(char **array);
 char		**array_join(char **array1, char **array2);
 size_t		array_len(char **array);
-char		**array_merge_back(char ***parray1, char **array2);
+char		**array_merge(char ***parray1, char **array2, enum e_location l);
 int			char_index(char *args, char ref);
 int			find_end_chars_index(char *input, int i);
 int			is_equal(char *s1, char *s2);

@@ -6,7 +6,7 @@
 /*   By: rtorrent <rtorrent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 21:08:04 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/02 15:28:10 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/20 15:40:20 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,40 +57,21 @@ char	**array_dup(char **array)
 	return (a0);
 }
 
-char	**array_add_front(char ***parray, char *str)
-{
-	char **const	a0 = malloc((array_len(*parray) + 2) * sizeof(char *));
-	char			**a;
-	char			**array;
-
-	if (a0)
-	{
-		a = a0;
-		*a++ = str;
-		array = *parray;
-		while (*array)
-			*a++ = *array++;
-		*a = NULL;
-		free(*parray);
-		*parray = a0;
-	}
-	return (a0);
-}
-
-char	**array_merge_back(char ***parray1, char **array2)
+char	**array_merge(char ***parray1, char **array2, enum e_location l)
 {
 	char **const	a0 = malloc((array_len(*parray1) + array_len(array2) + 1)
 			* sizeof(char *));
 	char			**a;
 	char			**array;
+	char **const	blocks[2] = {*parray1, array2};
 
 	if (a0)
 	{
 		a = a0;
-		array = *parray1;
+		array = blocks[0 ^ l];
 		while (*array)
 			*a++ = *array++;
-		array = array2;
+		array = blocks[1 ^ l];
 		while (*array)
 			*a++ = *array++;
 		*a = NULL;
@@ -98,4 +79,9 @@ char	**array_merge_back(char ***parray1, char **array2)
 		*parray1 = a0;
 	}
 	return (a0);
+}
+
+char	**array_add(char ***parray, char *str, enum e_location l)
+{
+	return (array_merge(parray, (char *[2]){str, NULL}, l));
 }

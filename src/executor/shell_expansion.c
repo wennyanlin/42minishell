@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 19:12:32 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/06 23:20:03 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/20 15:43:42 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ static void	word_split(char ***pargs, char ***pparg)
 	free(**pparg);
 	*(*pparg)++ = NULL;
 	n = array_len(*pargs) + array_len(split_arg);
-	array_merge_back(pargs, array_merge_back(&split_arg, *pparg));
+	array_merge(pargs, array_merge(&split_arg, *pparg, BACK), BACK);
 	free(split_arg);
 	*pparg = *pargs + n - 1;
 }
 
 static char	*parameter_expansion(t_data *data, char **args, char **parg,
-	int flags)
+	unsigned int flags)
 {
 	char	*str1;
 	char	*str2;
@@ -43,16 +43,18 @@ static char	*parameter_expansion(t_data *data, char **args, char **parg,
 		while (ft_isalnum(**parg) || **parg == UNDERSCORE)
 			++*parg;
 		str1 = ft_substr(str1, 0, *parg - str1);
-		get_value(&str1, flags);
+		get_value(data->envp, &str1, flags);
 	}
-	str2 = *args;
 	if (str1)
-		str2 = ft_strjoin(str2, str1);
+		str2 = ft_strjoin(*args, str1);
+	if (!str1 || !str2)
+		str2 = *args;
 	free(str1);
 	return (str2);
 }
 
-static void	check_parameter(t_data *data, char **args, char **parg, int flags)
+static int	check_parameter(t_data *data, char **args, char **parg,
+	unsigned int flags)
 {
 	char	*str1;
 	char	*str2;
@@ -61,33 +63,39 @@ static void	check_parameter(t_data *data, char **args, char **parg, int flags)
 		flags |= IQU;
 	else if (!(flags & EXP) || (*parg)[0] != DOLLAR
 		|| !(ft_isalpha((*parg)[1]) || (*parg)[1] == UNDERSCORE))
-	{
-		(*parg)++;
-		return ;
-	}
+		return (*(*parg)++);
 	*(*parg)++ = '\0';
 	str2 = parameter_expansion(data, args, parg, flags);
 	flags &= ~IQU;
 	str1 = ft_strjoin(str2, *parg);
-	if (str1 && str2)
+	if (str1)
 		*parg = str1 + ft_strlen(str2);
-	free(str2);
-	free(*args);
-	*args = str1;
+	else
+		*parg = str2 + ft_strlen(str2);
+	if (str2 != *args)
+		free(str2);
+	if (str1)
+	{
+		free(*args);
+		*args = str1;
+	}
+	return (FALSE);
 }
 
-static void	quote_removal(t_data *data, char **args, char **parg, int flags)
+static int	quote_removal(t_data *data, char **args, char **parg,
+	unsigned int flags)
 {
 	const char	quote = **parg;
 	char		*arg_close;
 	char		*str1;
 	char		*str2;
 
+	flags |= INQ;
 	*(*parg)++ = '\0';
 	arg_close = ft_strchr(*parg, quote);
 	str1 = ft_substr(*parg, 0, arg_close - *parg);
 	str2 = str1;
-	if (flags & IDQ)
+	if (quote == QUOTE_D)
 		while (str2 && *str2)
 			check_parameter(data, &str1, &str2, flags);
 	str2 = ft_strjoin(*args, str1);
@@ -98,32 +106,30 @@ static void	quote_removal(t_data *data, char **args, char **parg, int flags)
 	free(str2);
 	free(*args);
 	*args = str1;
+	return (TRUE);
 }
 
-void	shell_expansion(t_data *data, char ***pargs, int flags)
+void	shell_expansion(t_data *data, char ***pargs, unsigned int flags)
 {
 	char	**args;
 	char	*arg;
+	int		explicit_content;
 
 	if (*pargs == NULL)
 		return ;
 	args = *pargs;
 	while (*args)
 	{
+		explicit_content = FALSE;
 		arg = *args;
 		while (arg && *arg)
 		{
-			if (*arg == QUOTE_S)
-				flags |= ISQ;
-			else if (*arg == QUOTE_D)
-				flags |= IDQ;
-			if (flags & QRM && flags & (ISQ | IDQ))
-				quote_removal(data, args, &arg, flags);
+			if (flags & QRM && (*arg == QUOTE_S || *arg == QUOTE_D))
+				explicit_content |= quote_removal(data, args, &arg, flags);
 			else
-				check_parameter(data, args, &arg, flags);
-			flags &= ~(ISQ | IDQ);
+				explicit_content |= check_parameter(data, args, &arg, flags);
 		}
-		if (flags & WSP && ft_strchr(*args, UNIT_SEPARATOR))
+		if (flags & WSP && (!explicit_content || **args))
 			word_split(pargs, &args);
 		++args;
 	}

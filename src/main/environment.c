@@ -1,28 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   environment.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/27 14:06:28 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/19 14:59:13 by rtorrent         ###   ########.fr       */
+/*   Created: 2024/10/20 14:50:59 by rtorrent          #+#    #+#             */
+/*   Updated: 2024/10/20 14:54:08 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-#define PWD_ERROR 2
-
-int	bt_pwd(int argc, char *argv[], t_data *data)
+char	*getenvp(char **envp, char *name)
 {
-	char	pwd[PATH_MAX];
+	size_t	n;
 
-	(void)data;
-	if (argc > 1)
-		return (error_message(PWD_ERROR, 3, "pwd", *++argv, "invalid option"));
-	if (getcwd(pwd, PATH_MAX))
-		ft_putstr_fd(pwd, STDOUT_FILENO);
-	ft_putchar_fd('\n', STDOUT_FILENO);
-	return (EXIT_SUCCESS);
+	if (name)
+	{
+		n = ft_strlen(name);
+		while (*envp)
+		{
+			if (!ft_strncmp(*envp, name, n) && (*envp)[n] == EQUALS)
+				return (*envp + ++n);
+			envp++;
+		}
+	}
+	return (NULL);
 }

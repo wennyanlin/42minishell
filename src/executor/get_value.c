@@ -6,7 +6,7 @@
 /*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 20:17:10 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/04 20:59:36 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/20 14:53:21 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ static char	mark_spaces(unsigned int i, char c)
 	return (UNIT_SEPARATOR);
 }
 
-void	get_value(char **pstr, int flags)
+void	get_value(char **envp, char **pstr, unsigned int flags)
 {
 	char	*value;
 
-	value = getenv(*pstr);
+	value = getenvp(envp, *pstr);
 	if (value)
 	{
-		if (flags & (ISQ | IDQ) || !(flags & WSP))
+		if (flags & INQ || !(flags & WSP))
 			value = ft_strdup(value);
 		else
 			value = ft_strmapi(value, mark_spaces);
