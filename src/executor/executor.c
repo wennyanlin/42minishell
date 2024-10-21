@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/07 18:23:32 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/22 01:42:38 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void	execute_all(t_data *data, t_commands *cmds)
 	int	num_cmd;
 	int	pipe_read_end_prev;
 
+	set_signal(CHILD);
 	if (cmds == NULL)
 		return ;
 	num_cmd = lst_size(cmds);
