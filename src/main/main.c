@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/19 15:14:58 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/20 11:40:16 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ static void	start_minishell(void)
 		add_history(dt.line);
 		if (tokenize(&dt.tokens, dt.line) && parse_tokens(&dt))
 		{
+			set_signal(HEREDOC);
 			heredoc_iter(&dt, dt.cmds, heredoc_read);
 			set_signal(CHILD);
 			execute_all(&dt, dt.cmds);

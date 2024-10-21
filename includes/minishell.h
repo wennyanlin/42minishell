@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/20 15:37:12 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/21 10:41:55 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@
 # define NEGATIVE 0
 # define CHILD 0
 # define PARENT 1
+# define HEREDOC 2
 # define WR 1
 # define RD 0
 

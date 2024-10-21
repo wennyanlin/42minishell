@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 19:15:28 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/09 16:49:51 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/21 10:44:06 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	heredoc_read(t_data *dt, char **pwrd)
 	char *const	filename = heredoc_create_filename();
 	int			hd_fd;
 	char		**next_line;
+	extern int 	g_sigstatus;
 
 	if (filename == NULL)
 		exit_minishell(dt, errno, 3, SHNAME, "here-document", strerror(errno));
@@ -62,7 +63,7 @@ void	heredoc_read(t_data *dt, char **pwrd)
 		exit_minishell(dt, errno, 3, SHNAME, filename, strerror(errno));
 	shell_expansion(dt, &pwrd, QRM);
 	next_line = (char *[2]){readline(HEREDOC_PROMPT), NULL};
-	while (next_line[0] && ft_strncmp(next_line[0], *pwrd, -1))
+	while (next_line[0] && ft_strncmp(next_line[0], *pwrd, -1) && g_sigstatus != SIGINT_CODE)
 	{
 		if (!quoted)
 			shell_expansion(dt, &next_line, EXP);
