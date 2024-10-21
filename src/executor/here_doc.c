@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 19:15:28 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/21 23:32:10 by wlin             ###   ########.fr       */
+/*   Updated: 2024/10/22 00:12:01 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,10 @@ int	heredoc(t_data *dt, char **pwrd)
 	if (close(hd_fd) == INVALID)
 		exit_minishell(dt, errno, 3, SHNAME, "close", strerror(errno));
 	if (g_sigstatus == SIGINT_CODE)
+	{
+		dt->exit_status = 1;
 		return (SIGINT_CODE);
+	}
 	else if (return_pid == 0)
 		return (0);
 	else

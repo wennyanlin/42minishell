@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/21 23:31:56 by wlin             ###   ########.fr       */
+/*   Updated: 2024/10/22 00:02:22 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,9 @@ static void	start_minishell(void)
 	dt.envp = array_dup(environ);
 // TODO **** Increse SHLVL variable by one
 	dt.exit_status = 0;
-	set_signal(PARENT);
 	while (TRUE)
 	{
+		set_signal(PARENT);
 		g_sigstatus = 0;
 		dt.line = readline(PROMPT);
 		if (g_sigstatus != 0)
@@ -82,7 +82,7 @@ static void	start_minishell(void)
 			{
 				set_signal(CHILD);
 				execute_all(&dt, dt.cmds);
-				set_signal(PARENT);
+				// set_signal(PARENT);
 			}
 		}
 		if (dt.line == NULL)
