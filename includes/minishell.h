@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/21 10:41:55 by wlin             ###   ########.fr       */
+/*   Updated: 2024/10/21 23:04:53 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,10 +196,11 @@ void		execute_all(t_data *data, t_commands *cmds);
 void		fd_dup2(t_data *data, int oldfd, int newfd);
 char		*find_cmd_path(t_data *data, char *cmd);
 void		get_value(char **envp, char **pstr, unsigned int flags);
-void		heredoc_iter(t_data *data, t_commands *cmd,
-				void (*f)(t_data *, char **));
-void		heredoc_read(t_data *data, char **pword);
-void		heredoc_unlink(t_data *data, char **pfilename);
+int			heredoc(t_data *dt, char **pwrd);
+int			heredoc_iter(t_data *data, t_commands *cmd,
+				int (*f)(t_data *, char **));
+void		heredoc_read(t_data *data, char **pword, int hd_fd);
+int			heredoc_unlink(t_data *data, char **pfilename);
 void		init_process(t_data *data, t_process *process);
 int			lst_size(t_commands *cmds);
 void		shell_expansion(t_data *data, char ***pargs, unsigned int flags);
