@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 19:15:28 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/21 23:26:06 by wlin             ###   ########.fr       */
+/*   Updated: 2024/10/21 23:32:10 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,19 +52,11 @@ static char	*heredoc_create_filename(void)
 void	heredoc_read(t_data *dt, char **pwrd, int hd_fd)
 {
 	const int	quoted = ft_strchr(*pwrd, QUOTE_S) || ft_strchr(*pwrd, QUOTE_D);
-	// char *const	filename = heredoc_create_filename();
-	// int			hd_fd;
 	char		**next_line;
-	extern int 	g_sigstatus;
 
-	// if (filename == NULL)
-	// 	exit_minishell(dt, errno, 3, SHNAME, "here-document", strerror(errno));
-	// hd_fd = open(filename, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
-	// if (hd_fd == INVALID)
-	// 	exit_minishell(dt, errno, 3, SHNAME, filename, strerror(errno));
 	shell_expansion(dt, &pwrd, QRM);
 	next_line = (char *[2]){readline(HEREDOC_PROMPT), NULL};
-	while (next_line[0] && ft_strncmp(next_line[0], *pwrd, -1) && g_sigstatus != SIGINT_CODE)
+	while (next_line[0] && ft_strncmp(next_line[0], *pwrd, -1))
 	{
 		if (!quoted)
 			shell_expansion(dt, &next_line, EXP);
@@ -74,9 +66,6 @@ void	heredoc_read(t_data *dt, char **pwrd, int hd_fd)
 	}
 	free(next_line[0]);
 	free(*pwrd);
-	// *pwrd = filename;
-	// if (close(hd_fd) == INVALID)
-	// 	exit_minishell(dt, errno, 3, SHNAME, "close", strerror(errno));
 }
 
 int	heredoc_iter(t_data *data, t_commands *cmd,
@@ -98,7 +87,6 @@ int	heredoc_iter(t_data *data, t_commands *cmd,
 			if (return_status != 0)
 				return (return_status);
 			redirect->filename = tmp_array[0];
-			printf("filename = %s\n", redirect->filename);
 		}
 		redirect = redirect->next;
 	}
@@ -113,7 +101,6 @@ int	heredoc(t_data *dt, char **pwrd)
 	char *const	filename = heredoc_create_filename();
 	int			hd_fd;
 
-	printf("filename create: %s\n", filename);
 	if (filename == NULL)
 		exit_minishell(dt, errno, 3, SHNAME, "here-document", strerror(errno));
 	hd_fd = open(filename, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
@@ -124,11 +111,11 @@ int	heredoc(t_data *dt, char **pwrd)
 		exit_minishell(dt, errno, 3, SHNAME, "fork", strerror(errno));
 	else if (pid == CHILD)
 	{
+		set_signal(HEREDOC);
 		heredoc_read(dt, pwrd, hd_fd);
 		exit(0);
 	}
 	waitpid(pid, &return_pid, 0);
-	printf("return_pid = %d, filename %s\n", return_pid, filename);
 	*pwrd = filename;
 	if (close(hd_fd) == INVALID)
 		exit_minishell(dt, errno, 3, SHNAME, "close", strerror(errno));

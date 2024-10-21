@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/21 23:18:23 by wlin             ###   ########.fr       */
+/*   Updated: 2024/10/21 23:31:56 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ static void	start_minishell(void)
 		add_history(dt.line);
 		if (tokenize(&dt.tokens, dt.line) && parse_tokens(&dt))
 		{
-			set_signal(HEREDOC);
 			if (heredoc_iter(&dt, dt.cmds, heredoc) == 0)
 			{
 				set_signal(CHILD);
