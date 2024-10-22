@@ -6,7 +6,7 @@
 #    By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/30 13:11:23 by wlin              #+#    #+#              #
-#    Updated: 2024/10/20 14:52:02 by rtorrent         ###   ########.fr        #
+#    Updated: 2024/10/22 00:43:30 by wlin             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ FILES_LEXR		= lexer.c utils_list.c utils_str.c
 FILES_PARS		= parser.c parser_syntax.c parser_utils.c
 FILES_EXEC		= executor.c exec_find_cmd.c here_doc.c process_init.c\
 				  process.c exec_utils.c  split_path.c shell_expansion.c\
-				  get_value.c
+				  get_value.c heredoc_utils.c
 FILES_BLT		= builtin.c echo.c env.c exit.c pwd.c unset.c
 FILES_AUX		= aux_array.c aux_str.c
 FILES_TEST		= test_lexer.c
