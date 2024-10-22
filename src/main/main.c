@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/21 19:00:09 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/22 18:08:57 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,22 +67,18 @@ static void	start_minishell(void)
 	dt.export_vars = array_dup(environ);
 // TODO **** Increse SHLVL variable by one + export PWD
 	dt.exit_status = 0;
-	set_signal(PARENT);
 	while (TRUE)
 	{
 		reset_data(&dt);
+		set_signal(PARENT);
 		g_sigstatus = 0;
 		dt.line = readline(PROMPT);
 		if (g_sigstatus != 0)
 			dt.exit_status = g_sigstatus;
 		add_history(dt.line);
 		if (tokenize(&dt.tokens, dt.line) && parse_tokens(&dt))
-		{
-			heredoc_iter(&dt, dt.cmds, heredoc_read);
-			set_signal(CHILD);
-			execute_all(&dt, dt.cmds);
-			set_signal(PARENT);
-		}
+			if (heredoc_iter(&dt, dt.cmds, heredoc_fork) == 0)
+				execute_all(&dt, dt.cmds);
 		if (dt.line == NULL)
 			bt_exit(1, NULL, &dt);
 		clear_data(&dt);
