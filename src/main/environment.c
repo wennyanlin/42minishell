@@ -6,11 +6,34 @@
 /*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:50:59 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/21 17:30:18 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/22 18:58:16 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	export_var(char ***pexport_vars, char *var, char *equals)
+{
+	char			**p;
+	const size_t	n = equals - var;
+
+	p = *pexport_vars;
+	if (!p)
+		return ;
+	while (*p)
+	{
+		if (!ft_strncmp(*p, var, n) && (!(*p)[n] || (*p)[n] == EQUALS))
+			break ;
+		p++;
+	}
+	if (*p)
+	{
+		free(*p);
+		*p = ft_strdup(var);
+	}
+	else
+		array_add(pexport_vars, ft_strdup(var), BACK);
+}
 
 char	*getenvp(char **envp, char *name)
 {
@@ -21,7 +44,8 @@ char	*getenvp(char **envp, char *name)
 		n = ft_strlen(name);
 		while (*envp)
 		{
-			if (!ft_strncmp(*envp, name, n) && (*envp)[n] == EQUALS)
+			if (!ft_strncmp(*envp, name, n)
+				&& (!(*envp)[n] || (*envp)[n] == EQUALS))
 				return (*envp + ++n);
 			envp++;
 		}

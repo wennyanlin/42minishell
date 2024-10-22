@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/22 18:08:11 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/22 18:59:10 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,7 @@ void		clear_data(t_data *data);
 char		**env_array(char **export_vars);
 int			error_message(int code, int n, ...);
 void		exit_minishell(t_data *data, int code, int n, ...);
+void		export_var(char ***pexport_vars, char *var, char *equals);
 char		*getenvp(char **envp, char *name);
 void		set_signal(int mode);
 
