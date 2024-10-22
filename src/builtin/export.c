@@ -6,7 +6,7 @@
 /*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:55:50 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/21 19:08:11 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/22 01:41:38 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,15 +67,15 @@ int	bt_export(int argc, char *argv[], t_data *data)
 		if (ft_isalpha(*p) || *p == UNDERSCORE)
 			while (ft_isalnum(*++p) || *p == UNDERSCORE)
 				;
-		if (*p && *p != EQUALS)
+		if (!*p || *p == EQUALS)
+			setenvp(&data->export_vars, *argv++, p);
+		else
 		{
 			p = quote_str(*argv++);
 			argc = error_message(EXIT_FAILURE, 4, SHNAME, "export", p,
 					"not a valid identifier");
 			free(p);
 		}
-		else
-			array_add(&data->export_vars, ft_strdup(*argv++), BACK);
 	}
 	return (argc);
 }

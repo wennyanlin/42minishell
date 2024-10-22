@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/21 17:27:25 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/22 01:43:50 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,7 @@ int			error_message(int code, int n, ...);
 void		exit_minishell(t_data *data, int code, int n, ...);
 char		*getenvp(char **envp, char *name);
 void		set_signal(int mode);
+void		setenvp(char ***penvp, char *name, char *value);
 
 /*======================================LEXER=================================*/
 
