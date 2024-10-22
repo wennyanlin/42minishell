@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 19:15:28 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/22 01:44:44 by wlin             ###   ########.fr       */
+/*   Updated: 2024/10/22 13:42:37 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ t_heredoc	init_heredoc(t_data *dt)
 	int			hd_fd;
 	pid_t		pid;
 	t_heredoc	heredoc;
-	
+
 	if (filename == NULL)
 		exit_minishell(dt, errno, 3, SHNAME, "here-document", strerror(errno));
 	hd_fd = open(filename, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
@@ -101,5 +101,5 @@ int	heredoc_fork(t_data *dt, char **pwrd)
 		return (0);
 	else
 		return (exit_minishell(dt, errno, return_pid, SHNAME, "heredoc",
-			strerror(errno)), 0);
+				strerror(errno)), 0);
 }
