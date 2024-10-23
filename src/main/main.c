@@ -64,12 +64,12 @@ static void	start_minishell(void)
 {
 	t_data	dt;
 
-	reset_data(&dt);
-	dt.envp = array_dup(environ);
-// TODO **** Increse SHLVL variable by one
+	dt.export_vars = array_dup(environ);
+// TODO **** Increse SHLVL variable by one + export PWD
 	dt.exit_status = 0;
 	while (TRUE)
 	{
+		reset_data(&dt);
 		set_signal(PARENT);
 		g_sigstatus = 0;
 		dt.line = readline(PROMPT);
@@ -82,7 +82,6 @@ static void	start_minishell(void)
 		if (dt.line == NULL)
 			bt_exit(1, NULL, &dt);
 		clear_data(&dt);
-		reset_data(&dt);
 	}
 }
 

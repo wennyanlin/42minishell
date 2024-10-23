@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 19:15:28 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/22 17:31:32 by wlin             ###   ########.fr       */
+/*   Updated: 2024/10/22 13:42:37 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,6 @@ int	heredoc_fork(t_data *dt, char **pwrd)
 	else if (return_pid == 0)
 		return (0);
 	else
-		return (exit_minishell(dt, errno, return_pid, SHNAME, "heredoc",
+		return (exit_minishell(dt, errno, 3, SHNAME, "heredoc",
 				strerror(errno)), 0);
 }
