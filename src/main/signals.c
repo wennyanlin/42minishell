@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 23:52:42 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/22 13:40:58 by wlin             ###   ########.fr       */
+/*   Updated: 2024/10/24 14:59:03 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,14 @@ void	handle_sigint_child(int sig)
 		g_sigstatus = SIGINT;
 }
 
-void	set_signal(int mode)
+void	set_signal(enum e_mode mode)
 {
-	if (mode == CHILD)
+	if (mode == EXECUTING)
 	{
 		signal(SIGQUIT, handle_sigint_child);
 		signal(SIGINT, handle_sigint_child);
 	}
-	else if (mode == PARENT)
+	else if (mode == INTERACTIVE)
 	{
 		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, new_prompt_line);

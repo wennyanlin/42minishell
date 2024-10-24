@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/24 12:50:41 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/24 14:58:23 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static void	start_minishell(void)
 	while (TRUE)
 	{
 		reset_data(&dt);
-		set_signal(PARENT);
+		set_signal(INTERACTIVE);
 		g_sigstatus = 0;
 		dt.line = readline(PROMPT);
 		if (g_sigstatus != 0)
@@ -78,8 +78,12 @@ static void	start_minishell(void)
 		if (dt.line && dt.line[0])
 			add_history(dt.line);
 		if (tokenize(&dt.tokens, dt.line) && parse_tokens(&dt))
-			if (heredoc_iter(&dt, dt.cmds, heredoc_fork) == 0)
+		{
+			if (heredoc_iter(&dt, dt.cmds, heredoc_fork) == EXIT_SUCCESS)
 				execute_all(&dt, dt.cmds);
+			else
+				dt.exit_status = 444;
+		}
 		if (dt.line == NULL)
 			bt_exit(1, NULL, &dt);
 		clear_data(&dt);

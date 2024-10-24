@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 18:16:01 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/21 17:33:08 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/24 15:02:24 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ pid_t	create_process(t_data *data, t_process *process)
 		exit_minishell(data, errno, 3, SHNAME, "fork", strerror(errno));
 	else if (pid == CHILD)
 	{
+		set_signal(EXECUTING);
 		init_process(data, process);
 		child_process(data, process);
 	}
