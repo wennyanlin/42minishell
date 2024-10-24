@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/22 01:42:51 by wlin             ###   ########.fr       */
+/*   Updated: 2024/10/24 01:51:29 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ static void	start_minishell(void)
 		dt.line = readline(PROMPT);
 		if (g_sigstatus != 0)
 			dt.exit_status = g_sigstatus;
-		add_history(dt.line);
+		if (dt.line && dt.line[0])
+			add_history(dt.line);
 		if (tokenize(&dt.tokens, dt.line) && parse_tokens(&dt))
 			if (heredoc_iter(&dt, dt.cmds, heredoc_fork) == 0)
 				execute_all(&dt, dt.cmds);
