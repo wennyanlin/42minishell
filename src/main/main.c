@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/24 01:51:29 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/24 12:50:41 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static void	start_minishell(void)
 		g_sigstatus = 0;
 		dt.line = readline(PROMPT);
 		if (g_sigstatus != 0)
-			dt.exit_status = g_sigstatus;
+			dt.exit_status = FATALSIGNAL + g_sigstatus;
 		if (dt.line && dt.line[0])
 			add_history(dt.line);
 		if (tokenize(&dt.tokens, dt.line) && parse_tokens(&dt))
