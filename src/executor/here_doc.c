@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 19:15:28 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/24 15:00:49 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/25 14:08:19 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	heredoc_fork(t_data *data, char **pwrd)
 	heredoc = init_heredoc(data);
 	if (heredoc.pid == CHILD)
 	{
-		set_signal(HEREDOC);
+		set_signal(DEFAULT);
 		heredoc_read(data, pwrd, heredoc.fd);
 		free(heredoc.filename);
 		exit(EXIT_SUCCESS);

@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/24 14:58:23 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/25 14:17:17 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,10 @@ static void	start_minishell(void)
 		if (tokenize(&dt.tokens, dt.line) && parse_tokens(&dt))
 		{
 			if (heredoc_iter(&dt, dt.cmds, heredoc_fork) == EXIT_SUCCESS)
+			{
+				set_signal(EXECUTING);
 				execute_all(&dt, dt.cmds);
+			}
 			else
 				dt.exit_status = 444;
 		}
