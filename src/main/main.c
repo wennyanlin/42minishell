@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/25 14:17:17 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/25 20:00:49 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,28 +50,29 @@ void	clear_data(t_data *data)
 	clear_lists(data);
 }
 
+int	g_sigstatus;
+
 static void	reset_data(t_data *data)
 {
 	data->tokens = NULL;
 	data->cmds = NULL;
 	data->pid = NULL;
 	data->cmd_path = NULL;
+	g_sigstatus = 0;
 }
-
-int	g_sigstatus;
 
 static void	start_minishell(void)
 {
 	t_data	dt;
+	int		hd_exit;
 
 	dt.export_vars = array_dup(environ);
 // TODO **** Increse SHLVL variable by one + export PWD
 	dt.exit_status = 0;
+	set_signal(INTERACTIVE);
 	while (TRUE)
 	{
 		reset_data(&dt);
-		set_signal(INTERACTIVE);
-		g_sigstatus = 0;
 		dt.line = readline(PROMPT);
 		if (g_sigstatus != 0)
 			dt.exit_status = FATALSIGNAL + g_sigstatus;
@@ -79,13 +80,11 @@ static void	start_minishell(void)
 			add_history(dt.line);
 		if (tokenize(&dt.tokens, dt.line) && parse_tokens(&dt))
 		{
-			if (heredoc_iter(&dt, dt.cmds, heredoc_fork) == EXIT_SUCCESS)
-			{
-				set_signal(EXECUTING);
-				execute_all(&dt, dt.cmds);
-			}
+			hd_exit = heredoc_iter(&dt, dt.cmds, heredoc_fork);
+			if (hd_exit == EXIT_SUCCESS)
+				dt.exit_status = execute_all(&dt, dt.cmds);
 			else
-				dt.exit_status = 444;
+				dt.exit_status = hd_exit;
 		}
 		if (dt.line == NULL)
 			bt_exit(1, NULL, &dt);

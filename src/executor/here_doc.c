@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 19:15:28 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/25 14:08:19 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/25 19:23:33 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,16 @@ int	heredoc_fork(t_data *data, char **pwrd)
 	heredoc = init_heredoc(data);
 	if (heredoc.pid == CHILD)
 	{
-		set_signal(DEFAULT);
+		set_signal(HEREDOC_CHILD);
 		heredoc_read(data, pwrd, heredoc.fd);
 		free(heredoc.filename);
-		exit(EXIT_SUCCESS);
+		exit_minishell(data, EXIT_SUCCESS, 0);
 	}
+	set_signal(HEREDOC);
 	heredoc_exit = wait_process(&heredoc.pid, 1);
+	if (heredoc_exit != EXIT_SUCCESS)
+		ft_putchar_fd('\n', STDOUT_FILENO);
+	set_signal(INTERACTIVE);
 	*pwrd = heredoc.filename;
 	if (close(heredoc.fd) == INVALID)
 		exit_minishell(data, errno, 3, SHNAME, "close", strerror(errno));

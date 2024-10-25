@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/25 14:03:58 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/25 19:34:49 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,8 @@ enum e_mode
 	DEFAULT,
 	INTERACTIVE,
 	EXECUTING,
-	HEREDOC
+	HEREDOC,
+	HEREDOC_CHILD
 };
 
 enum e_location
@@ -204,7 +205,7 @@ void		cmd_lst_addback(t_commands **cmds, t_commands *new);
 /*====================================EXECUTOR================================*/
 
 pid_t		create_process(t_data *data, t_process *process);
-void		execute_all(t_data *data, t_commands *cmds);
+int			execute_all(t_data *data, t_commands *cmds);
 void		fd_dup2(t_data *data, int oldfd, int newfd);
 char		*find_cmd_path(t_data *data, char *cmd);
 void		get_value(char **envp, char **pstr, unsigned int flags);
