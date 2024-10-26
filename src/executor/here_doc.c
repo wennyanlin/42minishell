@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 19:15:28 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/26 02:42:36 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/26 04:15:05 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ int	heredoc_iter(t_data *data, t_commands *cmd,
 		{
 			tmp_array = (char *[2]){redirect->filename, NULL};
 			return_status = f(data, tmp_array);
+			redirect->filename = tmp_array[0];
 			if (return_status != 0)
 				return (return_status);
-			redirect->filename = tmp_array[0];
 		}
 		redirect = redirect->next;
 	}
@@ -76,10 +76,16 @@ t_heredoc	init_heredoc(t_data *dt)
 		exit_minishell(dt, errno, 3, SHNAME, "here-document", strerror(errno));
 	hd_fd = open(filename, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
 	if (hd_fd == INVALID)
+	{
+		free(filename);
 		exit_minishell(dt, errno, 3, SHNAME, filename, strerror(errno));
+	}
 	pid = fork();
 	if (pid == INVALID)
+	{
+		free(filename);
 		exit_minishell(dt, errno, 3, SHNAME, "fork", strerror(errno));
+	}
 	heredoc.fd = hd_fd;
 	heredoc.pid = pid;
 	heredoc.filename = filename;
