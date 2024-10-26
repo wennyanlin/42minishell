@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 23:52:42 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/25 19:17:23 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/26 04:44:23 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@ void	handle_newline(int sig)
 	extern int	g_sigstatus;
 
 	ft_putchar_fd('\n', STDOUT_FILENO);
-	rl_replace_line("", TRUE);
-	rl_on_new_line();
 	g_sigstatus = sig;
 }
 
@@ -31,6 +29,8 @@ void	handle_quit(int sig)
 void	handle_new_prompt(int sig)
 {
 	handle_newline(sig);
+	rl_replace_line("", TRUE);
+	rl_on_new_line();
 	rl_redisplay();
 }
 
