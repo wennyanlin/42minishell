@@ -6,7 +6,7 @@
 /*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:50:59 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/22 18:58:16 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/26 18:38:56 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,24 @@ void	export_var(char ***pexport_vars, char *var, char *equals)
 	}
 	else
 		array_add(pexport_vars, ft_strdup(var), BACK);
+}
+
+int	setenvp(char ***envp, char *name, char *value)
+{
+	value = ft_strjoin("=", value);
+	if (value)
+	{
+		name = ft_strjoin(name, value);
+		free(value);
+		if (name)
+		{
+			export_vars(envp, name, ft_strchr(name, EQUALS));
+			free(name);
+			return (EXIT_SUCCESS);
+		}
+		free(name);
+	}
+	return (EXIT_FAILURE);
 }
 
 char	*getenvp(char **envp, char *name)

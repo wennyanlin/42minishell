@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 14:12:00 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/21 12:58:31 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/26 17:26:07 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 int	is_builtin(t_bfunc *dst, char *cmd)
 {
 	static const char		*builtin[] = {"echo", "env", "exit", "export",
-		"pwd", "unset", NULL};
+		"cd", "pwd", "unset", NULL};
 	static const t_bfunc	bt_func[] = {bt_echo, bt_env, bt_exit, bt_export,
-		bt_pwd, bt_unset, NULL};
+		bt_cd, bt_pwd, bt_unset, NULL};
 	const char				**b;
 
 	b = builtin;
