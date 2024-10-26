@@ -6,7 +6,7 @@
 /*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:55:50 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/22 19:04:31 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/25 22:41:08 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,20 +35,6 @@ static int	print_export_vars(char **vars)
 		vars++;
 	}
 	return (EXIT_SUCCESS);
-}
-
-static char	*quote_str(char *str)
-{
-	const size_t	n = ft_strlen(str) + 3;
-	char *const		p = malloc(n);
-
-	if (p)
-	{
-		ft_strlcpy(p, "`", 2);
-		ft_strlcat(p, str, n);
-		ft_strlcat(p, "\'", n);
-	}
-	return (p);
 }
 
 int	bt_export(int argc, char *argv[], t_data *data)

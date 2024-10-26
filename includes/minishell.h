@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/25 19:34:49 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/25 22:40:35 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,9 +241,8 @@ char		**array_join(char **array1, char **array2);
 size_t		array_len(char **array);
 char		**array_merge(char ***parray1, char **array2, enum e_location l);
 int			char_index(char *args, char ref);
-int			find_end_chars_index(char *input, int i);
-int			is_equal(char *s1, char *s2);
 int			is_whitespace(char c);
+char		*quote_str(char *str);
 int			skip_spaces(char *str, int i);
 
 #endif

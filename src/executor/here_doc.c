@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 19:15:28 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/25 19:23:33 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/26 02:01:16 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	heredoc_read(t_data *dt, char **pwrd, int hd_fd)
 {
 	const int	quoted = ft_strchr(*pwrd, QUOTE_S) || ft_strchr(*pwrd, QUOTE_D);
 	char		**next_line;
+	char		*str1;
+	char		*str2;
 
 	shell_expansion(dt, &pwrd, QRM);
 	next_line = (char *[2]){readline(HEREDOC_PROMPT), NULL};
@@ -27,8 +29,15 @@ void	heredoc_read(t_data *dt, char **pwrd, int hd_fd)
 		free(next_line[0]);
 		next_line[0] = readline(HEREDOC_PROMPT);
 	}
-	free(next_line[0]);
-	free(*pwrd);
+	if (next_line[0])
+		return (free(next_line[0]));
+	str1 = quote_str(*pwrd);
+	str2 = ft_strjoin("here-document delimited by end-of-file (wanted ", str1);
+	free(str1);
+	str1 = ft_strjoin(str2, ")");
+	free(str2);
+	error_message(0, 3, SHNAME, "warning", str1);
+	free(str1);
 }
 
 int	heredoc_iter(t_data *data, t_commands *cmd,
@@ -87,14 +96,16 @@ int	heredoc_fork(t_data *data, char **pwrd)
 	{
 		set_signal(HEREDOC_CHILD);
 		heredoc_read(data, pwrd, heredoc.fd);
+		free(*pwrd);
 		free(heredoc.filename);
-		exit_minishell(data, EXIT_SUCCESS, 0);
+		exit(EXIT_SUCCESS);
 	}
 	set_signal(HEREDOC);
 	heredoc_exit = wait_process(&heredoc.pid, 1);
 	if (heredoc_exit != EXIT_SUCCESS)
 		ft_putchar_fd('\n', STDOUT_FILENO);
 	set_signal(INTERACTIVE);
+	free(*pwrd);
 	*pwrd = heredoc.filename;
 	if (close(heredoc.fd) == INVALID)
 		exit_minishell(data, errno, 3, SHNAME, "close", strerror(errno));
