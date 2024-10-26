@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/25 22:40:35 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/26 16:45:19 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,7 @@ enum e_mode
 	DEFAULT,
 	INTERACTIVE,
 	EXECUTING,
-	HEREDOC,
-	HEREDOC_CHILD
+	HEREDOC
 };
 
 enum e_location

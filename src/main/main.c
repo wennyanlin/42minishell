@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/25 20:00:49 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/26 16:24:27 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ static void	reset_data(t_data *data)
 	data->pid = NULL;
 	data->cmd_path = NULL;
 	g_sigstatus = 0;
+	set_signal(INTERACTIVE);
 }
 
 static void	start_minishell(void)
@@ -69,7 +70,6 @@ static void	start_minishell(void)
 	dt.export_vars = array_dup(environ);
 // TODO **** Increse SHLVL variable by one + export PWD
 	dt.exit_status = 0;
-	set_signal(INTERACTIVE);
 	while (TRUE)
 	{
 		reset_data(&dt);
@@ -80,11 +80,14 @@ static void	start_minishell(void)
 			add_history(dt.line);
 		if (tokenize(&dt.tokens, dt.line) && parse_tokens(&dt))
 		{
+			set_signal(EXECUTING);
 			hd_exit = heredoc_iter(&dt, dt.cmds, heredoc_fork);
 			if (hd_exit == EXIT_SUCCESS)
 				dt.exit_status = execute_all(&dt, dt.cmds);
 			else
 				dt.exit_status = hd_exit;
+			if (dt.exit_status > FATALSIGNAL)
+				ft_putchar_fd('\n', STDOUT_FILENO);
 		}
 		if (dt.line == NULL)
 			bt_exit(1, NULL, &dt);

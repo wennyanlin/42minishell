@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/25 21:48:07 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/26 16:23:56 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,13 +94,11 @@ int	execute_all(t_data *data, t_commands *cmds)
 	shell_expansion(data, &cmds->args, QRM | EXP | WSP);
 	if (!is_builtin(NULL, cmds->args[0]) || num_cmd > 1)
 	{
-		set_signal(EXECUTING);
 		pipe_read_end_prev = dup(STDIN_FILENO);
 		if (pipe_read_end_prev == INVALID)
 			exit_minishell(data, errno, 3, SHNAME, "dup", strerror(errno));
 		link_command(data, cmds, data->pid, pipe_read_end_prev);
 		num_cmd = wait_process(data->pid, num_cmd);
-		set_signal(INTERACTIVE);
 		return (num_cmd);
 	}
 	else
