@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:46:09 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/09 15:34:00 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/28 18:17:46 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,22 @@ static void	handle_redirection(t_data *data, t_process *process,
 void	init_process(t_data *data, t_process *process)
 {
 	t_redirect	*redirect;
+	char *const	cmd = process->comand->args[0];
 
-	if (process->command->args != NULL
-		&& !is_builtin(&process->builtin, process->command->args[0]))
+	if (process->command->args != NULL && !is_builtin(&process->builtin, cmd))
 	{
-		process->cmd_path = find_cmd_path(data, process->command->args[0]);
+		if (char_index(cmd, SLASH) != NOT_FOUND)
+		{
+			process->cmd_path = ft_strdup(cmd);
+			if (process->cmd_path == NULL)
+				exit_minishell(data, errno, 2, SHNAME, strerror(errno));
+		}
+		else
+		{
+			process->cmd_path = find_cmd_path(data->env, "PATH", cmd);
+			if (process->cmd_path == NULL)
+				exit_minishell(data, NOTFOUND, 2, cmd, "command not found");
+		}
 		data->cmd_path = process->cmd_path;
 	}
 	redirect = process->command->redirect;

@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/26 16:45:19 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/28 18:34:58 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@
 # define DOLLAR 36
 # define QUOTE_S 39
 # define MINUS 45
+# define SLASH 47
 # define C_LESS 60
 # define EQUALS 61
 # define C_GREAT 62
@@ -140,6 +141,7 @@ typedef struct s_commands
 typedef struct s_data
 {
 	int			exit_status;
+	char		**env;
 	char		**export_vars;
 	char		*line;
 	t_token		*tokens;
@@ -171,11 +173,12 @@ typedef struct s_heredoc
 /*===================================MINISHELL================================*/
 
 void		clear_data(t_data *data);
-char		**env_array(char **export_vars);
 int			error_message(int code, int n, ...);
 void		exit_minishell(t_data *data, int code, int n, ...);
 void		export_var(char ***pexport_vars, char *var, char *equals);
-char		*getenvp(char **envp, char *name);
+char		**filter_env_array(char **export_vars);
+char		*ft_getenv(char **env, char *name);
+int			ft_setenv(char ***penv, char *name, char *value);
 void		set_signal(enum e_mode mode);
 
 /*======================================LEXER=================================*/
@@ -206,8 +209,8 @@ void		cmd_lst_addback(t_commands **cmds, t_commands *new);
 pid_t		create_process(t_data *data, t_process *process);
 int			execute_all(t_data *data, t_commands *cmds);
 void		fd_dup2(t_data *data, int oldfd, int newfd);
-char		*find_cmd_path(t_data *data, char *cmd);
-void		get_value(char **envp, char **pstr, unsigned int flags);
+char		*find_cmd_path(char **env, char *path_name, char *cmd);
+void		get_value(char **env, char **pstr, unsigned int flags);
 char		*heredoc_create_filename(void);
 int			heredoc_fork(t_data *data, char **pwrd);
 int			heredoc_iter(t_data *data, t_commands *cmd,

@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/26 16:23:56 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/28 18:32:48 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,9 @@ int	execute_all(t_data *data, t_commands *cmds)
 		return (data->exit_status);
 	num_cmd = lst_size(cmds);
 	data->pid = malloc(sizeof(pid_t) * num_cmd);
-	if (data->pid == NULL)
-		exit_minishell(data, errno, 3, SHNAME, "malloc", strerror(errno));
+	data->env = filter_env_array(data->export_vars);
+	if (data->pid == NULL || data->env == NULL)
+		exit_minishell(data, errno, 2, SHNAME, strerror(errno));
 	shell_expansion(data, &cmds->args, QRM | EXP | WSP);
 	if (!is_builtin(NULL, cmds->args[0]) || num_cmd > 1)
 	{
@@ -98,8 +99,7 @@ int	execute_all(t_data *data, t_commands *cmds)
 		if (pipe_read_end_prev == INVALID)
 			exit_minishell(data, errno, 3, SHNAME, "dup", strerror(errno));
 		link_command(data, cmds, data->pid, pipe_read_end_prev);
-		num_cmd = wait_process(data->pid, num_cmd);
-		return (num_cmd);
+		return (wait_process(data->pid, num_cmd));
 	}
 	else
 		return (simple_command(data, cmds));

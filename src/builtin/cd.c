@@ -6,22 +6,24 @@
 /*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 17:26:59 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/27 21:15:30 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/28 19:30:56 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*test_cdpath(char **pcurpath, char *directory)
+static int	test_first(char *directory, char *sequence)
 {
-//TODO: split de CDPATH
-	*pcurpath = ft_strdup(*pcurpath);
-	return (*pcurpath);
+	char *const	delim = ft_strchr(directory, SLASH);
+
+	if (!delim)
+		return (!ft_strncmp(directory, sequence, -1));
+	return (!ft_strncmp(directory, sequence, delim - directory));
 }
 
 static int	previous_directory(t_data *data)
 {
-	char *const	oldpwd = getenvp(data->export_vars, "OLDPWD");
+	char *const	oldpwd = ft_getenv(data->export_vars, "OLDPWD");
 	int			ret;
 
 	if (!oldpwd)
@@ -34,7 +36,7 @@ static int	previous_directory(t_data *data)
 
 static int	home_directory(t_data *data)
 {
-	char *const	home = getenvp(data->export_vars, "HOME");
+	char *const	home = ft_getenv(data->export_vars, "HOME");
 
 	if (!home)
 		return (error_message(EXIT_FAILURE, 3, SHNAME, "cd", "HOME not set"));
@@ -43,21 +45,34 @@ static int	home_directory(t_data *data)
 
 int	bt_cd(int argc, char *argv[], t_data *data)
 {
-	char	**directory;
 	char	*curpath;
 
 	if (argc == 1)
 		return (home_directory(data));
 	else if (argc == 2 && ft_strncmp(*argv[1], "-", -1))
 		return (previous_directory(data));
-	if (argc > 2 || !test_cdpath(&curpath, argv[1]));
+	else if (argc > 2);
 		return (error_message(EXIT_FAILURE, 3, SHNAME, "cd",
 				"too many arguments"));
-	curpath = test_cdpath(argv[1]);
-	directory = ft_split(argv[1], SLASH);
-	if (!directory)
-		exit_minishell(data, errno, 3, SHNAME, "cd", strerror(errno));
+	if (**++argv == SLASH || test_first(*argv, ".") || test_first(*argv, "..")) 
+		curpath = ft_strdup(*argv);
+	else
+	{
+		curpath = find_cmd_path(data->env, "CDPATH", *argv);
+		if (!cur_path)
+			curpath = ft_strjoin("./", *argv);
+	}
+	if (!curpath)
+		exit_minishell
+//TODO: ***		
+
+	if (curpath && access(curpath, F_OK) == INVALID)
+		return (error_message(EXIT_FAILURE, 4, SHNAME, "cd", *argv,
+				"No such file or directory");
+	if (curpath && access(curpath, X_OK) == INVALID)
+		return (error_message(EXIT_FAILURE, 4, SHNAME, "cd", *argv,
+				"Permission denied");
+
 	free(curpath);
-	array_clear(&directory);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/26 16:24:27 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/28 17:52:10 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void	clear_data(t_data *data)
 	free(data->line);
 	free(data->pid);
 	free(data->cmd_path);
+	array_clear(&data->env);
 	heredoc_iter(data, data->cmds, heredoc_unlink);
 	clear_lists(data);
 }
