@@ -6,47 +6,39 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 23:52:42 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/22 13:40:58 by wlin             ###   ########.fr       */
+/*   Updated: 2024/10/26 16:35:41 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	new_prompt_line(int sig)
+void	handle_new_prompt(int sig)
 {
 	extern int	g_sigstatus;
 
-	(void)sig;
 	ft_putchar_fd('\n', STDOUT_FILENO);
-	rl_replace_line("", STDOUT_FILENO);
+	rl_replace_line("", TRUE);
 	rl_on_new_line();
 	rl_redisplay();
-	g_sigstatus = SIGINT;
+	g_sigstatus = sig;
 }
 
-void	handle_sigint_child(int sig)
+void	set_signal(enum e_mode mode)
 {
-	extern int	g_sigstatus;
-
-	(void)sig;
-	ft_putchar_fd('\n', STDOUT_FILENO);
-	if (sig == SIGQUIT)
-		g_sigstatus = SIGQUIT;
-	else if (sig == SIGINT)
-		g_sigstatus = SIGINT;
-}
-
-void	set_signal(int mode)
-{
-	if (mode == CHILD)
+	if (mode == DEFAULT)
 	{
-		signal(SIGQUIT, handle_sigint_child);
-		signal(SIGINT, handle_sigint_child);
+		signal(SIGQUIT, SIG_DFL);
+		signal(SIGINT, SIG_DFL);
 	}
-	else if (mode == PARENT)
+	else if (mode == INTERACTIVE)
 	{
 		signal(SIGQUIT, SIG_IGN);
-		signal(SIGINT, new_prompt_line);
+		signal(SIGINT, handle_new_prompt);
+	}
+	else if (mode == EXECUTING)
+	{
+		signal(SIGQUIT, SIG_IGN);
+		signal(SIGINT, SIG_IGN);
 	}
 	else if (mode == HEREDOC)
 	{

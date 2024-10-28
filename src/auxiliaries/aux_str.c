@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 17:34:51 by wlin              #+#    #+#             */
-/*   Updated: 2024/08/28 21:03:46 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/26 01:52:12 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,6 @@ int	skip_spaces(char *str, int i)
 	return (i);
 }
 
-int	find_end_chars_index(char *input, int i)
-{
-	while (!is_whitespace(input[i]))
-		i++;
-	return (i - 1);
-}
-
 int	char_index(char *str, char ref)
 {
 	int	i;
@@ -48,12 +41,16 @@ int	char_index(char *str, char ref)
 	return (-1);
 }
 
-int	is_equal(char *s1, char *s2)
+char	*quote_str(char *str)
 {
-	if (ft_strlen(s1) == ft_strlen(s2))
+	const size_t	n = ft_strlen(str) + 3;
+	char *const		p = malloc(n);
+
+	if (p)
 	{
-		if (ft_strncmp(s1, s2, ft_strlen(s1)) == 0)
-			return (EXIT_SUCCESS);
+		ft_strlcpy(p, "`", 2);
+		ft_strlcat(p, str, n);
+		ft_strlcat(p, "\'", n);
 	}
-	return (EXIT_FAILURE);
+	return (p);
 }
