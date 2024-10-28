@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 00:28:45 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/22 13:42:02 by wlin             ###   ########.fr       */
+/*   Updated: 2024/10/26 01:38:10 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,10 @@ int	heredoc_unlink(t_data *data, char **pfilename)
 
 	(void)data;
 	if (ft_strncmp(*pfilename, HEREDOC_PREFIX, n) == 0
-		&& access(*pfilename, F_OK) == 0)
-	{
-		if (unlink(*pfilename) == INVALID)
-			error_message(errno, 4, SHNAME, "here-document", *pfilename,
-				strerror(errno));
-		free(*pfilename);
-		*pfilename = NULL;
-	}
+		&& access(*pfilename, F_OK) == 0
+		&& unlink(*pfilename) == INVALID)
+		error_message(errno, 4, SHNAME, "here-document", *pfilename,
+			strerror(errno));
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 19:15:28 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/22 13:42:37 by wlin             ###   ########.fr       */
+/*   Updated: 2024/10/26 16:29:32 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	heredoc_read(t_data *dt, char **pwrd, int hd_fd)
 {
 	const int	quoted = ft_strchr(*pwrd, QUOTE_S) || ft_strchr(*pwrd, QUOTE_D);
 	char		**next_line;
+	char		*str1;
+	char		*str2;
 
 	shell_expansion(dt, &pwrd, QRM);
 	next_line = (char *[2]){readline(HEREDOC_PROMPT), NULL};
@@ -27,8 +29,15 @@ void	heredoc_read(t_data *dt, char **pwrd, int hd_fd)
 		free(next_line[0]);
 		next_line[0] = readline(HEREDOC_PROMPT);
 	}
-	free(next_line[0]);
-	free(*pwrd);
+	if (next_line[0])
+		return (free(next_line[0]));
+	str1 = quote_str(*pwrd);
+	str2 = ft_strjoin("here-document delimited by end-of-file (wanted ", str1);
+	free(str1);
+	str1 = ft_strjoin(str2, ")");
+	free(str2);
+	error_message(0, 3, SHNAME, "warning", str1);
+	free(str1);
 }
 
 int	heredoc_iter(t_data *data, t_commands *cmd,
@@ -47,9 +56,9 @@ int	heredoc_iter(t_data *data, t_commands *cmd,
 		{
 			tmp_array = (char *[2]){redirect->filename, NULL};
 			return_status = f(data, tmp_array);
+			redirect->filename = tmp_array[0];
 			if (return_status != 0)
 				return (return_status);
-			redirect->filename = tmp_array[0];
 		}
 		redirect = redirect->next;
 	}
@@ -67,40 +76,42 @@ t_heredoc	init_heredoc(t_data *dt)
 		exit_minishell(dt, errno, 3, SHNAME, "here-document", strerror(errno));
 	hd_fd = open(filename, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
 	if (hd_fd == INVALID)
+	{
+		free(filename);
 		exit_minishell(dt, errno, 3, SHNAME, filename, strerror(errno));
+	}
 	pid = fork();
 	if (pid == INVALID)
+	{
+		free(filename);
 		exit_minishell(dt, errno, 3, SHNAME, "fork", strerror(errno));
+	}
 	heredoc.fd = hd_fd;
 	heredoc.pid = pid;
 	heredoc.filename = filename;
 	return (heredoc);
 }
 
-int	heredoc_fork(t_data *dt, char **pwrd)
+int	heredoc_fork(t_data *data, char **pwrd)
 {
-	int			return_pid;
-	extern int	g_sigstatus;
 	t_heredoc	heredoc;
+	int			heredoc_exit;
 
-	heredoc = init_heredoc(dt);
+	heredoc = init_heredoc(data);
 	if (heredoc.pid == CHILD)
 	{
 		set_signal(HEREDOC);
-		heredoc_read(dt, pwrd, heredoc.fd);
+		heredoc_read(data, pwrd, heredoc.fd);
+		free(*pwrd);
 		free(heredoc.filename);
+		if (close(heredoc.fd) == INVALID)
+			exit(error_message(errno, 3, SHNAME, "close", strerror(errno)));
 		exit(EXIT_SUCCESS);
 	}
-	set_signal(CHILD);
-	waitpid(heredoc.pid, &return_pid, 0);
+	heredoc_exit = wait_process(&heredoc.pid, 1);
+	free(*pwrd);
 	*pwrd = heredoc.filename;
 	if (close(heredoc.fd) == INVALID)
-		exit_minishell(dt, errno, 3, SHNAME, "close", strerror(errno));
-	if (g_sigstatus == SIGINT)
-		return (dt->exit_status = 1, SIGINT);
-	else if (return_pid == 0)
-		return (0);
-	else
-		return (exit_minishell(dt, errno, 3, SHNAME, "heredoc",
-				strerror(errno)), 0);
+		exit_minishell(data, errno, 3, SHNAME, "close", strerror(errno));
+	return (heredoc_exit);
 }
