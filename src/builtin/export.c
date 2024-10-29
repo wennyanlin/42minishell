@@ -6,7 +6,7 @@
 /*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:55:50 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/25 22:41:08 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/29 17:57:57 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,27 +20,46 @@ static int	print_export_vars(char **vars)
 
 	while (*vars)
 	{
-		ft_putstr_fd("declare -x ", STDOUT_FILENO);
+		printf("declare -x ");
 		equals = ft_strchr(*vars, EQUALS);
 		if (equals)
 		{
-			dprintf(STDOUT_FILENO, "%.*s", (int)(equals - *vars), *vars);
-			ft_putstr_fd("=\"", STDOUT_FILENO);
+			printf("%.*s", (int)(equals - *vars), *vars);
+			printf("=\"");
 			if (*++equals)
-				ft_putstr_fd(equals, STDOUT_FILENO);
-			ft_putendl_fd("\"", STDOUT_FILENO);
+				printf("%s", equals);
+			printf("\"\n");
 		}
 		else
-			ft_putendl_fd(*vars, STDOUT_FILENO);
+			printf("%s\n", *vars);
 		vars++;
 	}
 	return (EXIT_SUCCESS);
 }
 
-int	bt_export(int argc, char *argv[], t_data *data)
+static void	export_arg(t_data *data, char arg[], int *error)
 {
 	char	*p;
 
+	p = arg;
+	if (ft_isalpha(*p) || *p == UNDERSCORE)
+		while (ft_isalnum(*++p) || *p == UNDERSCORE)
+			;
+	if (!*p && get_from_env(data->env, arg))
+		return ;
+	else if (!*p || *p == EQUALS)
+		export_var(&data->export_vars, arg, p);
+	else
+	{
+		p = quote_str(arg);
+		*error = error_message(EXIT_FAILURE, 4, SHNAME, "export", p,
+				"not a valid identifier");
+		free(p);
+	}
+}
+
+int	bt_export(int argc, char *argv[], t_data *data)
+{
 	argc = EXIT_SUCCESS;
 	if (*++argv && **argv == MINUS && (*argv)[1])
 		return (error_message(EXPORT_ERROR, 4, SHNAME, "export",
@@ -48,20 +67,6 @@ int	bt_export(int argc, char *argv[], t_data *data)
 	if (!*argv)
 		return (print_export_vars(data->export_vars));
 	while (*argv)
-	{
-		p = *argv;
-		if (ft_isalpha(*p) || *p == UNDERSCORE)
-			while (ft_isalnum(*++p) || *p == UNDERSCORE)
-				;
-		if (!*p || *p == EQUALS)
-			export_var(&data->export_vars, *argv++, p);
-		else
-		{
-			p = quote_str(*argv++);
-			argc = error_message(EXIT_FAILURE, 4, SHNAME, "export", p,
-					"not a valid identifier");
-			free(p);
-		}
-	}
+		export_arg(data, *argv++, &argc);
 	return (argc);
 }
