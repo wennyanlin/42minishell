@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:46:09 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/28 18:17:46 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/29 12:18:23 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static void	handle_redirection(t_data *data, t_process *process,
 void	init_process(t_data *data, t_process *process)
 {
 	t_redirect	*redirect;
-	char *const	cmd = process->comand->args[0];
+	char *const	cmd = process->command->args[0];
 
 	if (process->command->args != NULL && !is_builtin(&process->builtin, cmd))
 	{

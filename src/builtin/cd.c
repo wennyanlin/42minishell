@@ -6,7 +6,7 @@
 /*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 17:26:59 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/28 19:30:56 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/29 13:59:40 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int	test_first(char *directory, char *sequence)
 
 static int	previous_directory(t_data *data)
 {
-	char *const	oldpwd = ft_getenv(data->export_vars, "OLDPWD");
+	char *const	oldpwd = get_from_env(data->env, "OLDPWD");
 	int			ret;
 
 	if (!oldpwd)
@@ -36,43 +36,67 @@ static int	previous_directory(t_data *data)
 
 static int	home_directory(t_data *data)
 {
-	char *const	home = ft_getenv(data->export_vars, "HOME");
+	char *const	home = get_from_env(data->env, "HOME");
 
 	if (!home)
 		return (error_message(EXIT_FAILURE, 3, SHNAME, "cd", "HOME not set"));
 	return (bt_cd(2, (char *[3]){"cd", home, NULL}, data));
 }
 
+static int	access_cd(t_data *data, char *path, char *curpath, char *argv)
+{
+	char	pwd[PATH_MAX];
+
+	if (path[0] != SLASH)
+	{
+		getcwd(pwd, PATH_MAX);
+		ft_strlcat(pwd, "/", PATH_MAX);
+		ft_strlcat(pwd, path, PATH_MAX);
+		curpath = pwd;
+	}
+	if (access(curpath, F_OK) == INVALID)
+		return (error_message(EXIT_FAILURE, 4, SHNAME, "cd", argv,
+				"No such file or directory"));
+	if (access(curpath, X_OK) == INVALID)
+		return (error_message(EXIT_FAILURE, 4, SHNAME, "cd", argv,
+				"Permission denied"));
+	if (chdir(curpath) == INVALID)
+		return (error_message(errno, 3, SHNAME, "cd", strerror(errno)));
+	curpath = get_from_env(data->env, "PWD");
+	if (curpath)
+		set_in_env(&data->export_vars, "OLDPWD", curpath);
+	else
+		bt_unset(1, (char *[2]){"OLDPWD", NULL}, data);
+	getcwd(pwd, PATH_MAX);
+	set_in_env(&data->export_vars, "PWD", pwd);
+	return (EXIT_SUCCESS);
+}
+
 int	bt_cd(int argc, char *argv[], t_data *data)
 {
+	char	path[PATH_MAX];
 	char	*curpath;
 
 	if (argc == 1)
 		return (home_directory(data));
-	else if (argc == 2 && ft_strncmp(*argv[1], "-", -1))
+	else if (argc == 2 && !ft_strncmp(argv[1], "-", -1))
 		return (previous_directory(data));
-	else if (argc > 2);
+	else if (argc > 2)
 		return (error_message(EXIT_FAILURE, 3, SHNAME, "cd",
 				"too many arguments"));
-	if (**++argv == SLASH || test_first(*argv, ".") || test_first(*argv, "..")) 
-		curpath = ft_strdup(*argv);
+	if (**++argv == SLASH || test_first(*argv, ".") || test_first(*argv, ".."))
+		ft_strlcpy(path, *argv, PATH_MAX);
 	else
 	{
 		curpath = find_cmd_path(data->env, "CDPATH", *argv);
-		if (!cur_path)
-			curpath = ft_strjoin("./", *argv);
+		if (curpath)
+			ft_strlcpy(path, curpath, PATH_MAX);
+		else
+		{
+			ft_strlcpy(path, "./", PATH_MAX);
+			ft_strlcat(path, *argv, PATH_MAX);
+		}
+		free(curpath);
 	}
-	if (!curpath)
-		exit_minishell
-//TODO: ***		
-
-	if (curpath && access(curpath, F_OK) == INVALID)
-		return (error_message(EXIT_FAILURE, 4, SHNAME, "cd", *argv,
-				"No such file or directory");
-	if (curpath && access(curpath, X_OK) == INVALID)
-		return (error_message(EXIT_FAILURE, 4, SHNAME, "cd", *argv,
-				"Permission denied");
-
-	free(curpath);
-	return (0);
+	return (access_cd(data, path, path, *argv));
 }

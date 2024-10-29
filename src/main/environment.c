@@ -6,7 +6,7 @@
 /*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:50:59 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/28 18:32:15 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/29 14:29:19 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	export_var(char ***pexport_vars, char *var, char *equals)
 		array_add(pexport_vars, ft_strdup(var), BACK);
 }
 
-int	ft_setenv(char ***penv, char *name, char *value)
+int	set_in_env(char ***pexport_vars, char *name, char *value)
 {
 	value = ft_strjoin("=", value);
 	if (value)
@@ -44,7 +44,7 @@ int	ft_setenv(char ***penv, char *name, char *value)
 		free(value);
 		if (name)
 		{
-			export_vars(penv, name, ft_strchr(name, EQUALS));
+			export_var(pexport_vars, name, ft_strchr(name, EQUALS));
 			free(name);
 			return (EXIT_SUCCESS);
 		}
@@ -53,7 +53,7 @@ int	ft_setenv(char ***penv, char *name, char *value)
 	return (EXIT_FAILURE);
 }
 
-char	*ft_getenv(char **env, char *name)
+char	*get_from_env(char **env, char *name)
 {
 	size_t	n;
 
@@ -73,15 +73,15 @@ char	*ft_getenv(char **env, char *name)
 
 char	**filter_env_array(char **export_vars)
 {
-	char	**p;
+	char	**env;
 
-	p = array_dup((char *[1]){NULL});
-	while (p && *export_vars)
+	env = array_dup((char *[1]){NULL});
+	while (env && *export_vars)
 	{
 		if (ft_strchr(*export_vars, EQUALS)
-			&& !array_add(&p, *export_vars, BACK))
-			array_clear(&p);
+			&& !array_add(&env, ft_strdup(*export_vars), BACK))
+			array_clear(&env);
 		export_vars++;
 	}
-	return (p);
+	return (env);
 }

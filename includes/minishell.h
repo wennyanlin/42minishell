@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/28 18:34:58 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/29 11:57:42 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,8 +177,8 @@ int			error_message(int code, int n, ...);
 void		exit_minishell(t_data *data, int code, int n, ...);
 void		export_var(char ***pexport_vars, char *var, char *equals);
 char		**filter_env_array(char **export_vars);
-char		*ft_getenv(char **env, char *name);
-int			ft_setenv(char ***penv, char *name, char *value);
+char		*get_from_env(char **env, char *name);
+int			set_in_env(char ***pexport_vars, char *name, char *value);
 void		set_signal(enum e_mode mode);
 
 /*======================================LEXER=================================*/

@@ -6,7 +6,7 @@
 /*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 20:17:10 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/28 18:36:44 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/29 11:53:33 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	get_value(char **env, char **pstr, unsigned int flags)
 {
 	char	*value;
 
-	value = ft_getenv(env, *pstr);
+	value = get_from_env(env, *pstr);
 	if (value)
 	{
 		if (flags & INQ || !(flags & WSP))
