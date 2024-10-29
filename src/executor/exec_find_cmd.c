@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:12:56 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/21 17:11:55 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/29 11:54:05 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,21 +67,16 @@ char	*examine_path(char **path_dirs, char *cmd)
 	return (NULL);
 }
 
-char	*find_cmd_path(t_data *data, char *cmd)
+char	*find_cmd_path(char **env, char *path_name, char *cmd)
 {
-	char *const	env = getenvp(data->export_vars, "PATH");
+	char *const	path_value = get_from_env(env, path_name);
 	char		*full_path;
 	char		**path_dirs;
 
-	if (!env)
+	if (!path_value)
 		return (ft_strdup(cmd));
-	if (char_index(cmd, '/') != NOT_FOUND)
-		return (ft_strdup(cmd));
-	path_dirs = split_path(env, ':');
+	path_dirs = split_path(path_value, ':');
 	full_path = examine_path(path_dirs, cmd);
-	data->cmd_path = full_path;
 	array_clear(&path_dirs);
-	if (full_path == NULL)
-		exit_minishell(data, NOTFOUND, 2, cmd, "command not found");
 	return (full_path);
 }

@@ -6,7 +6,7 @@
 /*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:50:59 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/22 18:58:16 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/29 14:29:19 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,35 +35,53 @@ void	export_var(char ***pexport_vars, char *var, char *equals)
 		array_add(pexport_vars, ft_strdup(var), BACK);
 }
 
-char	*getenvp(char **envp, char *name)
+int	set_in_env(char ***pexport_vars, char *name, char *value)
+{
+	value = ft_strjoin("=", value);
+	if (value)
+	{
+		name = ft_strjoin(name, value);
+		free(value);
+		if (name)
+		{
+			export_var(pexport_vars, name, ft_strchr(name, EQUALS));
+			free(name);
+			return (EXIT_SUCCESS);
+		}
+		free(name);
+	}
+	return (EXIT_FAILURE);
+}
+
+char	*get_from_env(char **env, char *name)
 {
 	size_t	n;
 
 	if (name)
 	{
 		n = ft_strlen(name);
-		while (*envp)
+		while (*env)
 		{
-			if (!ft_strncmp(*envp, name, n)
-				&& (!(*envp)[n] || (*envp)[n] == EQUALS))
-				return (*envp + ++n);
-			envp++;
+			if (!ft_strncmp(*env, name, n)
+				&& (!(*env)[n] || (*env)[n] == EQUALS))
+				return (*env + ++n);
+			env++;
 		}
 	}
 	return (NULL);
 }
 
-char	**env_array(char **export_vars)
+char	**filter_env_array(char **export_vars)
 {
-	char	**p;
+	char	**env;
 
-	p = array_dup((char *[1]){NULL});
-	while (p && *export_vars)
+	env = array_dup((char *[1]){NULL});
+	while (env && *export_vars)
 	{
 		if (ft_strchr(*export_vars, EQUALS)
-			&& !array_add(&p, *export_vars, BACK))
-			array_clear(&p);
+			&& !array_add(&env, ft_strdup(*export_vars), BACK))
+			array_clear(&env);
 		export_vars++;
 	}
-	return (p);
+	return (env);
 }

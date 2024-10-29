@@ -6,7 +6,7 @@
 /*   By: rtorrent <rtorrent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 21:08:04 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/20 15:40:20 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/29 14:29:05 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,15 +63,15 @@ char	**array_merge(char ***parray1, char **array2, enum e_location l)
 			* sizeof(char *));
 	char			**a;
 	char			**array;
-	char **const	blocks[2] = {*parray1, array2};
+	char **const	src[2] = {*parray1, array2};
 
 	if (a0)
 	{
 		a = a0;
-		array = blocks[0 ^ l];
+		array = src[0 ^ l];
 		while (*array)
 			*a++ = *array++;
-		array = blocks[1 ^ l];
+		array = src[1 ^ l];
 		while (*array)
 			*a++ = *array++;
 		*a = NULL;
@@ -83,5 +83,7 @@ char	**array_merge(char ***parray1, char **array2, enum e_location l)
 
 char	**array_add(char ***parray, char *str, enum e_location l)
 {
+	if (!*str)
+		return (NULL);
 	return (array_merge(parray, (char *[2]){str, NULL}, l));
 }
