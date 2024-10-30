@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:46:09 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/29 12:18:23 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/30 13:55:03 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ void	init_process(t_data *data, t_process *process)
 	t_redirect	*redirect;
 	char *const	cmd = process->command->args[0];
 
-	if (process->command->args != NULL && !is_builtin(&process->builtin, cmd))
+	process->cmd_path = NULL;
+	if (!is_builtin(&process->builtin, cmd) && cmd)
 	{
 		if (char_index(cmd, SLASH) != NOT_FOUND)
 		{
@@ -89,7 +90,6 @@ void	init_process(t_data *data, t_process *process)
 			if (process->cmd_path == NULL)
 				exit_minishell(data, NOTFOUND, 2, cmd, "command not found");
 		}
-		data->cmd_path = process->cmd_path;
 	}
 	redirect = process->command->redirect;
 	while (redirect)

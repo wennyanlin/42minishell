@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/28 18:32:48 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/30 12:53:20 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int	execute_all(t_data *data, t_commands *cmds)
 	if (data->pid == NULL || data->env == NULL)
 		exit_minishell(data, errno, 2, SHNAME, strerror(errno));
 	shell_expansion(data, &cmds->args, QRM | EXP | WSP);
-	if (!is_builtin(NULL, cmds->args[0]) || num_cmd > 1)
+	if (num_cmd > 1 || !cmds->args[0] || !is_builtin(NULL, cmds->args[0]))
 	{
 		pipe_read_end_prev = dup(STDIN_FILENO);
 		if (pipe_read_end_prev == INVALID)
