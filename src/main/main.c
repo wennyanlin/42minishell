@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/29 13:57:07 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/30 12:20:21 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,24 @@ static void	reset_data(t_data *data)
 static void	start_minishell(void)
 {
 	t_data	dt;
+	char	pwd[PATH_MAX];
+	char	*shlvl;
+	int		shlvl_value;
 	int		hd_exit;
 
 	dt.export_vars = array_dup(environ);
 	dt.env = NULL;
-// TODO **** Increse SHLVL variable by one + export PWD
 	dt.exit_status = 0;
+	set_in_env(&dt.export_vars, "PWD", getcwd(pwd, PATH_MAX));
+	shlvl = getenv("SHLVL");
+	shlvl_value = 0;
+	if (shlvl)
+		shlvl_value = ft_atoi(shlvl);
+	if (shlvl_value < 0)
+		shlvl_value = -1;
+	shlvl = ft_itoa(++shlvl_value);
+	set_in_env(&dt.export_vars, "SHLVL", shlvl);
+	free(shlvl);
 	while (TRUE)
 	{
 		reset_data(&dt);
