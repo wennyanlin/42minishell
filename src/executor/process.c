@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 18:16:01 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/30 13:54:07 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/30 18:12:21 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,13 @@ void	child_process(t_data *data, t_process *process)
 	char *const		cmd_path = process->cmd_path;
 	char **const	command = process->command->args;
 
-	data->cmd_path = process->cmd_path;
 	fd_dup2(data, process->fd_in, STDIN_FILENO);
 	fd_dup2(data, process->fd_out, STDOUT_FILENO);
 	if (process->builtin)
 		exit((*process->builtin)(array_len(command), command, data));
 	if (cmd_path == NULL)
 		exit_minishell(data, EXIT_SUCCESS, 0);
+	data->cmd_path = cmd_path;
 	if (access(cmd_path, F_OK) == INVALID)
 		exit_minishell(data, NOTFOUND, 3, SHNAME, command[0],
 			"No such file or directory");
