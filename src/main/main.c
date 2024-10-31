@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/30 12:20:21 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/11/01 00:09:03 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,21 +90,25 @@ static void	start_minishell(void)
 		dt.line = readline(PROMPT);
 		if (g_sigstatus != 0)
 			dt.exit_status = FATALSIGNAL + g_sigstatus;
-		if (dt.line && dt.line[0])
-			add_history(dt.line);
-		if (tokenize(&dt.tokens, dt.line) && parse_tokens(&dt))
-		{
-			set_signal(EXECUTING);
-			hd_exit = heredoc_iter(&dt, dt.cmds, heredoc_fork);
-			if (hd_exit == EXIT_SUCCESS)
-				dt.exit_status = execute_all(&dt, dt.cmds);
-			else
-				dt.exit_status = hd_exit;
-			if (dt.exit_status > FATALSIGNAL)
-				ft_putchar_fd('\n', STDOUT_FILENO);
-		}
 		if (dt.line == NULL)
 			bt_exit(1, (char *[2]){"exit", NULL}, &dt);
+		if (dt.line[0])
+		{
+			add_history(dt.line);
+			if (tokenize(&dt.tokens, dt.line) && parse_tokens(&dt))
+			{
+				set_signal(EXECUTING);
+				hd_exit = heredoc_iter(&dt, dt.cmds, heredoc_fork);
+				if (hd_exit == EXIT_SUCCESS)
+					dt.exit_status = execute_all(&dt, dt.cmds);
+				else
+					dt.exit_status = hd_exit;
+				if (dt.exit_status > FATALSIGNAL)
+					ft_putchar_fd('\n', STDOUT_FILENO);
+			}
+			else
+				dt.exit_status = EXIT_FAILURE;
+		}
 		clear_data(&dt);
 	}
 }
