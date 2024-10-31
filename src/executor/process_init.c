@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:46:09 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/30 13:55:03 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/31 16:16:29 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ static void	handle_redirection(t_data *data, t_process *process,
 		exit_minishell(data, errno, 4, SHNAME, "word splitting",
 			redirect->filename, strerror(errno));
 	shell_expansion(data, &redirection_split, QRM | EXP | WSP);
+	free(redirect->filename);
 	if (array_len(redirection_split) != 1)
 	{
 		error_message(EXIT_FAILURE, 3, SHNAME, redirect->filename,
