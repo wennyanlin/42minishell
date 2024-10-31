@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 18:16:01 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/29 12:19:00 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/30 18:12:21 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	child_process(t_data *data, t_process *process)
 		exit((*process->builtin)(array_len(command), command, data));
 	if (cmd_path == NULL)
 		exit_minishell(data, EXIT_SUCCESS, 0);
+	data->cmd_path = cmd_path;
 	if (access(cmd_path, F_OK) == INVALID)
 		exit_minishell(data, NOTFOUND, 3, SHNAME, command[0],
 			"No such file or directory");

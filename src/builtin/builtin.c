@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 14:12:00 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/26 17:26:07 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/30 13:31:05 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	is_builtin(t_bfunc *dst, char *cmd)
 	b = builtin;
 	while (*b)
 	{
-		if (!ft_strncmp(*b, cmd, -1))
+		if (cmd && !ft_strncmp(*b, cmd, -1))
 			break ;
 		b++;
 	}
