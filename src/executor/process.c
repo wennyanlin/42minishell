@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 18:16:01 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/30 18:12:21 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/11/01 13:29:58 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	child_process(t_data *data, t_process *process)
 	execute_command(data, cmd_path, command);
 }
 
-pid_t	create_process(t_data *data, t_process *process)
+pid_t	create_process(t_data *data, t_process *process, int pipe_read_end_prev)
 {
 	pid_t	pid;
 
@@ -59,6 +59,9 @@ pid_t	create_process(t_data *data, t_process *process)
 	else if (pid == CHILD)
 	{
 		set_signal(DEFAULT);
+		if (pipe_read_end_prev != process->fd_in
+			&& close(pipe_read_end_prev) == INVALID)
+			exit_minishell(data, errno, 3, SHNAME, "close", strerror(errno));
 		init_process(data, process);
 		child_process(data, process);
 	}

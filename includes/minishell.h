@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/29 11:57:42 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/11/01 13:43:34 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,7 +206,8 @@ void		cmd_lst_addback(t_commands **cmds, t_commands *new);
 
 /*====================================EXECUTOR================================*/
 
-pid_t		create_process(t_data *data, t_process *process);
+pid_t		create_process(t_data *data, t_process *process,
+				int pipe_read_end_prev);
 int			execute_all(t_data *data, t_commands *cmds);
 void		fd_dup2(t_data *data, int oldfd, int newfd);
 char		*find_cmd_path(char **env, char *path_name, char *cmd);
