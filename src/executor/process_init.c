@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:46:09 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/31 16:16:29 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/10/31 23:34:32 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ static void	handle_redirection(t_data *data, t_process *process,
 		exit_minishell(data, errno, 4, SHNAME, "word splitting",
 			redirect->filename, strerror(errno));
 	shell_expansion(data, &redirection_split, QRM | EXP | WSP);
-	free(redirect->filename);
 	if (array_len(redirection_split) != 1)
 	{
 		error_message(EXIT_FAILURE, 3, SHNAME, redirect->filename,
@@ -62,6 +61,7 @@ static void	handle_redirection(t_data *data, t_process *process,
 		array_clear(&redirection_split);
 		exit_minishell(data, EXIT_FAILURE, 0);
 	}
+	free(redirect->filename);
 	redirect->filename = redirection_split[0];
 	free(redirection_split[1]);
 	free(redirection_split);
@@ -76,6 +76,12 @@ void	init_process(t_data *data, t_process *process)
 	t_redirect	*redirect;
 	char *const	cmd = process->command->args[0];
 
+	redirect = process->command->redirect;
+	while (redirect)
+	{
+		handle_redirection(data, process, redirect);
+		redirect = redirect->next;
+	}
 	process->cmd_path = NULL;
 	if (!is_builtin(&process->builtin, cmd) && cmd)
 	{
@@ -91,11 +97,5 @@ void	init_process(t_data *data, t_process *process)
 			if (process->cmd_path == NULL)
 				exit_minishell(data, NOTFOUND, 2, cmd, "command not found");
 		}
-	}
-	redirect = process->command->redirect;
-	while (redirect)
-	{
-		handle_redirection(data, process, redirect);
-		redirect = redirect->next;
 	}
 }
