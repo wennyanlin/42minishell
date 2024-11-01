@@ -6,11 +6,50 @@
 /*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 17:38:36 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/21 17:10:33 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/11/01 20:09:59 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	clear_lists(t_data *data)
+{
+	t_token		*next_token;
+	t_commands	*next_cmds;
+	t_redirect	*next_redirect;
+
+	while (data->tokens)
+	{
+		next_token = data->tokens->next;
+		free(data->tokens->word);
+		free(data->tokens);
+		data->tokens = next_token;
+	}
+	while (data->cmds)
+	{
+		next_cmds = data->cmds->next;
+		array_clear(&data->cmds->args);
+		while (data->cmds->redirect)
+		{
+			next_redirect = data->cmds->redirect->next;
+			free(data->cmds->redirect->filename);
+			free(data->cmds->redirect);
+			data->cmds->redirect = next_redirect;
+		}
+		free(data->cmds);
+		data->cmds = next_cmds;
+	}
+}
+
+void	clear_data(t_data *data)
+{
+	free(data->line);
+	free(data->pid);
+	free(data->cmd_path);
+	array_clear(&data->env);
+	heredoc_iter(data, data->cmds, heredoc_unlink);
+	clear_lists(data);
+}
 
 static void	verror_message(int n, va_list *pap)
 {
