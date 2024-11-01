@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/30 18:09:56 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/11/01 13:30:31 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	link_command(t_data *data, t_commands *cmds, pid_t *pid,
 		if (pipe(process.pipe_fd) == INVALID)
 			exit_minishell(data, errno, 3, SHNAME, "pipe", strerror(errno));
 		process.fd_out = process.pipe_fd[WR];
+		pipe_read_end_prev = process.pipe_fd[RD];
 	}
 	else
 	{
@@ -73,10 +74,7 @@ void	link_command(t_data *data, t_commands *cmds, pid_t *pid,
 		if (process.fd_out == INVALID)
 			exit_minishell(data, errno, 3, SHNAME, "dup", strerror(errno));
 	}
-	*pid = create_process(data, &process);
-	pipe_read_end_prev = process.pipe_fd[RD];
-	free(data->cmd_path);
-	data->cmd_path = NULL;
+	*pid = create_process(data, &process, pipe_read_end_prev);
 	link_command(data, cmds->next, ++pid, pipe_read_end_prev);
 }
 
