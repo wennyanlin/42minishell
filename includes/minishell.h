@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/11/02 02:14:44 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/11/02 16:05:26 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # include "../lib/libft/libft.h"
 
 # define VERSION "0.1"
-# define SHNAME "minishell"
+# define SHNAME "Smooth Operator"
 # define HEREDOC_PREFIX "/tmp/tmp_heredoc"
 
 # define BLUE "\033[1;34m"
@@ -37,7 +37,7 @@
 # define GREEN "\033[0;32m"
 # define RESET "\033[0m"
 
-# define PROMPT "minishell% "
+# define PROMPT "Smooth Operator% "
 # define HEREDOC_PROMPT "> "
 
 # define TRUE 1
