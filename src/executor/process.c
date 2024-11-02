@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 18:16:01 by wlin              #+#    #+#             */
-/*   Updated: 2024/11/02 12:24:22 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/11/02 18:32:01 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,15 @@
 
 void	execute_command(t_data *data, char *command_path, char **cmd_args)
 {
-	char	*shell_path;
-	int		e;
+	struct stat	statbuf;
 
-	execve(command_path, cmd_args, data->env);
-	shell_path = get_from_env(data->env, "SHELL");
-	if (shell_path)
+	if (!stat(command_path, &statbuf))
 	{
-		e = errno;
-		execve(shell_path, array_add(&cmd_args, shell_path, FRONT), data->env);
-		exit_minishell(data, e, 3, SHNAME, cmd_args[1], strerror(e));
+		if ((statbuf.st_mode & S_IFMT) == S_IFREG)
+			execve(command_path, cmd_args, data->env);
+		exit_minishell(data, errno, 3, SHNAME, command_path, "Is a directory");
 	}
-	exit_minishell(data, errno, 3, SHNAME, cmd_args[0], strerror(errno));
+	exit_minishell(data, errno, 3, SHNAME, "stat", strerror(errno));
 }
 
 void	child_process(t_data *data, t_process *process)
