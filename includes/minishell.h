@@ -46,6 +46,7 @@
 # define NOT_FOUND -1
 # define INVALID -1
 # define NONE 0
+# define OK 0
 
 # define UNIT_SEPARATOR 31
 # define QUOTE_D 34
@@ -218,7 +219,7 @@ int			heredoc_iter(t_data *data, t_commands *cmd,
 				int (*f)(t_data *, char **));
 void		heredoc_read(t_data *data, char **pword, int hd_fd);
 int			heredoc_unlink(t_data *data, char **pfilename);
-void		init_process(t_data *data, t_process *process);
+int			init_process(t_data *data, t_process *process);
 int			lst_size(t_commands *cmds);
 void		shell_expansion(t_data *data, char ***pargs, unsigned int flags);
 char		**split_path(char *string, char separator);

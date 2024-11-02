@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 11:46:39 by wlin              #+#    #+#             */
-/*   Updated: 2024/11/01 13:30:31 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/11/02 12:23:17 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,10 @@ int	simple_command(t_data *data, t_commands *cmd)
 	process.command = cmd;
 	process.fd_in = STDIN_FILENO;
 	process.fd_out = STDOUT_FILENO;
-	init_process(data, &process);
-	sc_exit = (*process.builtin)(array_len(process.command->args),
-			process.command->args, data);
+	sc_exit = init_process(data, &process);
+	if (sc_exit == OK)
+		sc_exit = (*process.builtin)(array_len(process.command->args),
+				process.command->args, data);
 	fd_dup2(data, dup_fd[RD], STDIN_FILENO);
 	fd_dup2(data, dup_fd[WR], STDOUT_FILENO);
 	return (sc_exit & 0377);
@@ -60,6 +61,7 @@ void	link_command(t_data *data, t_commands *cmds, pid_t *pid,
 	if (cmds->prev)
 		shell_expansion(data, &cmds->args, QRM | EXP | WSP);
 	process.command = cmds;
+	process.cmd_path = NULL;
 	process.fd_in = pipe_read_end_prev;
 	if (cmds->next)
 	{
