@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 13:16:12 by wlin              #+#    #+#             */
-/*   Updated: 2024/11/02 16:05:26 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/11/02 16:23:56 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # include <readline/history.h>
 # include "../lib/libft/libft.h"
 
-# define VERSION "0.1"
+# define VERSION "1.1"
 # define SHNAME "Smooth Operator"
 # define HEREDOC_PREFIX "/tmp/tmp_heredoc"
 
