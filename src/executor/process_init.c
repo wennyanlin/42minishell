@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:46:09 by wlin              #+#    #+#             */
-/*   Updated: 2024/11/02 02:29:16 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/11/02 12:25:25 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	init_process(t_data *data, t_process *process)
 	while (redirect)
 	{
 		hr_code = handle_redirection(data, process, redirect);
-		if (hr_code)
+		if (hr_code != OK)
 			return (hr_code);
 		redirect = redirect->next;
 	}
