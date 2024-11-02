@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 18:17:03 by wlin              #+#    #+#             */
-/*   Updated: 2024/11/02 16:26:57 by wlin             ###   ########.fr       */
+/*   Updated: 2024/11/02 17:21:10 by wlin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	check_pipe_error(t_token *token_lst)
 		return (prompt_error_message(PIPE));
 	else if (is_redirection(token_lst->next->metachar)
 		&& token_lst->next->next == NULL)
-		return (ft_putstr_fd("SHNAME : syntax error near unexpected "
+		return (ft_putstr_fd(SHNAME ": syntax error near unexpected "
 				"token`newline'\n", STDERR_FILENO), EXIT_FAILURE);
 	else if (token_lst->prev == NULL && token_lst->next->word
 		&& token_lst->next->next == NULL)
@@ -46,7 +46,7 @@ int	check_pipe_error(t_token *token_lst)
 int	check_redirection_error(t_token *token_lst)
 {
 	if (token_lst->next == NULL)
-		return (ft_putstr_fd("SHNAME : syntax error near unexpected "
+		return (ft_putstr_fd(SHNAME ": syntax error near unexpected "
 				"token`newline'\n", STDERR_FILENO), EXIT_FAILURE);
 	else if (token_lst->next->metachar == PIPE)
 		return (prompt_error_message(PIPE));
