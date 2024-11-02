@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:35:36 by wlin              #+#    #+#             */
-/*   Updated: 2024/11/01 20:56:07 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/11/02 16:02:58 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	reset_data(t_data *data)
 	set_signal(INTERACTIVE);
 }
 
-static int	run_commands(t_data *data)
+static int	smooth_operator(t_data *data)
 {
 	int		exit_code;
 
@@ -39,7 +39,7 @@ static int	run_commands(t_data *data)
 	return (EXIT_FAILURE);
 }
 
-static void	run_minishell(t_data *data)
+static void	minishell_loop(t_data *data)
 {
 	while (TRUE)
 	{
@@ -52,7 +52,7 @@ static void	run_minishell(t_data *data)
 		if (data->line[0])
 		{
 			add_history(data->line);
-			data->exit_status = run_commands(data);
+			data->exit_status = smooth_operator(data);
 			if (data->exit_status > FATALSIGNAL)
 				ft_putchar_fd('\n', STDOUT_FILENO);
 		}
@@ -60,7 +60,7 @@ static void	run_minishell(t_data *data)
 	}
 }
 
-static void	start_minishell(void)
+static void	init_minishell(void)
 {
 	t_data	dt;
 	char	pwd[PATH_MAX];
@@ -80,7 +80,7 @@ static void	start_minishell(void)
 	shlvl = ft_itoa(++shlvl_value);
 	set_in_env(&dt.export_vars, "SHLVL", shlvl);
 	free(shlvl);
-	run_minishell(&dt);
+	minishell_loop(&dt);
 }
 
 int	main(int argc, char **argv)
@@ -90,5 +90,5 @@ int	main(int argc, char **argv)
 	else if (argc == 2 && ft_strncmp(argv[1], "-v", 3) == 0)
 		printf("%s, version %s\n", SHNAME, VERSION);
 	else
-		start_minishell();
+		init_minishell();
 }
