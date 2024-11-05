@@ -6,7 +6,7 @@
 /*   By: rtorrent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:55:50 by rtorrent          #+#    #+#             */
-/*   Updated: 2024/10/29 17:57:57 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/11/05 13:38:28 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	export_arg(t_data *data, char arg[], int *error)
 			;
 	if (!*p && get_from_env(data->env, arg))
 		return ;
-	else if (!*p || *p == EQUALS)
+	else if (!*p || (*p == EQUALS && p != arg))
 		export_var(&data->export_vars, arg, p);
 	else
 	{
