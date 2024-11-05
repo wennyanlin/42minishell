@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 18:16:01 by wlin              #+#    #+#             */
-/*   Updated: 2024/11/05 12:40:27 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/11/05 13:06:43 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	execute_command(t_data *data, char *command_path, char **cmd_args)
 {
 	struct stat	statbuf;
 
+	if (!*cmd_args[0])
+		exit_minishell(data, NOTFOUND, 1, "Command \'\' not found");
 	if (!stat(command_path, &statbuf))
 	{
 		if ((statbuf.st_mode & S_IFMT) == S_IFREG)
