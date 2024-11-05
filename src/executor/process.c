@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 18:16:01 by wlin              #+#    #+#             */
-/*   Updated: 2024/11/03 00:13:02 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/11/05 12:40:27 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ void	execute_command(t_data *data, char *command_path, char **cmd_args)
 	{
 		if ((statbuf.st_mode & S_IFMT) == S_IFREG)
 			execve(command_path, cmd_args, data->env);
-		exit_minishell(data, NOTEXECUTABLE, 3, SHNAME, command_path, "Is a directory");
+		exit_minishell(data, NOTEXECUTABLE, 3, SHNAME, command_path,
+			"Is not a regular file");
 	}
 	exit_minishell(data, errno, 3, SHNAME, "stat", strerror(errno));
 }

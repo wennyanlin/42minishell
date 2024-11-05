@@ -6,7 +6,7 @@
 /*   By: wlin <wlin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 19:15:28 by wlin              #+#    #+#             */
-/*   Updated: 2024/10/26 16:29:32 by rtorrent         ###   ########.fr       */
+/*   Updated: 2024/11/04 18:23:26 by rtorrent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,9 @@ t_heredoc	init_heredoc(t_data *dt)
 	hd_fd = open(filename, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
 	if (hd_fd == INVALID)
 	{
+		error_message(errno, 3, SHNAME, filename, strerror(errno));
 		free(filename);
-		exit_minishell(dt, errno, 3, SHNAME, filename, strerror(errno));
+		exit_minishell(dt, errno, 0);
 	}
 	pid = fork();
 	if (pid == INVALID)
